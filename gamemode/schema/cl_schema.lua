@@ -1,3 +1,4 @@
+/* // if you want set custom font, remove this line.
 do
 	catherine.font.FontString = "Segoe UI"
 	catherine.font.Set( "catherine_menuTitle", catherine.font.FontString, 20, 1000 )
@@ -12,3 +13,4 @@ do
 	catherine.font.Set( "catherine_outline20", catherine.font.FontString, 20, 1000, true )
 	catherine.font.Set( "catherine_outline15", catherine.font.FontString, 15, 1000, true )
 end
+*/ // and this line too.
