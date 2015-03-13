@@ -1,6 +1,6 @@
 Faction.name = "Citizen"
 Faction.color = Color( 255, 0, 0 )
-Faction.desc = "He weard dirty shirts."
+Faction.desc = "He wears a dirty shirt."
 Faction.models = {
 	"models/humans/group01/male_01.mdl",
 	"models/humans/group01/male_02.mdl",
