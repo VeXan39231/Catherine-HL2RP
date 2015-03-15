@@ -9,16 +9,16 @@ catherine.command.Register( {
 					if ( pl:GetInvItemData( "portable_radio", "freq" ) != "" ) then
 						Schema:SayRadio( pl, table.concat( args, " " ) )
 					else
-						catherine.util.Notify( pl, "You are not set radio freq!" )
+						catherine.util.Notify( pl, "You have not set the radio freq!" )
 					end
 				else
 					catherine.util.Notify( pl, "Please turn on the radio!" )
 				end
 			else
-				catherine.util.Notify( pl, "You don't have Portable radio!" )
+				catherine.util.Notify( pl, "You don't have a Portable radio!" )
 			end
 		else
-			catherine.util.Notify( pl, "Please input message!" )
+			catherine.util.Notify( pl, "Please input a message!" )
 		end
 	end
 } )
