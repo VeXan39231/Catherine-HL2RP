@@ -7,15 +7,11 @@ Base.weight = 0
 Base.func = { }
 Base.func.eat = {
 	text = "Eat",
-	viewIsEntity = true,
-	viewIsMenu = true,
-	ismenuRightclickFunc = true,
-	func = function( pl, tab, data )
+	canShowIsWorld = true,
+	canShowIsMenu = true,
+	func = function( pl, itemTable )
 		pl:EmitSound( "physics/flesh/flesh_impact_hard" .. math.random( 1, 5 ) .. ".wav" )
-		pl:SetHealth( math.Clamp( pl:Health( ) + ( tab.healthPlus or 0 ), 0, 100 ) )
-		catherine.inventory.Update( pl, "remove", tab.uniqueID )
-	end,
-	showFunc = function( pl, tab, key )
-		return true
+		pl:SetHealth( math.Clamp( pl:Health( ) + ( itemTable.healthPlus or 0 ), 0, 100 ) )
+		catherine.inventory.Work( pl, CAT_INV_ACTION_REMOVE, itemTable.uniqueID )
 	end
 }

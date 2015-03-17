@@ -1,8 +1,8 @@
 Item.name = "Portable Radio"
 Item.desc = "Communication to other humans."
-Item.cost = 210
+Item.cost = 300
 Item.model = "models/Items/battery.mdl"
-Item.weight = 3
+Item.weight = 1
 Item.category = "Communication"
 Item.itemData = {
 	freq = "",
@@ -11,7 +11,7 @@ Item.itemData = {
 Item.func = { }
 Item.func.setfreq = {
 	text = "Set Freq",
-	viewIsMenu = true,
+	canShowIsMenu = true,
 	func = function( pl, tab, data )
 		catherine.util.UniqueStringReceiver( pl, "PortableRadio_UniqueSetFreq", "Set Radio freq", "What are you setting for radio?", "xxx.x", function( _, val )
 			if ( val:find( "^%d%d%d%.%d$" ) ) then
@@ -31,7 +31,7 @@ Item.func.setfreq = {
 }
 Item.func.toggle = {
 	text = "Toggle",
-	viewIsMenu = true,
+	canShowIsMenu = true,
 	func = function( pl, tab, data )
 		local toggle = false
 		if ( !data.toggle ) then toggle = true end
@@ -39,18 +39,16 @@ Item.func.toggle = {
 	end
 }
 
-
 if ( CLIENT ) then
-	function Item:DrawOverAll( pl, w, h, data )
-		if ( data.toggle ) then
+	function Item:DrawInformation( pl, itemTable, w, h, itemData )
+		if ( itemData.toggle ) then
 			surface.SetDrawColor( 255, 255, 255, 255 )
 			surface.SetMaterial( Material( "icon16/accept.png" ) )
 			surface.DrawTexturedRect( 5, 5, 16, 16 )
 		end
 	end
 	
-	function Item:GetDesc( pl, itemTab, data )
-		return "Freq : " .. ( data.freq == "" and "xxx.x" or data.freq ) .. "\nToggle : " .. ( data.toggle == true and "On" or "Off" )
+	function Item:GetDesc( pl, itemTable, itemData )
+		return "Freq : " .. ( itemData.freq == "" and "xxx.x" or itemData.freq ) .. "\nPower : " .. ( itemData.toggle == true and "On" or "Off" )
 	end
 end
-

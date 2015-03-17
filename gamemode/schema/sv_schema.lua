@@ -1,11 +1,6 @@
---[[
 
---]]
-
-resource.AddFile( "resource/fonts/Le_Bossu.ttf" )
-
-function Schema:PlayerCantSpray( pl )
-	return !pl:HasItem( "spray" )
+function Schema:PlayerCanSpray( pl )
+	return pl:HasItem( "spray_can" )
 end
 
 function Schema:SayRadio( pl, text )
@@ -24,7 +19,6 @@ function Schema:SayRadio( pl, text )
 end
 
 function Schema:SayDispatch( pl, text )
-
 	catherine.chat.RunByClass( pl, "dispatch", text )
 end
 

@@ -1,4 +1,3 @@
-
 catherine.command.Register( {
 	command = "radio",
 	syntax = "[Text]",
