@@ -1,4 +1,3 @@
-
 function Schema:PlayerCanSpray( pl )
 	return pl:HasItem( "spray_can" )
 end
@@ -22,7 +21,7 @@ function Schema:SayDispatch( pl, text )
 	catherine.chat.RunByClass( pl, "dispatch", text )
 end
 
-function Schema:ChatAdjust( pl, adjustInfo )
+function Schema:ChatAdjust( adjustInfo )
 	if ( adjustInfo.class == "ic" or adjustInfo.class == "radio" or adjustInfo.class == "yell" or adjustInfo.class == "whisper" ) then
 		local tab = { sounds = { }, text = "" }
 		local ex = string.Explode( ", ", adjustInfo.text )
@@ -66,8 +65,9 @@ function Schema:ChatAdjust( pl, adjustInfo )
 	end
 end
 
-function Schema:PostChated( pl, adjustInfo )
+function Schema:ChatSended( adjustInfo )
 	if ( adjustInfo and adjustInfo.voice ) then
+		local pl = adjustInfo.player
 		local len = 0
 		for k, v in pairs( adjustInfo.voice ) do
 			len = len + ( k == 1 and 0 or v.len + 0.3 )

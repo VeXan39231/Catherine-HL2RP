@@ -11,9 +11,8 @@ catherine.util.Include( "sh_commands.lua" )
 catherine.util.Include( "sv_schema.lua" )
 catherine.util.Include( "cl_schema.lua" )
 
-catherine.chat.RegisterClass( {
-	class = "radio",
-	doChat = function( pl, text )
+catherine.chat.RegisterClass( "radio", {
+	onChat = function( pl, text )
 		chat.AddText( Color( 0, 255, 100 ), pl:Name( ) .. " radio says " .. text )
 	end,
 	global = true,
@@ -22,9 +21,8 @@ catherine.chat.RegisterClass( {
 	end
 } )
 
-catherine.chat.RegisterClass( {
-	class = "dispatch",
-	doChat = function( pl, text )
+catherine.chat.RegisterClass( "dispatch", {
+	onChat = function( pl, text )
 		chat.AddText( Color( 255, 150, 150 ), "Combine Dispatch - " .. text )
 	end,
 	global = true,
