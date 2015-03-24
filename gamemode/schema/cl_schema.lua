@@ -6,6 +6,8 @@ function GM:GetSchemaInformation( )
 	}
 end
 
-function GM:OnRenderScreenColor( pl, data )
-
+function GM:PostRenderScreenColor( pl, data )
+	local data = { }
+	data.colour = 0.6
+	return data
 end

@@ -6,3 +6,4 @@ Faction.models = {
 	"models/breen.mdl"
 }
 Faction.index = 4
+FACTION_ADMIN = Faction.index

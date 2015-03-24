@@ -19,3 +19,4 @@ Faction.models = {
 	"models/humans/group01/female_07.mdl"
 }
 Faction.index = 1
+FACTION_CITIZEN = Faction.index
