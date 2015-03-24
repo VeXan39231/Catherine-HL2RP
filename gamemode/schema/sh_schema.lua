@@ -44,7 +44,8 @@ catherine.chat.RegisterClass( "radio", {
 	global = true,
 	canRun = function( pl )
 		return pl:Alive( )
-	end
+	end,
+	command = "radio"
 } )
 
 catherine.chat.RegisterClass( "dispatch", {

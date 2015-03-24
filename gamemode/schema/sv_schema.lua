@@ -4,17 +4,18 @@ end
 
 function Schema:SayRadio( pl, text )
 	local chanels = { }
-	local playerfreq = pl:GetInvItemData( "portable_radio", "freq" )
+	local playeritemData = pl:GetInvItemData( "portable_radio" )
 	
 	for k, v in pairs( player.GetAllByLoaded( ) ) do
-		local freq = v:GetInvItemData( "portable_radio", "freq" )
-		if ( v:HasItem( "portable_radio" ) and v:GetInvItemData( "portable_radio", "toggle" ) and freq != "" ) then
-			chanels[ freq ] = chanels[ freq ] or { }
-			chanels[ freq ][ #chanels[ freq ] + 1 ] = v
+		if ( !v:HasItem( "portable_radio" ) ) then continue end
+		local targetitemData = v:GetInvItemData( "portable_radio" )
+		if ( targetitemData.toggle and targetitemData.freq != "xxx.x" and targetitemData.freq != "" ) then
+			chanels[ targetitemData.freq ] = chanels[ targetitemData.freq ] or { }
+			chanels[ targetitemData.freq ][ #chanels[ targetitemData.freq ] + 1 ] = v
 		end
 	end
 
-	catherine.chat.RunByClass( pl, "radio", text, chanels[ playerfreq ] )
+	catherine.chat.RunByClass( pl, "radio", text, chanels[ playeritemData.freq ] )
 end
 
 function Schema:SayDispatch( pl, text )
@@ -88,13 +89,25 @@ function Schema:PlayerUseDoor( pl, ent )
 	end
 end
 
+function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
+	if ( !pl:IsRunning( ) ) then return true end
+	local team = pl:Team( )
+	if ( team == FACTION_MPF ) then
+		pl:EmitSound( "npc/metropolice/gear" .. math.random( 1, 6 ) .. ".wav", 70 )
+		return true
+	elseif ( team == FACTION_OTA ) then
+		pl:EmitSound( "npc/combine_soldier/gear" .. math.random( 1, 6 ) .. ".wav", 70 )
+		return true
+	end
+end
+
 function Schema:InventoryInitialize( pl )
 	local team = pl:Team( )
 	if ( team == FACTION_CITIZEN ) then
 		// need suitcase
 		local randomNum = math.random( 10000, 99999 )
 		catherine.item.Give( pl, "cid" )
-		catherine.item.Give,( "cid", {
+		pl:SetInvItemDatas( "cid", {
 			cid = randomNum,
 			name = pl:Name( )
 		} )
@@ -103,6 +116,7 @@ function Schema:InventoryInitialize( pl )
 		catherine.item.Give( pl, "portable_radio" )
 		if ( team == FACTION_MPF ) then
 			catherine.item.Give( pl, "weapon_pistol" )
+			catherine.item.Give( pl, "weapon_stunstick" )
 		elseif ( team == FACTION_OTA ) then
 			catherine.item.Give( pl, "weapon_ar2" )
 		end
@@ -115,5 +129,16 @@ function Schema:GetPlayerPainSound( pl )
 		return "npc/metropolice/pain" .. math.random( 1, 3 ) .. ".wav"
 	elseif ( team == FACTION_OTA ) then
 		return "npc/combine_soldier/pain" .. math.random( 1, 3 ) .. ".wav"
+	end
+end
+
+function Schema:PlayerDeathSound( pl )
+	local team = pl:Team( )
+	if ( team == FACTION_MPF ) then
+		pl:EmitSound( "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav" )
+		return true
+	elseif ( team == FACTION_OTA ) then
+		pl:EmitSound( "npc/combine_soldier/die" .. math.random( 1, 3 ) .. ".wav" )
+		return true
 	end
 end
