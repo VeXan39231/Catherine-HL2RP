@@ -81,3 +81,39 @@ function Schema:ChatSended( adjustInfo )
 		end
 	end
 end
+
+function Schema:PlayerUseDoor( pl, ent )
+	if ( pl:PlayerIsCombine( ) and !ent:HasSpawnFlags( 256 ) and !ent:HasSpawnFlags( 1024 ) ) then
+		ent:Fire( "open", "", 0 )
+	end
+end
+
+function Schema:InventoryInitialize( pl )
+	local team = pl:Team( )
+	if ( team == FACTION_CITIZEN ) then
+		// need suitcase
+		local randomNum = math.random( 10000, 99999 )
+		catherine.item.Give( pl, "cid" )
+		catherine.item.Give,( "cid", {
+			cid = randomNum,
+			name = pl:Name( )
+		} )
+		pl:SetCharacterVar( "cid", randomNum )
+	elseif ( team == FACTION_MPF or team == FACTION_OTA or team == FACTION_ADMIN ) then
+		catherine.item.Give( pl, "portable_radio" )
+		if ( team == FACTION_MPF ) then
+			catherine.item.Give( pl, "weapon_pistol" )
+		elseif ( team == FACTION_OTA ) then
+			catherine.item.Give( pl, "weapon_ar2" )
+		end
+	end
+end
+
+function Schema:GetPlayerPainSound( pl )
+	local team = pl:Team( )
+	if ( team == FACTION_MPF ) then
+		return "npc/metropolice/pain" .. math.random( 1, 3 ) .. ".wav"
+	elseif ( team == FACTION_OTA ) then
+		return "npc/combine_soldier/pain" .. math.random( 1, 3 ) .. ".wav"
+	end
+end
