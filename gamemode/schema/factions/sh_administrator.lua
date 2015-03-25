@@ -1,9 +1,9 @@
-Faction.name = "Administrator"
-Faction.color = Color( 255, 165, 0 )
-Faction.desc = "A city administrator."
-Faction.isWhitelist = true
-Faction.models = {
+local FACTION = catherine.faction.Create( "administrator" )
+FACTION.name = "Administrator"
+FACTION.color = Color( 237, 179, 97 )
+FACTION.desc = "A city administrator."
+FACTION.isWhitelist = true
+FACTION.models = {
 	"models/breen.mdl"
 }
-Faction.index = 4
-FACTION_ADMIN = Faction.index
+FACTION_ADMIN = catherine.faction.Register( FACTION )

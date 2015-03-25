@@ -3,19 +3,19 @@ function Schema:PlayerCanSpray( pl )
 end
 
 function Schema:SayRadio( pl, text )
-	local chanels = { }
-	local playeritemData = pl:GetInvItemData( "portable_radio" )
+	local chanels, playerFreq = { }, pl:GetInvItemData( "portable_radio", "freq", nil )
+	if ( !playerFreq ) then return end
 	
 	for k, v in pairs( player.GetAllByLoaded( ) ) do
 		if ( !v:HasItem( "portable_radio" ) ) then continue end
-		local targetitemData = v:GetInvItemData( "portable_radio" )
-		if ( targetitemData.toggle and targetitemData.freq != "xxx.x" and targetitemData.freq != "" ) then
+		local targetitemData = v:GetInvItemDatas( "portable_radio" )
+		if ( targetitemData.toggle and targetitemData.freq and ( targetitemData.freq != "xxx.x" and targetitemData.freq != "" ) ) then
 			chanels[ targetitemData.freq ] = chanels[ targetitemData.freq ] or { }
 			chanels[ targetitemData.freq ][ #chanels[ targetitemData.freq ] + 1 ] = v
 		end
 	end
 
-	catherine.chat.RunByClass( pl, "radio", text, chanels[ playeritemData.freq ] )
+	catherine.chat.RunByClass( pl, "radio", text, chanels[ playerFreq ] )
 end
 
 function Schema:SayDispatch( pl, text )
@@ -23,6 +23,7 @@ function Schema:SayDispatch( pl, text )
 end
 
 function Schema:ChatAdjust( adjustInfo )
+	local pl = adjustInfo.player
 	if ( adjustInfo.class == "ic" or adjustInfo.class == "radio" or adjustInfo.class == "yell" or adjustInfo.class == "whisper" ) then
 		local tab = { sounds = { }, text = "" }
 		local ex = string.Explode( ", ", adjustInfo.text )
@@ -37,6 +38,7 @@ function Schema:ChatAdjust( adjustInfo )
 		end
 
 		for k, v in pairs( Schema.voice.normalVoice ) do
+			if ( !table.HasValue( v.faction, pl:Team( ) ) ) then continue end
 			for k1, v1 in pairs( ex ) do
 				if ( v1:lower( ) == v.command:lower( ) ) then
 					tab.sounds[ #tab.sounds + 1 ] = { dir = v.sound, len = SoundDuration( v.sound ), vol = vol }
@@ -53,9 +55,10 @@ function Schema:ChatAdjust( adjustInfo )
 		adjustInfo.voice = tab.sounds
 		return adjustInfo
 	elseif ( adjustInfo.class == "dispatch" ) then
-		local tab = { sounds = { }, text = "" }
+		local tab, text = { sounds = { }, text = "" }, adjustInfo.text:lower( )
+		
 		for k, v in pairs( Schema.voice.dispatchVoice ) do
-			if ( v.command:lower( ) == adjustInfo.text:lower( ) ) then
+			if ( v.command:lower( ) == text ) then
 				tab.sounds[ #tab.sounds + 1 ] = { dir = v.sound, len = SoundDuration( v.sound ), vol = true }
 				adjustInfo.text = v.output
 			end
