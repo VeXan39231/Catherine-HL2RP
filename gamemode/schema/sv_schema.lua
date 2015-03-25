@@ -37,7 +37,7 @@ function Schema:ChatAdjust( adjustInfo )
 			vol = 30
 		end
 
-		for k, v in pairs( Schema.voice.normalVoice ) do
+		for k, v in pairs( Schema.vo.normalVoice ) do
 			if ( !table.HasValue( v.faction, pl:Team( ) ) ) then continue end
 			for k1, v1 in pairs( ex ) do
 				if ( v1:lower( ) == v.command:lower( ) ) then
@@ -57,7 +57,7 @@ function Schema:ChatAdjust( adjustInfo )
 	elseif ( adjustInfo.class == "dispatch" ) then
 		local tab, text = { sounds = { }, text = "" }, adjustInfo.text:lower( )
 		
-		for k, v in pairs( Schema.voice.dispatchVoice ) do
+		for k, v in pairs( Schema.vo.dispatchVoice ) do
 			if ( v.command:lower( ) == text ) then
 				tab.sounds[ #tab.sounds + 1 ] = { dir = v.sound, len = SoundDuration( v.sound ), vol = true }
 				adjustInfo.text = v.output
@@ -137,14 +137,12 @@ function Schema:GetPlayerPainSound( pl )
 	end
 end
 
-function Schema:PlayerDeathSound( pl )
+function Schema:GetPlayerDeathSound( pl )
 	local team = pl:Team( )
 	if ( team == FACTION_CP ) then
-		pl:EmitSound( "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav" )
-		return true
+		return "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav"
 	elseif ( team == FACTION_OW ) then
-		pl:EmitSound( "npc/combine_soldier/die" .. math.random( 1, 3 ) .. ".wav" )
-		return true
+		return "npc/combine_soldier/die" .. math.random( 1, 3 ) .. ".wav"
 	end
 end
 

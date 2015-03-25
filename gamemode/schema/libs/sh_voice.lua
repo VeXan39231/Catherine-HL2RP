@@ -174,4 +174,5 @@ Schema.vo.RegisterNormal( COMBINE, "Zero", "Zero!", "npc/metropolice/vo/zero.wav
 Schema.vo.RegisterNormal( COMBINE, "Zone", "Zone!", "npc/metropolice/vo/zone.wav" )
 
 
-//Schema.vo.RegisterNormal( CITIZEN, "Sweeping", "Sweeping for suspect.", "npc/metropolice/hiding02.wav" )
+// Citizen voice stuff.
+//Schema.vo.RegisterNormal( CITIZEN, "Command", "Answer", "Sound" )
