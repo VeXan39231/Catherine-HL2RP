@@ -1,7 +1,8 @@
-Faction.name = "Citizen"
-Faction.color = Color( 131, 139, 131 )
-Faction.desc = "He wears a dirty shirt."
-Faction.models = {
+local FACTION = catherine.faction.New( "citizen" )
+FACTION.name = "Citizen"
+FACTION.color = Color( 131, 139, 131 )
+FACTION.desc = "He wears a dirty shirt."
+FACTION.models = {
 	"models/humans/group01/male_01.mdl",
 	"models/humans/group01/male_02.mdl",
 	"models/humans/group01/male_03.mdl",
@@ -18,5 +19,5 @@ Faction.models = {
 	"models/humans/group01/female_06.mdl",
 	"models/humans/group01/female_07.mdl"
 }
-Faction.index = 1
-FACTION_CITIZEN = Faction.index
+
+FACTION_CITIZEN = catherine.faction.Register( FACTION )

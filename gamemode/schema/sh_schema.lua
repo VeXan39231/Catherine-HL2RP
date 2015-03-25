@@ -7,8 +7,8 @@ Schema.IntroTitle = "City 18, 2016."
 Schema.IntroDesc = "It's safe here."
 
 Schema.isCombine = {
-	FACTION_MPF,
-	FACTION_OTA
+	FACTION_CP,
+	FACTION_OW
 }
 
 catherine.util.Include( "sh_config.lua" )

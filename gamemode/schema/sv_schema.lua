@@ -95,10 +95,10 @@ end
 function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
 	if ( !pl:IsRunning( ) ) then return true end
 	local team = pl:Team( )
-	if ( team == FACTION_MPF ) then
+	if ( team == FACTION_CP ) then
 		pl:EmitSound( "npc/metropolice/gear" .. math.random( 1, 6 ) .. ".wav", 70 )
 		return true
-	elseif ( team == FACTION_OTA ) then
+	elseif ( team == FACTION_OW ) then
 		pl:EmitSound( "npc/combine_soldier/gear" .. math.random( 1, 6 ) .. ".wav", 70 )
 		return true
 	end
@@ -115,12 +115,12 @@ function Schema:InventoryInitialize( pl )
 			name = pl:Name( )
 		} )
 		pl:SetCharacterVar( "cid", randomNum )
-	elseif ( team == FACTION_MPF or team == FACTION_OTA or team == FACTION_ADMIN ) then
+	elseif ( team == FACTION_CP or team == FACTION_OW or team == FACTION_ADMIN ) then
 		catherine.item.Give( pl, "portable_radio" )
-		if ( team == FACTION_MPF ) then
+		if ( team == FACTION_CP ) then
 			catherine.item.Give( pl, "weapon_pistol" )
 			catherine.item.Give( pl, "weapon_stunstick" )
-		elseif ( team == FACTION_OTA ) then
+		elseif ( team == FACTION_OW ) then
 			catherine.item.Give( pl, "weapon_ar2" )
 		end
 	end
@@ -128,19 +128,19 @@ end
 
 function Schema:GetPlayerPainSound( pl )
 	local team = pl:Team( )
-	if ( team == FACTION_MPF ) then
+	if ( team == FACTION_CP ) then
 		return "npc/metropolice/pain" .. math.random( 1, 3 ) .. ".wav"
-	elseif ( team == FACTION_OTA ) then
+	elseif ( team == FACTION_OW ) then
 		return "npc/combine_soldier/pain" .. math.random( 1, 3 ) .. ".wav"
 	end
 end
 
 function Schema:PlayerDeathSound( pl )
 	local team = pl:Team( )
-	if ( team == FACTION_MPF ) then
+	if ( team == FACTION_CP ) then
 		pl:EmitSound( "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav" )
 		return true
-	elseif ( team == FACTION_OTA ) then
+	elseif ( team == FACTION_OW ) then
 		pl:EmitSound( "npc/combine_soldier/die" .. math.random( 1, 3 ) .. ".wav" )
 		return true
 	end
