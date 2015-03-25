@@ -1,19 +1,20 @@
-Item.name = "Portable Radio"
-Item.desc = "Communication to other humans."
-Item.cost = 300
-Item.model = "models/Items/battery.mdl"
-Item.weight = 1
-Item.category = "Communication"
-Item.itemData = {
+local ITEM = catherine.item.New( "portable_radio" )
+ITEM.name = "Portable Radio"
+ITEM.desc = "Communication to other humans."
+ITEM.cost = 300
+ITEM.model = "models/items/battery.mdl"
+ITEM.weight = 1
+ITEM.category = "Communication"
+ITEM.itemData = {
 	freq = "xxx.x",
 	toggle = false
 }
-Item.func = { }
-Item.func.setfreq = {
+ITEM.func = { }
+ITEM.func.setfreq = {
 	text = "Set Frequency",
 	canShowIsMenu = true,
 	func = function( pl, itemTable )
-		local itemData = pl:GetInvItemData( itemTable.uniqueID )
+		local itemData = pl:GetInvItemDatas( itemTable.uniqueID )
 		catherine.util.UniqueStringReceiver( pl, "PortableRadio_UniqueSetFreq", "Set Radio Frequency", "What are you setting for radio?", itemData.freq or "xxx.x", function( _, val )
 			if ( val:find( "^%d%d%d%.%d$" ) ) then
 				local one, two, three = val:match( "(%d)%d(%d)%.(%d)" )
@@ -30,18 +31,18 @@ Item.func.setfreq = {
 		end )
 	end
 }
-Item.func.toggle = {
+ITEM.func.toggle = {
 	text = "Toggle",
 	icon = "icon16/accept.png",
 	canShowIsMenu = true,
 	func = function( pl, itemTable )
-		local itemData = pl:GetInvItemData( itemTable.uniqueID )
+		local itemData = pl:GetInvItemDatas( itemTable.uniqueID )
 		pl:SetInvItemData( itemTable.uniqueID, "toggle", !itemData.toggle )
 	end
 }
 
 if ( CLIENT ) then
-	function Item:DrawInformation( pl, itemTable, w, h, itemData )
+	function ITEM:DrawInformation( pl, itemTable, w, h, itemData )
 		if ( itemData.toggle ) then
 			surface.SetDrawColor( 255, 255, 255, 255 )
 			surface.SetMaterial( Material( "icon16/accept.png" ) )
@@ -49,8 +50,9 @@ if ( CLIENT ) then
 		end
 	end
 	
-	function Item:GetDesc( pl, itemTable, itemData, isInv )
-		if ( !isInv ) then return end
-		return "Frequency : " .. ( itemData.freq == "" and "xxx.x" or itemData.freq ) .. "\nPower : " .. ( itemData.toggle == true and "On" or "Off" )
+	function ITEM:GetDesc( pl, itemTable, itemData, isInv )
+		return isInv and "Frequency : " .. ( itemData.freq == "" and "xxx.x" or itemData.freq ) .. "\nPower : " .. ( itemData.toggle == true and "On" or "Off" )
 	end
 end
+
+catherine.item.Register( ITEM )

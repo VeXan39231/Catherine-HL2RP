@@ -3,19 +3,19 @@ function Schema:PlayerCanSpray( pl )
 end
 
 function Schema:SayRadio( pl, text )
-	local chanels = { }
-	local playeritemData = pl:GetInvItemData( "portable_radio" )
+	local chanels, playerFreq = { }, pl:GetInvItemData( "portable_radio", "freq", nil )
+	if ( !playerFreq ) then return end
 	
 	for k, v in pairs( player.GetAllByLoaded( ) ) do
 		if ( !v:HasItem( "portable_radio" ) ) then continue end
-		local targetitemData = v:GetInvItemData( "portable_radio" )
-		if ( targetitemData.toggle and targetitemData.freq != "xxx.x" and targetitemData.freq != "" ) then
+		local targetitemData = v:GetInvItemDatas( "portable_radio" )
+		if ( targetitemData.toggle and targetitemData.freq and ( targetitemData.freq != "xxx.x" and targetitemData.freq != "" ) ) then
 			chanels[ targetitemData.freq ] = chanels[ targetitemData.freq ] or { }
 			chanels[ targetitemData.freq ][ #chanels[ targetitemData.freq ] + 1 ] = v
 		end
 	end
 
-	catherine.chat.RunByClass( pl, "radio", text, chanels[ playeritemData.freq ] )
+	catherine.chat.RunByClass( pl, "radio", text, chanels[ playerFreq ] )
 end
 
 function Schema:SayDispatch( pl, text )
@@ -23,6 +23,7 @@ function Schema:SayDispatch( pl, text )
 end
 
 function Schema:ChatAdjust( adjustInfo )
+	local pl = adjustInfo.player
 	if ( adjustInfo.class == "ic" or adjustInfo.class == "radio" or adjustInfo.class == "yell" or adjustInfo.class == "whisper" ) then
 		local tab = { sounds = { }, text = "" }
 		local ex = string.Explode( ", ", adjustInfo.text )
@@ -36,7 +37,8 @@ function Schema:ChatAdjust( adjustInfo )
 			vol = 30
 		end
 
-		for k, v in pairs( Schema.voice.normalVoice ) do
+		for k, v in pairs( Schema.vo.normalVoice ) do
+			if ( !table.HasValue( v.faction, pl:Team( ) ) ) then continue end
 			for k1, v1 in pairs( ex ) do
 				if ( v1:lower( ) == v.command:lower( ) ) then
 					tab.sounds[ #tab.sounds + 1 ] = { dir = v.sound, len = SoundDuration( v.sound ), vol = vol }
@@ -53,9 +55,10 @@ function Schema:ChatAdjust( adjustInfo )
 		adjustInfo.voice = tab.sounds
 		return adjustInfo
 	elseif ( adjustInfo.class == "dispatch" ) then
-		local tab = { sounds = { }, text = "" }
-		for k, v in pairs( Schema.voice.dispatchVoice ) do
-			if ( v.command:lower( ) == adjustInfo.text:lower( ) ) then
+		local tab, text = { sounds = { }, text = "" }, adjustInfo.text:lower( )
+		
+		for k, v in pairs( Schema.vo.dispatchVoice ) do
+			if ( v.command:lower( ) == text ) then
 				tab.sounds[ #tab.sounds + 1 ] = { dir = v.sound, len = SoundDuration( v.sound ), vol = true }
 				adjustInfo.text = v.output
 			end
@@ -92,15 +95,16 @@ end
 function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
 	if ( !pl:IsRunning( ) ) then return true end
 	local team = pl:Team( )
-	if ( team == FACTION_MPF ) then
+	if ( team == FACTION_CP ) then
 		pl:EmitSound( "npc/metropolice/gear" .. math.random( 1, 6 ) .. ".wav", 70 )
 		return true
-	elseif ( team == FACTION_OTA ) then
+	elseif ( team == FACTION_OW ) then
 		pl:EmitSound( "npc/combine_soldier/gear" .. math.random( 1, 6 ) .. ".wav", 70 )
 		return true
 	end
 end
 
+/*
 function Schema:InventoryInitialize( pl )
 	local team = pl:Team( )
 	if ( team == FACTION_CITIZEN ) then
@@ -112,33 +116,44 @@ function Schema:InventoryInitialize( pl )
 			name = pl:Name( )
 		} )
 		pl:SetCharacterVar( "cid", randomNum )
-	elseif ( team == FACTION_MPF or team == FACTION_OTA or team == FACTION_ADMIN ) then
+	elseif ( team == FACTION_CP or team == FACTION_OW or team == FACTION_ADMIN ) then
 		catherine.item.Give( pl, "portable_radio" )
-		if ( team == FACTION_MPF ) then
+		if ( team == FACTION_CP ) then
 			catherine.item.Give( pl, "weapon_pistol" )
 			catherine.item.Give( pl, "weapon_stunstick" )
-		elseif ( team == FACTION_OTA ) then
+		elseif ( team == FACTION_OW ) then
 			catherine.item.Give( pl, "weapon_ar2" )
 		end
 	end
 end
+*/
 
 function Schema:GetPlayerPainSound( pl )
 	local team = pl:Team( )
-	if ( team == FACTION_MPF ) then
+	if ( team == FACTION_CP ) then
 		return "npc/metropolice/pain" .. math.random( 1, 3 ) .. ".wav"
-	elseif ( team == FACTION_OTA ) then
+	elseif ( team == FACTION_OW ) then
 		return "npc/combine_soldier/pain" .. math.random( 1, 3 ) .. ".wav"
 	end
 end
 
-function Schema:PlayerDeathSound( pl )
+function Schema:GetPlayerDeathSound( pl )
 	local team = pl:Team( )
-	if ( team == FACTION_MPF ) then
-		pl:EmitSound( "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav" )
-		return true
-	elseif ( team == FACTION_OTA ) then
-		pl:EmitSound( "npc/combine_soldier/die" .. math.random( 1, 3 ) .. ".wav" )
-		return true
+	if ( team == FACTION_CP ) then
+		return "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav"
+	elseif ( team == FACTION_OW ) then
+		return "npc/combine_soldier/die" .. math.random( 1, 3 ) .. ".wav"
 	end
+end
+
+function Schema:HealthFullRecovered( pl )
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	
+	// to do
+end
+
+function Schema:HealthRecovering( pl )
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	
+	// to do
 end
