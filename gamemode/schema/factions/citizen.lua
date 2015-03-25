@@ -20,4 +20,14 @@ FACTION.models = {
 	"models/humans/group01/female_07.mdl"
 }
 
+function FACTION:PlayerFirstSpawned( pl )
+	local randomNum = math.random( 10000, 99999 )
+	catherine.item.Give( pl, "cid" )
+	pl:SetInvItemDatas( "cid", {
+		cid = randomNum,
+		name = pl:Name( )
+	} )
+	pl:SetCharacterVar( "cid", randomNum )
+end
+
 FACTION_CITIZEN = catherine.faction.Register( FACTION )

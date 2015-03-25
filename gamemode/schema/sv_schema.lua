@@ -104,6 +104,7 @@ function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
 	end
 end
 
+/*
 function Schema:InventoryInitialize( pl )
 	local team = pl:Team( )
 	if ( team == FACTION_CITIZEN ) then
@@ -125,6 +126,7 @@ function Schema:InventoryInitialize( pl )
 		end
 	end
 end
+*/
 
 function Schema:GetPlayerPainSound( pl )
 	local team = pl:Team( )
