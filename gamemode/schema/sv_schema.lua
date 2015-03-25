@@ -147,3 +147,15 @@ function Schema:PlayerDeathSound( pl )
 		return true
 	end
 end
+
+function Schema:HealthFullRecovered( pl )
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	
+	// to do
+end
+
+function Schema:HealthRecovering( pl )
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	
+	// to do
+end

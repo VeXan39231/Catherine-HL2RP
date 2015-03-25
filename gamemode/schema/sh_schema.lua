@@ -29,7 +29,8 @@ end
 
 
 
-
+// Hint stuff
+//catherine.hint.Register( "" )
 
 
 
@@ -39,13 +40,12 @@ end
 
 catherine.chat.RegisterClass( "radio", {
 	onChat = function( pl, text )
-		chat.AddText( Color( 0, 255, 100 ), pl:Name( ) .. " radio says " .. text )
+		chat.AddText( Color( 0, 255, 100 ), pl:Name( ) .. " radio says " .. catherine.chat.PreSet( text ) )
 	end,
 	global = true,
 	canRun = function( pl )
 		return pl:Alive( )
-	end,
-	command = "radio"
+	end
 } )
 
 catherine.chat.RegisterClass( "dispatch", {

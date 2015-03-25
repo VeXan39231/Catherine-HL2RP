@@ -1,7 +1,9 @@
-Item.base = "bag_base"
-Item.name = "Small bag"
-Item.desc = "This item using add inventory space!"
-Item.cost = 100
-Item.model = "models/props_junk/garbage_bag001a.mdl"
-Item.weight = 0.5
-Item.weightPlus = 10
+local ITEM = catherine.item.New( "small_bag", "BAG" )
+ITEM.name = "Small bag"
+ITEM.desc = "This item using add inventory space!"
+ITEM.cost = 100
+ITEM.model = "models/props_junk/garbage_bag001a.mdl"
+ITEM.weight = 0.5
+ITEM.weightPlus = 10
+
+catherine.item.Register( ITEM )

@@ -1,7 +1,9 @@
-Item.base = "weapon_base"
-Item.name = "Stunstick"
-Item.desc = "An electrified baton powered by a mysterious combine battery."
-Item.cost = 350
-Item.model = "models/weapons/w_stunbaton.mdl"
-Item.weight = 2
-Item.weaponClass = "cat_stunstick"
+local ITEM = catherine.item.New( "weapon_stunstick", "WEAPON" )
+ITEM.name = "Stunstick"
+ITEM.desc = "An electrified baton powered by a mysterious combine battery."
+ITEM.cost = 350
+ITEM.model = "models/weapons/w_stunbaton.mdl"
+ITEM.weight = 2
+ITEM.weaponClass = "cat_stunstick"
+
+catherine.item.Register( ITEM )
