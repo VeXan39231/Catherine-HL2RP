@@ -1,6 +1,12 @@
 Schema.vo = { normalVoice = { }, dispatchVoice = { } }
 
-local COMBINE, CITIZEN = Schema.isCombine, { FACTION_CITIZEN }
+local COMBINE, CITIZEN = {
+	FACTION_CP,
+	FACTION_OW
+},
+{
+	FACTION_CITIZEN
+}
 
 function Schema.vo.RegisterNormal( faction, command, output, sound )
 	Schema.vo.normalVoice[ #Schema.vo.normalVoice + 1 ] = {

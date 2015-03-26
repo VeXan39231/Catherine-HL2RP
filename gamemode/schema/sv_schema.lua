@@ -89,6 +89,8 @@ end
 function Schema:PlayerUseDoor( pl, ent )
 	if ( pl:PlayerIsCombine( ) and !ent:HasSpawnFlags( 256 ) and !ent:HasSpawnFlags( 1024 ) ) then
 		ent:Fire( "open", "", 0 )
+		
+		return true
 	end
 end
 
