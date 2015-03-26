@@ -51,7 +51,7 @@ if ( CLIENT ) then
 	end
 	
 	function ITEM:GetDesc( pl, itemTable, itemData, isInv )
-		return isInv and "Frequency : " .. ( itemData.freq == "" and "xxx.x" or itemData.freq ) .. "\nPower : " .. ( itemData.toggle == true and "On" or "Off" )
+		return isInv and "Frequency : " .. ( itemData.freq and itemData.freq == "" and "xxx.x" or itemData.freq ) .. "\nPower : " .. ( itemData.toggle == true and "On" or "Off" )
 	end
 end
 
