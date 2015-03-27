@@ -89,9 +89,13 @@ end
 function Schema:PlayerUseDoor( pl, ent )
 	if ( pl:PlayerIsCombine( ) and !ent:HasSpawnFlags( 256 ) and !ent:HasSpawnFlags( 1024 ) ) then
 		ent:Fire( "open", "", 0 )
-		
 		return true
 	end
+end
+
+function Schema:AddCombineOverlayMessage( pl, message, time, col, textMakeDelay )
+	if ( !IsValid( pl ) or !message ) then return end
+	netstream.Start( pl, "catherine.Schema.AddCombineOverlayMessage", { message, time, col, textMakeDelay } )
 end
 
 function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
@@ -105,30 +109,6 @@ function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
 		return true
 	end
 end
-
-/*
-function Schema:InventoryInitialize( pl )
-	local team = pl:Team( )
-	if ( team == FACTION_CITIZEN ) then
-		// need suitcase
-		local randomNum = math.random( 10000, 99999 )
-		catherine.item.Give( pl, "cid" )
-		pl:SetInvItemDatas( "cid", {
-			cid = randomNum,
-			name = pl:Name( )
-		} )
-		pl:SetCharacterVar( "cid", randomNum )
-	elseif ( team == FACTION_CP or team == FACTION_OW or team == FACTION_ADMIN ) then
-		catherine.item.Give( pl, "portable_radio" )
-		if ( team == FACTION_CP ) then
-			catherine.item.Give( pl, "weapon_pistol" )
-			catherine.item.Give( pl, "weapon_stunstick" )
-		elseif ( team == FACTION_OW ) then
-			catherine.item.Give( pl, "weapon_ar2" )
-		end
-	end
-end
-*/
 
 function Schema:GetPlayerPainSound( pl )
 	local team = pl:Team( )
@@ -150,12 +130,62 @@ end
 
 function Schema:HealthFullRecovered( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
-	
-	// to do
+	self:AddCombineOverlayMessage( pl, "Vital signs recovered ...", 4, Color( 150, 255, 150 ) )
+end
+
+function Schema:PlayerTakeDamage( pl )
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( ( pl.CAT_HL2RP_nextHurtDelay or CurTime( ) ) <= CurTime( ) ) then
+		local combineNumber = pl:GetCharacterVar( "combineNumber", "ERROR" )
+		for k, v in pairs( player.GetAllByLoaded( ) ) do
+			if ( pl == v ) then
+				self:AddCombineOverlayMessage( pl, "WARNING ! Physical bodily trauma detected ...", 7, Color( 255, 150, 0 ) )
+			else
+				self:AddCombineOverlayMessage( pl, "WARNING ! Unit #" .. combineNumber .. " has damaged by unknown problems ...", 7, Color( 255, 150, 0 ) )
+			end
+		end
+		pl.CAT_HL2RP_nextHurtDelay = CurTime( ) + 2
+	end
 end
 
 function Schema:HealthRecovering( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
+	local per = pl:Health( ) / pl:GetMaxHealth( )
+	self:AddCombineOverlayMessage( pl, "Vital signs recovering [" .. per * 100 .. "%] ...", 4, Color( 255, 150, 150 ) )
+end
+
+function Schema:PlayerGone( pl )
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	local combineNumber, team, msg = pl:GetCharacterVar( "combineNumber", "ERROR" ), pl:Team( ), ""
 	
-	// to do
+	if ( team == FACTION_CP ) then
+		msg = "WARNING ! Unit #" .. combineNumber .. " vital signs absent, alerting dispatch ..."
+	elseif ( team == FACTION_OW ) then
+		msg = "WARNING ! Overwatch Unit #" .. combineNumber .. " vital signs absent, alerting dispatch ..."
+	end
+	
+	for k, v in pairs( player.GetAllByLoaded( ) ) do
+		if ( pl == v ) then
+			if ( pl:Team( ) == FACTION_CP ) then
+				self:AddCombineOverlayMessage( pl, "ERROR ! Shut Down - ...", 10, Color( 255, 0, 0 ) )
+			elseif ( pl:Team( ) == FACTION_OW ) then
+				self:AddCombineOverlayMessage( pl, "Critical Error - ...", 10, Color( 255, 0, 0 ) )
+			end
+		else
+			self:AddCombineOverlayMessage( v, "WARNING ! Vital signs dropping ...", 10, Color( 255, 150, 0 ), 0.04 )
+			self:AddCombineOverlayMessage( v, msg, 15, Color( 255, 0, 0 ), 0.04 )
+		end
+		
+		v:EmitSound( "npc/overwatch/radiovoice/on1.wav" )
+		v:EmitSound( "npc/overwatch/radiovoice/lostbiosignalforunit.wav" )
+		
+		timer.Simple( 1.5, function( )
+			v:EmitSound( "npc/overwatch/radiovoice/off4.wav" )
+		end )
+	end
+end
+
+function Schema:OnSpawnedInCharacter( pl )
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	self:AddCombineOverlayMessage( pl, "Online ...", 5, Color( 150, 255, 150 ) )
 end
