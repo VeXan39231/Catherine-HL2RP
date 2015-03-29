@@ -18,6 +18,19 @@ function Schema:SayRadio( pl, text )
 	catherine.chat.RunByClass( pl, "radio", text, chanels[ playerFreq ] )
 end
 
+function Schema:SayRequest( pl, text )
+	local targets = { }
+	for k, v in pairs( player.GetAllByLoaded( ) ) do
+		if ( !v:PlayerIsCombine( ) ) then continue end
+		targets[ #targets + 1 ] = v
+	end
+	for k, v in pairs( player.GetAllByLoaded( ) ) do
+		if ( !v:PlayerIsCombine( ) ) then continue end
+		self:AddCombineOverlayMessage( v, pl:Name( ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
+	end
+	catherine.chat.RunByClass( pl, "request", text, targets )
+end
+
 function Schema:SayDispatch( pl, text )
 	catherine.chat.RunByClass( pl, "dispatch", text )
 end

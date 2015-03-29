@@ -46,3 +46,13 @@ catherine.chat.RegisterClass( "dispatch", {
 		return pl:Alive( )
 	end
 } )
+
+catherine.chat.RegisterClass( "request", {
+	onChat = function( pl, text )
+		chat.AddText( Color( 255, 200, 150 ), pl:Name( ) .. " request says " .. catherine.chat.PreSet( text ) )
+	end,
+	global = true,
+	canRun = function( pl )
+		return pl:Alive( )
+	end
+} )

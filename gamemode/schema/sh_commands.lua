@@ -25,6 +25,23 @@ catherine.command.Register( {
 } )
 
 catherine.command.Register( {
+	command = "request",
+	syntax = "[Text]",
+	runFunc = function( pl, args )
+		local args = table.concat( args, " " )
+		if ( args != "" ) then
+			if ( pl:HasItem( "request_device" ) ) then
+				Schema:SayRequest( pl, args )
+			else
+				catherine.util.Notify( pl, "You don't have a Request device!" )
+			end
+		else
+			catherine.util.Notify( pl, "Please input a message!" )
+		end
+	end
+} )
+
+catherine.command.Register( {
 	command = "dispatch",
 	syntax = "[Text]",
 	runFunc = function( pl, args )
