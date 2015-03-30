@@ -1,6 +1,5 @@
 Schema.Name = "HL2RP"
 Schema.Author = "L7D"
-Schema.FolderName = "cat_hl2rp"
 Schema.Title = "Half - Life 2 Role Play"
 Schema.Desc = "It's safe here."
 Schema.IntroTitle = "City 18, 2016."
