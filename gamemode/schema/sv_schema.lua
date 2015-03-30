@@ -199,6 +199,12 @@ function Schema:PlayerGone( pl )
 end
 
 function Schema:OnSpawnedInCharacter( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
-	self:AddCombineOverlayMessage( pl, "Online ...", 5, Color( 150, 255, 150 ) )
+	if ( pl:PlayerIsCombine( ) ) then
+		self:AddCombineOverlayMessage( pl, "Online ...", 5, Color( 150, 255, 150 ) )
+	else
+		for k, v in pairs( player.GetAllByLoaded( ) ) do
+			if ( !v:PlayerIsCombine( ) ) then continue end
+			self:AddCombineOverlayMessage( v, "Refreshing citizen lists ...", 5, Color( 150, 255, 150 ) )
+		end
+	end
 end

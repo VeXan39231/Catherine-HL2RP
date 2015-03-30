@@ -1,7 +1,7 @@
 local ITEM = catherine.item.New( "cid" )
 ITEM.name = "CID Card"
 ITEM.desc = "The citizen id card."
-ITEM.cost = 10
+ITEM.cost = 0
 ITEM.model = "models/gibs/metal_gib4.mdl"
 ITEM.weight = 0.1
 ITEM.category = "Wallet"
