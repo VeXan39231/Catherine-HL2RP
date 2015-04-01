@@ -16,6 +16,10 @@ You should have received a copy of the GNU General Public License
 along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
+-- Add the resource pack.
+resource.AddWorkshop( "104491619" )
+resource.AddWorkshop( "105042805" )
+
 function Schema:PlayerCanSpray( pl )
 	return pl:HasItem( "spray_can" )
 end

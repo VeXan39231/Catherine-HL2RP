@@ -49,6 +49,7 @@ Schema.CombineRank = {
 	[ "01" ] = Schema.CombineRankClass.Unit,
 	[ "RCT" ] = Schema.CombineRankClass.Unit
 }
+/* // Default
 Schema.CombineRankModel = {
 	[ "SeC" ] = "models/sect_police2.mdl",
 	[ "DvL" ] = "models/eliteshockcp.mdl",
@@ -61,12 +62,22 @@ Schema.CombineRankModel = {
 	[ "02" ] = "models/police.mdl",
 	[ "01" ] = "models/police.mdl",
 	[ "RCT" ] = "models/police.mdl"
+}*/
+Schema.CombineRankModel = {
+	[ "SeC" ] = "models/dpfilms/metropolice/phoenix_police.mdl",
+	[ "DvL" ] = "models/dpfilms/metropolice/blacop.mdl",
+	[ "EpU" ] = "models/dpfilms/metropolice/elite_police.mdl",
+	[ "GHOST" ] = "models/eliteghostcp.mdl",
+	[ "OfC" ] = "models/dpfilms/metropolice/policetrench.mdl",
+	[ "05" ] = "models/dpfilms/metropolice/hl2concept.mdl",
+	[ "04" ] = "models/dpfilms/metropolice/hl2concept.mdl",
+	[ "03" ] = "models/dpfilms/metropolice/hl2concept.mdl",
+	[ "02" ] = "models/dpfilms/metropolice/hl2concept.mdl",
+	[ "01" ] = "models/dpfilms/metropolice/hl2concept.mdl",
+	[ "RCT" ] = "models/dpfilms/metropolice/hl2concept.mdl"
 }
-
-function Schema:DoPrecache( )
-	for k, v in pairs( self.CombineRankModel ) do
-		util.PrecacheModel( v )
-	end
+for k, v in pairs( Schema.CombineRankModel ) do
+	util.PrecacheModel( v )
 end
 
 function Schema:GetRankByName( name )
@@ -87,7 +98,7 @@ end
 
 function Schema:GetModelByRank( rank )
 	if ( !rank ) then return end
-	return self.CombineRankModel[ rank ] or "models/police.mdl"
+	return self.CombineRankModel[ rank ] or "models/dpfilms/metropolice/hl2concept.mdl"
 end
 
 local META = FindMetaTable( "Player" )
@@ -132,5 +143,3 @@ catherine.chat.RegisterClass( "request", {
 		return pl:Alive( )
 	end
 } )
-
-Schema:DoPrecache( )

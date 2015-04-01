@@ -86,14 +86,14 @@ function Schema:HUDDrawBarBottom( x, y )
 	if ( !LocalPlayer( ):PlayerIsCombine( ) ) then return end
 	for k, v in pairs( self.playercombineOverlays ) do
 		if ( v.time <= CurTime( ) ) then
-			v.a = Lerp( 0.03, v.a, 0 )
+			v.a = Lerp( 0.06, v.a, 0 )
 			if ( math.Round( v.a ) <= 0 ) then
 				table.remove( self.playercombineOverlays, k )
 			end
 		else
-			v.a = Lerp( 0.03, v.a, 255 )
+			v.a = Lerp( 0.06, v.a, 255 )
 		end
-		v.y = Lerp( 0.03, v.y, ( y ) + ( k * 20 ) )
+		v.y = Lerp( 0.06, v.y, ( y ) + ( k * 20 ) )
 		
 		if ( v.textTime <= CurTime( ) and string.utf8len( v.message ) < string.utf8len( v.originalMessage ) ) then
 			local text = string.utf8sub( v.originalMessage, v.textSubCount, v.textSubCount )
