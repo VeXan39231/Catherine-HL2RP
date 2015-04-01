@@ -32,6 +32,13 @@ Schema.IsCombineFacton = {
 	FACTION_CP,
 	FACTION_OW
 }
+Schema.CombineRank = {
+	[ "SeC" ] = 1,
+	[ "DvL" ] = 2,
+	[ "EpU" ] = 3,
+	[ "GHOST" ] = 4,
+	[ "OfC" ] = 5
+}
 
 local META = FindMetaTable( "Player" )
 
