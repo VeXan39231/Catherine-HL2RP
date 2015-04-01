@@ -65,10 +65,14 @@ catherine.command.Register( {
 	runFunc = function( pl, args )
 		local args = table.concat( args, " " )
 		if ( pl:PlayerIsCombine( ) or pl:Team( ) == FACTION_ADMIN ) then
-			if ( args != "" ) then
-				Schema:SayDispatch( pl, args )
+			if ( Schema:CanDispatch( pl:Name( ) ) ) then
+				if ( args != "" ) then
+					Schema:SayDispatch( pl, args )
+				else
+					catherine.util.Notify( pl, "Please input message!" )
+				end
 			else
-				catherine.util.Notify( pl, "Please input message!" )
+				catherine.util.Notify( pl, "You don't have permission using Dispatch!" )
 			end
 		else
 			catherine.util.Notify( pl, "You are not combine!" )

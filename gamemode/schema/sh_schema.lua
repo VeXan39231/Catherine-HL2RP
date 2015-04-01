@@ -32,13 +32,63 @@ Schema.IsCombineFacton = {
 	FACTION_CP,
 	FACTION_OW
 }
-Schema.CombineRank = {
-	[ "SeC" ] = 1,
-	[ "DvL" ] = 2,
-	[ "EpU" ] = 3,
-	[ "GHOST" ] = 4,
-	[ "OfC" ] = 5
+Schema.CombineRankClass = {
+	Elite = "cp_elite",
+	Unit = "cp_unit"
 }
+Schema.CombineRank = {
+	[ "SeC" ] = Schema.CombineRankClass.Elite,
+	[ "DvL" ] = Schema.CombineRankClass.Elite,
+	[ "EpU" ] = Schema.CombineRankClass.Elite,
+	[ "GHOST" ] = Schema.CombineRankClass.Unit,
+	[ "OfC" ] = Schema.CombineRankClass.Unit,
+	[ "05" ] = Schema.CombineRankClass.Unit,
+	[ "04" ] = Schema.CombineRankClass.Unit,
+	[ "03" ] = Schema.CombineRankClass.Unit,
+	[ "02" ] = Schema.CombineRankClass.Unit,
+	[ "01" ] = Schema.CombineRankClass.Unit,
+	[ "RCT" ] = Schema.CombineRankClass.Unit
+}
+Schema.CombineRankModel = {
+	[ "SeC" ] = "models/sect_police2.mdl",
+	[ "DvL" ] = "models/eliteshockcp.mdl",
+	[ "EpU" ] = "models/leet_police2.mdl",
+	[ "GHOST" ] = "models/eliteghostcp.mdl",
+	[ "OfC" ] = "models/policetrench.mdl",
+	[ "05" ] = "models/police.mdl",
+	[ "04" ] = "models/police.mdl",
+	[ "03" ] = "models/police.mdl",
+	[ "02" ] = "models/police.mdl",
+	[ "01" ] = "models/police.mdl",
+	[ "RCT" ] = "models/police.mdl"
+}
+
+function Schema:DoPrecache( )
+	for k, v in pairs( self.CombineRankModel ) do
+		util.PrecacheModel( v )
+	end
+end
+
+function Schema:GetRankByName( name )
+	if ( !name ) then return end
+	for k, v in pairs( self.CombineRank ) do
+		if ( name:find( k ) ) then
+			return k, v
+		end
+	end
+end
+
+function Schema:CanDispatch( name )
+	if ( !name ) then return end
+	return table.HasValue( {
+		"EpU", "SeC", "DvL"
+	}, self:GetRankByName( name ) or "ERROR" )
+end
+
+function Schema:GetModelByRank( rank )
+	if ( !rank ) then return end
+	return self.CombineRankModel[ rank ] or "models/police.mdl"
+end
 
 local META = FindMetaTable( "Player" )
 
@@ -82,3 +132,5 @@ catherine.chat.RegisterClass( "request", {
 		return pl:Alive( )
 	end
 } )
+
+Schema:DoPrecache( )

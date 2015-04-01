@@ -16,10 +16,9 @@ You should have received a copy of the GNU General Public License
 along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-local CLASS = catherine.class.New( "citizen" )
-CLASS.name = "Citizen"
-CLASS.desc = "He wears a dirty shirt."
-CLASS.faction = FACTION_CITIZEN
-CLASS.isDefault = true
+local CLASS = catherine.class.New( "cp_unit" )
+CLASS.name = "Civil Protection Unit"
+CLASS.desc = "TEST"
+CLASS.faction = FACTION_CP
 
 catherine.class.Register( CLASS )

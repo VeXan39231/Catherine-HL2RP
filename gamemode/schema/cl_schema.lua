@@ -96,7 +96,7 @@ function Schema:HUDDrawBarBottom( x, y )
 		v.y = Lerp( 0.03, v.y, ( y ) + ( k * 20 ) )
 		
 		if ( v.textTime <= CurTime( ) and string.utf8len( v.message ) < string.utf8len( v.originalMessage ) ) then
-			local text = string.utf8sub( v.originalMessage, v.textSubCount, v.textSubCount )//v.originalMessage:sub( v.textSubCount, v.textSubCount )
+			local text = string.utf8sub( v.originalMessage, v.textSubCount, v.textSubCount )
 			v.message = v.message .. text
 			v.textSubCount = v.textSubCount + 1
 			v.textTime = CurTime( ) + v.textMakeDelay

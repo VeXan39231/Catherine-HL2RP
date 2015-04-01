@@ -219,6 +219,14 @@ end
 function Schema:OnSpawnedInCharacter( pl )
 	if ( pl:PlayerIsCombine( ) ) then
 		self:AddCombineOverlayMessage( pl, "Online ...", 5, Color( 150, 255, 150 ) )
+		local rankID, classID = self:GetRankByName( pl:Name( ) )
+		
+		if ( rankID and classID ) then
+			catherine.class.Set( pl, classID )
+			pl:SetModel( self:GetModelByRank( rankID ) )
+		else
+			catherine.class.Set( pl, "cp_unit" )
+		end
 	else
 		for k, v in pairs( player.GetAllByLoaded( ) ) do
 			if ( !v:PlayerIsCombine( ) ) then continue end
@@ -228,5 +236,13 @@ function Schema:OnSpawnedInCharacter( pl )
 end
 
 function Schema:CharacterNameChanged( pl, newName )
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	local rankID, classID = self:GetRankByName( pl:Name( ) )
 	
+	if ( rankID and classID ) then
+		catherine.class.Set( pl, classID )
+		pl:SetModel( self:GetModelByRank( rankID ) )
+	else
+		catherine.class.Set( pl, "cp_unit" )
+	end
 end
