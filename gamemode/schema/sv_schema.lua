@@ -1,3 +1,25 @@
+--[[
+< CATHERINE > - A free role-playing framework for Garry's Mod.
+Develop by L7D.
+
+Catherine is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
+]]--
+
+-- Add the resource pack.
+resource.AddWorkshop( "104491619" )
+resource.AddWorkshop( "105042805" )
+
 function Schema:PlayerCanSpray( pl )
 	return pl:HasItem( "spray_can" )
 end
@@ -201,10 +223,30 @@ end
 function Schema:OnSpawnedInCharacter( pl )
 	if ( pl:PlayerIsCombine( ) ) then
 		self:AddCombineOverlayMessage( pl, "Online ...", 5, Color( 150, 255, 150 ) )
+		local rankID, classID = self:GetRankByName( pl:Name( ) )
+		
+		if ( rankID and classID ) then
+			catherine.class.Set( pl, classID )
+			pl:SetModel( self:GetModelByRank( rankID ) )
+		else
+			catherine.class.Set( pl, "cp_unit" )
+		end
 	else
 		for k, v in pairs( player.GetAllByLoaded( ) ) do
 			if ( !v:PlayerIsCombine( ) ) then continue end
 			self:AddCombineOverlayMessage( v, "Refreshing citizen lists ...", 5, Color( 150, 255, 150 ) )
 		end
+	end
+end
+
+function Schema:CharacterNameChanged( pl, newName )
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	local rankID, classID = self:GetRankByName( pl:Name( ) )
+	
+	if ( rankID and classID ) then
+		catherine.class.Set( pl, classID )
+		pl:SetModel( self:GetModelByRank( rankID ) )
+	else
+		catherine.class.Set( pl, "cp_unit" )
 	end
 end

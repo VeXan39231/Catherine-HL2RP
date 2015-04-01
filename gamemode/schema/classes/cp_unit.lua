@@ -16,4 +16,9 @@ You should have received a copy of the GNU General Public License
 along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-catherine.configs.characterMenuMusic = "music/hl2_song19.mp3"
+local CLASS = catherine.class.New( "cp_unit" )
+CLASS.name = "Civil Protection Unit"
+CLASS.desc = "TEST"
+CLASS.faction = FACTION_CP
+
+catherine.class.Register( CLASS )

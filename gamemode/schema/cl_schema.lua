@@ -1,3 +1,21 @@
+--[[
+< CATHERINE > - A free role-playing framework for Garry's Mod.
+Develop by L7D.
+
+Catherine is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
+]]--
+
 Schema.combineOverlayMessage = {
 	"Waiting for biosignal ...",
 	"Initializing Heads-up-display ...",
@@ -68,17 +86,17 @@ function Schema:HUDDrawBarBottom( x, y )
 	if ( !LocalPlayer( ):PlayerIsCombine( ) ) then return end
 	for k, v in pairs( self.playercombineOverlays ) do
 		if ( v.time <= CurTime( ) ) then
-			v.a = Lerp( 0.03, v.a, 0 )
+			v.a = Lerp( 0.06, v.a, 0 )
 			if ( math.Round( v.a ) <= 0 ) then
 				table.remove( self.playercombineOverlays, k )
 			end
 		else
-			v.a = Lerp( 0.03, v.a, 255 )
+			v.a = Lerp( 0.06, v.a, 255 )
 		end
-		v.y = Lerp( 0.03, v.y, ( y ) + ( k * 20 ) )
+		v.y = Lerp( 0.06, v.y, ( y ) + ( k * 20 ) )
 		
 		if ( v.textTime <= CurTime( ) and string.utf8len( v.message ) < string.utf8len( v.originalMessage ) ) then
-			local text = string.utf8sub( v.originalMessage, v.textSubCount, v.textSubCount )//v.originalMessage:sub( v.textSubCount, v.textSubCount )
+			local text = string.utf8sub( v.originalMessage, v.textSubCount, v.textSubCount )
 			v.message = v.message .. text
 			v.textSubCount = v.textSubCount + 1
 			v.textTime = CurTime( ) + v.textMakeDelay

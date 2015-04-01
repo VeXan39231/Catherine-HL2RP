@@ -1,12 +1,26 @@
-Schema.vo = { normalVoice = { }, dispatchVoice = { } }
+--[[
+< CATHERINE > - A free role-playing framework for Garry's Mod.
+Develop by L7D.
 
-local COMBINE, CITIZEN = {
-	FACTION_CP,
-	FACTION_OW
-},
-{
-	FACTION_CITIZEN
-}
+Catherine is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
+]]--
+
+Schema.vo = Schema.vo or { }
+Schema.vo.normalVoice = { }
+Schema.vo.dispatchVoice = { }
+
+local COMBINE, CITIZEN = Schema.IsCombineFacton, { FACTION_CITIZEN }
 
 function Schema.vo.RegisterNormal( faction, command, output, sound )
 	Schema.vo.normalVoice[ #Schema.vo.normalVoice + 1 ] = {
