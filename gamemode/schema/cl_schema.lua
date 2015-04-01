@@ -1,6 +1,6 @@
 --[[
 < CATHERINE > - A free role-playing framework for Garry's Mod.
-Develop by L7D.
+Development and design by L7D.
 
 Catherine is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,11 +33,15 @@ netstream.Hook( "catherine.Schema.AddCombineOverlayMessage", function( data )
 	Schema:AddCombineOverlayMessage( data[ 1 ], data[ 2 ], data[ 3 ], data[ 4 ] )
 end )
 
+netstream.Hook( "catherine.Schema.ClearCombineOverlayMessages", function( )
+	Schema.playercombineOverlays = { }
+end )
+
 function Schema:GetSchemaInformation( )
 	return {
 		title = Schema.IntroTitle,
 		desc = Schema.IntroDesc,
-		author = "Design and development by " .. Schema.Author .. "."
+		author = "Development and design by " .. Schema.Author .. "."
 	}
 end
 

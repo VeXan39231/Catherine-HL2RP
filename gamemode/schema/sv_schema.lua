@@ -1,6 +1,6 @@
 --[[
 < CATHERINE > - A free role-playing framework for Garry's Mod.
-Develop by L7D.
+Development and design by L7D.
 
 Catherine is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -133,6 +133,11 @@ function Schema:AddCombineOverlayMessage( pl, message, time, col, textMakeDelay 
 	netstream.Start( pl, "catherine.Schema.AddCombineOverlayMessage", { message, time, col, textMakeDelay } )
 end
 
+function Schema:ClearCombineOverlayMessages( pl )
+	if ( !IsValid( pl ) ) then return end
+	netstream.Start( pl, "catherine.Schema.ClearCombineOverlayMessages" )
+end
+
 function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
 	if ( !pl:IsRunning( ) ) then return true end
 	local team = pl:Team( )
@@ -223,12 +228,15 @@ end
 function Schema:OnSpawnedInCharacter( pl )
 	if ( pl:PlayerIsCombine( ) ) then
 		self:AddCombineOverlayMessage( pl, "Online ...", 5, Color( 150, 255, 150 ) )
+		
 		local rankID, classID = self:GetRankByName( pl:Name( ) )
+		if ( pl:Class( ) != nil and pl:Class() == classID ) then return end
 		
 		if ( rankID and classID ) then
 			catherine.class.Set( pl, classID )
 			pl:SetModel( self:GetModelByRank( rankID ) )
 		else
+			if ( pl:Class( ) == "cp_unit" ) then return end
 			catherine.class.Set( pl, "cp_unit" )
 		end
 	else
@@ -242,11 +250,18 @@ end
 function Schema:CharacterNameChanged( pl, newName )
 	if ( !pl:PlayerIsCombine( ) ) then return end
 	local rankID, classID = self:GetRankByName( pl:Name( ) )
+
+	if ( pl:Class( ) != nil and pl:Class() == classID ) then return end
 	
 	if ( rankID and classID ) then
 		catherine.class.Set( pl, classID )
 		pl:SetModel( self:GetModelByRank( rankID ) )
 	else
+		if ( pl:Class( ) == "cp_unit" ) then return end
 		catherine.class.Set( pl, "cp_unit" )
 	end
+end
+
+function Schema:CharacterLoadingStart( pl )
+	self:ClearCombineOverlayMessages( pl )
 end
