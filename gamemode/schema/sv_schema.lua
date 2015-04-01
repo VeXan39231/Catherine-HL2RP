@@ -226,3 +226,7 @@ function Schema:OnSpawnedInCharacter( pl )
 		end
 	end
 end
+
+function Schema:CharacterNameChanged( pl, newName )
+	
+end
