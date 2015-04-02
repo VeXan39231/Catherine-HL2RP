@@ -76,8 +76,10 @@ Schema.CombineRankModel = {
 	[ "01" ] = "models/dpfilms/metropolice/hl2concept.mdl",
 	[ "RCT" ] = "models/dpfilms/metropolice/hl2concept.mdl"
 }
+
 for k, v in pairs( Schema.CombineRankModel ) do
 	util.PrecacheModel( v )
+	catherine.anim.SetModelAnimation( "metrocop", v )
 end
 
 function Schema:GetRankByName( name )

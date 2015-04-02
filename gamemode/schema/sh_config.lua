@@ -17,3 +17,11 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 catherine.configs.characterMenuMusic = "music/hl2_song19.mp3"
+catherine.configs.defaultRPdateTime = {
+	year = 2016,
+	minute = 1,
+	day = 1,
+	hour = 1,
+	month = 1,
+	second = 1
+}
