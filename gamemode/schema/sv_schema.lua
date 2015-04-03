@@ -23,6 +23,8 @@ resource.AddWorkshop( "105042805" )
 CAT_SCHEMA_COMBINEOVERLAY_LOCAL = 1
 CAT_SCHEMA_COMBINEOVERLAY_GLOBAL = 2
 
+Schema.NextRadioSignalCheckTick = Schema.NextRadioSignalCheckTick or CurTime( ) + 2
+
 function Schema:PlayerCanSpray( pl )
 	return pl:HasItem( "spray_can" )
 end
@@ -293,14 +295,49 @@ function Schema:GetRadioListeners( pl )
 end
 
 function Schema:Tick( )
-	local chanels, playerFreq = { }, pl:GetInvItemData( "portable_radio", "freq", nil )
-	if ( !playerFreq ) then return end
-	
-	for k, v in pairs( player.GetAllByLoaded( ) ) do
-	
+	if ( self.NextRadioSignalCheckTick <= CurTime( ) ) then
+		self:RadioTick( )
+		self.NextRadioSignalCheckTick = CurTime( ) + 2
 	end
 end
 
-function Schema:Tick( )
+// 1 - 1000,
+// 2 - 300,
+// 3 - 100
+// 4 - 3000
 
+function Schema:CalcRadio( pl )
+	local listeners = self:GetRadioListeners( pl )
+	local disradio = {
+		[ 800 ] = 5,
+		[ 1800 ] = 4,
+		[ 3000 ] = 3,
+		[ 5000 ] = 2,
+		[ 8000 ] = 1,
+		[ 10000 ] = 0
+	}
+	local l = 1000000 // need set max map size.
+	
+	for k, v in pairs( listeners or { } ) do
+		if ( pl == v ) then continue end
+		local dis = catherine.util.CalcDistanceByPos( pl, v )
+		if ( dis < l ) then
+			l = dis
+		end
+	end
+
+	for k, v in pairs( disradio ) do
+		if ( k >= l ) then
+			return v
+		end
+	end
+	
+	return 0
+end
+
+function Schema:RadioTick( )
+	for k, v in pairs( player.GetAllByLoaded( ) ) do
+		if ( v:PlayerIsCombine( ) ) then continue end
+		v:SetNetVar( "radioSignal", self:CalcRadio( v ) )
+	end
 end
