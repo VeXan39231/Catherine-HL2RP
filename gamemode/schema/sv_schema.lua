@@ -310,7 +310,7 @@ function Schema:CalcRadio( pl )
 		[ 8000 ] = 1,
 		[ 10000 ] = 0
 	}
-	local l = 1000000 // need set max map size.
+	local l = 1000000 // need to set max map size.
 	
 	for k, v in pairs( listeners or { } ) do
 		if ( pl == v ) then continue end

@@ -93,6 +93,11 @@ end
 
 function Schema:CanDispatch( name )
 	if ( !name ) then return end
+	local can = { }
+	for k, v in pairs( Schema.CombineRank ) do
+		if ( v != Schema.CombineRankClass.Elite ) then continue end
+		can[ #can + 1 ] = v
+	end
 	return table.HasValue( {
 		"EpU", "SeC", "DvL"
 	}, self:GetRankByName( name ) or "ERROR" )
@@ -114,11 +119,11 @@ function Schema:GetCombines( )
 	return players
 end
 
-local META = FindMetaTable( "Player" )
-
 function Schema:PlayerIsCombine( pl )
 	return table.HasValue( self.IsCombineFacton, pl:Team( ) )
 end
+
+local META = FindMetaTable( "Player" )
 
 function META:PlayerIsCombine( )
 	return Schema:PlayerIsCombine( self )
