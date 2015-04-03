@@ -29,14 +29,6 @@ Schema.combineOverlayMessage = {
 Schema.playercombineOverlays = { }
 local combineOverlayMaterial
 
-netstream.Hook( "catherine.Schema.AddCombineOverlayMessage", function( data )
-	Schema:AddCombineOverlayMessage( data[ 1 ], data[ 2 ], data[ 3 ], data[ 4 ] )
-end )
-
-netstream.Hook( "catherine.Schema.ClearCombineOverlayMessages", function( )
-	Schema.playercombineOverlays = { }
-end )
-
 function Schema:GetSchemaInformation( )
 	return {
 		title = Schema.IntroTitle,
@@ -71,14 +63,13 @@ function Schema:AutomaticCombineOverlayMessage( )
 end
 
 function Schema:AddCombineOverlayMessage( message, time, col, textMakeDelay )
-	if ( !message or !time ) then return end
 	self.playercombineOverlays[ #self.playercombineOverlays + 1 ] = {
 		message = "",
 		a = 0,
 		y = 20 + ( ( #self.playercombineOverlays + 2 ) * 20 ),
-		time = CurTime( ) + ( time or 6 ),
+		time = CurTime( ) + time,
 		textTime = CurTime( ),
-		textMakeDelay = textMakeDelay or 0.05,
+		textMakeDelay = textMakeDelay,
 		textSubCount = 1,
 		gradientW = 0,
 		originalMessage = self:PrefixCombineOverlayMessage( ) .. message,
@@ -88,6 +79,11 @@ end
 
 function Schema:HUDDrawBarBottom( x, y )
 	if ( !LocalPlayer( ):PlayerIsCombine( ) ) then return end
+	
+	self:DrawCombineOverlay( x, y )
+end
+
+function Schema:DrawCombineOverlay( x, y )
 	for k, v in pairs( self.playercombineOverlays ) do
 		if ( v.time <= CurTime( ) ) then
 			v.a = Lerp( 0.06, v.a, 0 )
@@ -104,8 +100,9 @@ function Schema:HUDDrawBarBottom( x, y )
 			v.message = v.message .. text
 			v.textSubCount = v.textSubCount + 1
 			v.textTime = CurTime( ) + v.textMakeDelay
-			v.gradientW = v.gradientW + 10
+			v.gradientW = v.gradientW + 5
 		end
+		
 		surface.SetDrawColor( v.col.r, v.col.g, v.col.b, v.a - 100 )
 		surface.SetMaterial( Material( "gui/gradient" ) )
 		surface.DrawTexturedRect( 5, v.y + 10, v.gradientW, 1 )
@@ -128,6 +125,36 @@ function Schema:HUDBackgroundDraw( )
 	surface.DrawTexturedRect( 0, 0, ScrW( ), ScrH( ) )
 end
 
+function Schema:HUDDraw( )
+	if ( !LocalPlayer( ):Alive( ) or !LocalPlayer( ):HasItem( "portable_radio" ) or LocalPlayer( ):GetInvItemData( "portable_radio", "toggle", false ) == false ) then return end
+	local freq = LocalPlayer( ):GetInvItemData( "portable_radio", "freq", "000.0" )
+	local x, y = 15, ScrH( ) * 0.4
+	local signal = LocalPlayer( ):GetNetVar( "radioSignal", 0 )
+	
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.SetMaterial( Material( "CAT_HL2RP/antenna.png", "smooth" ) )
+	surface.DrawTexturedRect( x, y, 42, 42 )
+
+	if ( signal == 0 ) then
+		draw.SimpleText( "NO SIGNAL", "catherine_normal15", x + 50, y + 40, Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, 1 )
+	else
+		local col = Color( 255, 255, 255, 255 )
+		
+		if ( signal <= 1 ) then
+			col = Color( 255, 0, 0, 255 )
+		elseif ( signal <= 2 ) then
+			col = Color( 255, 255, 0, 255 )
+		end
+		
+		for i = 1, signal do
+			local h = 5 * i
+			draw.RoundedBox( 0, ( x + 40 ) + 7 * i, ( y + 40 ) - h, 5, h, col )
+		end
+	end
+	
+	draw.SimpleText( freq, "catherine_normal15", x + 5, y + 55, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, 1 )
+end
+
 function Schema:Think( )
 	local pl = LocalPlayer( )
 	if ( !pl:PlayerIsCombine( ) or !pl:Alive( ) ) then return end
@@ -140,3 +167,11 @@ function Schema:Think( )
 end
 
 catherine.font.Register( "catherine_hl2rp_combineOverlay", "Consolas", 15, 1000 )
+
+netstream.Hook( "catherine.Schema.AddCombineOverlayMessage", function( data )
+	Schema:AddCombineOverlayMessage( data[ 1 ], data[ 2 ], data[ 3 ], data[ 4 ] )
+end )
+
+netstream.Hook( "catherine.Schema.ClearCombineOverlayMessages", function( )
+	Schema.playercombineOverlays = { }
+end )

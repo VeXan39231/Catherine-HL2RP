@@ -76,8 +76,19 @@ Schema.CombineRankModel = {
 	[ "01" ] = "models/dpfilms/metropolice/hl2concept.mdl",
 	[ "RCT" ] = "models/dpfilms/metropolice/hl2concept.mdl"
 }
+Schema.BadRadioStrings = {
+	"?",
+	"%",
+	"{",
+	"@",
+	"__",
+	"_____",
+	"_"
+}
+
 for k, v in pairs( Schema.CombineRankModel ) do
 	util.PrecacheModel( v )
+	catherine.anim.SetModelAnimation( "metrocop", v )
 end
 
 function Schema:GetRankByName( name )
@@ -91,6 +102,11 @@ end
 
 function Schema:CanDispatch( name )
 	if ( !name ) then return end
+	local can = { }
+	for k, v in pairs( Schema.CombineRank ) do
+		if ( v != Schema.CombineRankClass.Elite ) then continue end
+		can[ #can + 1 ] = v
+	end
 	return table.HasValue( {
 		"EpU", "SeC", "DvL"
 	}, self:GetRankByName( name ) or "ERROR" )
@@ -101,22 +117,48 @@ function Schema:GetModelByRank( rank )
 	return self.CombineRankModel[ rank ] or "models/dpfilms/metropolice/hl2concept.mdl"
 end
 
-local META = FindMetaTable( "Player" )
+function Schema:GetCombines( )
+	local players = { }
+	
+	for k, v in pairs( player.GetAllByLoaded( ) ) do
+		if ( !v:PlayerIsCombine( ) ) then continue end
+		players[ #players + 1 ] = v
+	end
+	
+	return players
+end
 
 function Schema:PlayerIsCombine( pl )
 	return table.HasValue( self.IsCombineFacton, pl:Team( ) )
 end
 
+local META = FindMetaTable( "Player" )
+
 function META:PlayerIsCombine( )
 	return Schema:PlayerIsCombine( self )
+end
+
+function Schema:CalcBadNameString( )
+	local rand = math.random( 5, 15 )
+	local text = ""
+	
+	for i = 1, rand do
+		text = text .. table.Random( self.BadRadioStrings )
+	end
+	
+	return text
 end
 
 // Hint stuff
 //catherine.hint.Register( "" )
 
 catherine.chat.RegisterClass( "radio", {
-	onChat = function( pl, text )
-		chat.AddText( Color( 0, 255, 100 ), pl:Name( ) .. " radio says " .. catherine.chat.PreSet( text ) )
+	onChat = function( pl, text, ex )
+		local name = pl:Name( )
+		if ( ex[ 1 ] and LocalPlayer( ) != pl ) then
+			name = Schema:CalcBadNameString( )
+		end
+		chat.AddText( Color( 0, 255, 100 ), name .. " radio says " .. catherine.chat.PreSet( text ) )
 	end,
 	global = true,
 	canRun = function( pl )

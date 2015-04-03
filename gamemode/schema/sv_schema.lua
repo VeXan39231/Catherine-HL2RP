@@ -20,37 +20,48 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 resource.AddWorkshop( "104491619" )
 resource.AddWorkshop( "105042805" )
 
+catherine.util.AddResourceInFolder( "materials/CAT_HL2RP" )
+
+CAT_SCHEMA_COMBINEOVERLAY_LOCAL = 1
+CAT_SCHEMA_COMBINEOVERLAY_GLOBAL = 2
+CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL = 3
+
+Schema.NextRadioSignalCheckTick = Schema.NextRadioSignalCheckTick or CurTime( ) + 2
+
 function Schema:PlayerCanSpray( pl )
 	return pl:HasItem( "spray_can" )
 end
 
 function Schema:SayRadio( pl, text )
-	local chanels, playerFreq = { }, pl:GetInvItemData( "portable_radio", "freq", nil )
-	if ( !playerFreq ) then return end
-	
-	for k, v in pairs( player.GetAllByLoaded( ) ) do
-		if ( !v:HasItem( "portable_radio" ) ) then continue end
-		local targetitemData = v:GetInvItemDatas( "portable_radio" )
-		if ( targetitemData.toggle and targetitemData.freq and ( targetitemData.freq != "xxx.x" and targetitemData.freq != "" ) ) then
-			chanels[ targetitemData.freq ] = chanels[ targetitemData.freq ] or { }
-			chanels[ targetitemData.freq ][ #chanels[ targetitemData.freq ] + 1 ] = v
+	local listeners = self:GetRadioListeners( pl )
+	local blockPl = nil
+	local radioSignal = pl:GetNetVar( "radioSignal", 0 )
+
+	if ( radioSignal == 2 ) then
+		local ex = string.Explode( " ", text )
+		for k, v in pairs( ex ) do
+			ex[ k ] = ex[ k ] .. string.rep( ".", math.random( 2, 10 ) )
 		end
+		text = table.concat( ex, "" )
+		
+	elseif ( radioSignal == 1 ) then
+		text = string.rep( ".", #text )
+		for k, v in pairs( listeners ) do
+			v:EmitSound( "ambient/levels/prison/radio_random" .. math.random( 1, 9 ) .. ".wav", 40 )
+		end
+		blockPl = pl
+	elseif ( radioSignal == 0 ) then
+		catherine.chat.RunByClass( pl, "radio", string.rep( ".", #text ) )
+		pl:EmitSound( "ambient/levels/prison/radio_random" .. math.random( 1, 9 ) .. ".wav", 40 )
+		return
 	end
 
-	catherine.chat.RunByClass( pl, "radio", text, chanels[ playerFreq ] )
+	catherine.chat.RunByClass( pl, "radio", text, listeners, blockPl )
 end
 
 function Schema:SayRequest( pl, text )
-	local targets = { }
-	for k, v in pairs( player.GetAllByLoaded( ) ) do
-		if ( !v:PlayerIsCombine( ) ) then continue end
-		targets[ #targets + 1 ] = v
-	end
-	for k, v in pairs( player.GetAllByLoaded( ) ) do
-		if ( !v:PlayerIsCombine( ) ) then continue end
-		self:AddCombineOverlayMessage( v, pl:Name( ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
-	end
-	catherine.chat.RunByClass( pl, "request", text, targets )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, pl:Name( ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
+	catherine.chat.RunByClass( pl, "request", text, self:GetCombines( ) )
 end
 
 function Schema:SayDispatch( pl, text )
@@ -128,9 +139,18 @@ function Schema:PlayerUseDoor( pl, ent )
 	end
 end
 
-function Schema:AddCombineOverlayMessage( pl, message, time, col, textMakeDelay )
-	if ( !IsValid( pl ) or !message ) then return end
-	netstream.Start( pl, "catherine.Schema.AddCombineOverlayMessage", { message, time, col, textMakeDelay } )
+function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, textMakeDelay )
+	if ( !message ) then return end
+	targetType = targetType or CAT_SCHEMA_COMBINEOVERLAY_GLOBAL
+	local combines = self:GetCombines( )
+	
+	if ( targetType == CAT_SCHEMA_COMBINEOVERLAY_LOCAL and IsValid( pl ) ) then
+		combines = pl
+	elseif ( targetType == CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL and IsValid( pl ) ) then
+		table.RemoveByValue( combines, pl )
+	end
+	
+	netstream.Start( combines, "catherine.Schema.AddCombineOverlayMessage", { message, time or 6, col or Color( 255, 255, 255 ), textMakeDelay or 0.05 } )
 end
 
 function Schema:ClearCombineOverlayMessages( pl )
@@ -139,83 +159,89 @@ function Schema:ClearCombineOverlayMessages( pl )
 end
 
 function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
-	if ( !pl:IsRunning( ) ) then return true end
-	local team = pl:Team( )
-	if ( team == FACTION_CP ) then
-		pl:EmitSound( "npc/metropolice/gear" .. math.random( 1, 6 ) .. ".wav", 70 )
-		return true
-	elseif ( team == FACTION_OW ) then
-		pl:EmitSound( "npc/combine_soldier/gear" .. math.random( 1, 6 ) .. ".wav", 70 )
-		return true
+	if ( !pl:PlayerIsCombine( ) or !pl:IsRunning( ) ) then return true end
+	
+	local sound = "npc/metropolice/gear" .. math.random( 1, 6 ) .. ".wav"
+	if ( pl:Team( ) == FACTION_OW ) then
+		sound = "npc/combine_soldier/gear" .. math.random( 1, 6 ) .. ".wav"
 	end
+	
+	pl:EmitSound( sound, 70 )
+	return true
 end
 
 function Schema:GetPlayerPainSound( pl )
-	local team = pl:Team( )
-	if ( team == FACTION_CP ) then
-		return "npc/metropolice/pain" .. math.random( 1, 3 ) .. ".wav"
-	elseif ( team == FACTION_OW ) then
-		return "npc/combine_soldier/pain" .. math.random( 1, 3 ) .. ".wav"
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	
+	local sound = "npc/metropolice/pain" .. math.random( 1, 3 ) .. ".wav"
+	if ( pl:Team( ) == FACTION_OW ) then
+		sound = "npc/combine_soldier/pain" .. math.random( 1, 3 ) .. ".wav"
 	end
+	
+	return sound
 end
 
 function Schema:GetPlayerDeathSound( pl )
-	local team = pl:Team( )
-	if ( team == FACTION_CP ) then
-		return "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav"
-	elseif ( team == FACTION_OW ) then
-		return "npc/combine_soldier/die" .. math.random( 1, 3 ) .. ".wav"
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	
+	local sound = "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav"
+	if ( pl:Team( ) == FACTION_OW ) then
+		sound = "npc/combine_soldier/die" .. math.random( 1, 3 ) .. ".wav"
 	end
+	
+	return sound
+end
+
+function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, textMakeDelay )
+	if ( !message ) then return end
+	targetType = targetType or CAT_SCHEMA_COMBINEOVERLAY_GLOBAL
+	local combines = self:GetCombines( )
+	
+	if ( targetType == CAT_SCHEMA_COMBINEOVERLAY_LOCAL and IsValid( pl ) ) then
+		combines = pl
+	elseif ( targetType == CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL and IsValid( pl ) ) then
+		table.RemoveByValue( combines, pl )
+	end
+	
+	netstream.Start( combines, "catherine.Schema.AddCombineOverlayMessage", { message, time or 6, col or Color( 255, 255, 255 ), textMakeDelay or 0.05 } )
 end
 
 function Schema:HealthFullRecovered( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
-	self:AddCombineOverlayMessage( pl, "Vital signs recovered ...", 4, Color( 150, 255, 150 ) )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Vital signs recovered ...", 4, Color( 150, 255, 150 ) )
 end
 
 function Schema:PlayerTakeDamage( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
 	if ( ( pl.CAT_HL2RP_nextHurtDelay or CurTime( ) ) <= CurTime( ) ) then
 		local combineNumber = pl:GetCharacterVar( "combineNumber", "ERROR" )
-		for k, v in pairs( player.GetAllByLoaded( ) ) do
-			if ( pl == v ) then
-				self:AddCombineOverlayMessage( pl, "WARNING ! Physical bodily trauma detected ...", 7, Color( 255, 150, 0 ) )
-			else
-				self:AddCombineOverlayMessage( pl, "WARNING ! Unit #" .. combineNumber .. " has damaged by unknown problems ...", 7, Color( 255, 150, 0 ) )
-			end
-		end
-		pl.CAT_HL2RP_nextHurtDelay = CurTime( ) + 2
+		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "WARNING ! Physical bodily trauma detected ...", 7, Color( 255, 150, 0 ) )
+		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL, pl, "WARNING ! Unit #" .. combineNumber .. " has damaged by unknown problems ...", 7, Color( 255, 150, 0 ) )
+		pl.CAT_HL2RP_nextHurtDelay = CurTime( ) + 5
 	end
 end
 
 function Schema:HealthRecovering( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
-	local per = pl:Health( ) / pl:GetMaxHealth( )
-	self:AddCombineOverlayMessage( pl, "Vital signs recovering [" .. per * 100 .. "%] ...", 4, Color( 255, 150, 150 ) )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Vital signs recovering [" .. ( pl:Health( ) / pl:GetMaxHealth( ) ) * 100 .. "%] ...", 4, Color( 255, 150, 150 ) )
 end
 
 function Schema:PlayerGone( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
-	local combineNumber, team, msg = pl:GetCharacterVar( "combineNumber", "ERROR" ), pl:Team( ), ""
+	local combineNumber = pl:GetCharacterVar( "combineNumber", "ERROR" )
 	
-	if ( team == FACTION_CP ) then
-		msg = "WARNING ! Unit #" .. combineNumber .. " vital signs absent, alerting dispatch ..."
-	elseif ( team == FACTION_OW ) then
-		msg = "WARNING ! Overwatch Unit #" .. combineNumber .. " vital signs absent, alerting dispatch ..."
+	local localMessage = "ERROR ! Shut Down - ..."
+	local globalMessage = "WARNING ! Unit #" .. combineNumber .. " vital signs absent, alerting dispatch ..."
+	if ( pl:Team( ) == FACTION_OW ) then
+		localMessage = "Critical Error - ..."
+		globalMessage = "WARNING ! Overwatch Unit #" .. combineNumber .. " vital signs absent, alerting dispatch ..."
 	end
 	
-	for k, v in pairs( player.GetAllByLoaded( ) ) do
-		if ( pl == v ) then
-			if ( pl:Team( ) == FACTION_CP ) then
-				self:AddCombineOverlayMessage( pl, "ERROR ! Shut Down - ...", 10, Color( 255, 0, 0 ) )
-			elseif ( pl:Team( ) == FACTION_OW ) then
-				self:AddCombineOverlayMessage( pl, "Critical Error - ...", 10, Color( 255, 0, 0 ) )
-			end
-		else
-			self:AddCombineOverlayMessage( v, "WARNING ! Vital signs dropping ...", 10, Color( 255, 150, 0 ), 0.04 )
-			self:AddCombineOverlayMessage( v, msg, 15, Color( 255, 0, 0 ), 0.04 )
-		end
-		
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL, pl, "WARNING ! Vital signs dropping ...", 10, Color( 255, 150, 0 ), 0.04 )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, localMessage, 10, Color( 255, 0, 0 ), 0.04 )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL, pl, globalMessage, 10, Color( 255, 0, 0 ), 0.04 )
+
+	for k, v in pairs( self:GetCombines( ) or { } ) do
 		v:EmitSound( "npc/overwatch/radiovoice/on1.wav" )
 		v:EmitSound( "npc/overwatch/radiovoice/lostbiosignalforunit.wav" )
 		
@@ -227,7 +253,7 @@ end
 
 function Schema:OnSpawnedInCharacter( pl )
 	if ( pl:PlayerIsCombine( ) ) then
-		self:AddCombineOverlayMessage( pl, "Online ...", 5, Color( 150, 255, 150 ) )
+		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Online ...", 5, Color( 150, 255, 150 ), 0.04 )
 		
 		local rankID, classID = self:GetRankByName( pl:Name( ) )
 		if ( pl:Class( ) != nil and pl:Class() == classID ) then return end
@@ -239,12 +265,10 @@ function Schema:OnSpawnedInCharacter( pl )
 			if ( pl:Class( ) == "cp_unit" ) then return end
 			catherine.class.Set( pl, "cp_unit" )
 		end
-	else
-		for k, v in pairs( player.GetAllByLoaded( ) ) do
-			if ( !v:PlayerIsCombine( ) ) then continue end
-			self:AddCombineOverlayMessage( v, "Refreshing citizen lists ...", 5, Color( 150, 255, 150 ) )
-		end
+		return
 	end
+	
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, "Refreshing citizen lists ...", 7, Color( 150, 255, 150 ) )
 end
 
 function Schema:CharacterNameChanged( pl, newName )
@@ -263,5 +287,77 @@ function Schema:CharacterNameChanged( pl, newName )
 end
 
 function Schema:CharacterLoadingStart( pl )
+	if ( !pl:PlayerIsCombine( ) ) then return end
 	self:ClearCombineOverlayMessages( pl )
+end
+
+function Schema:GetRadioListeners( pl )
+	local listeners, playerFreq = { }, pl:GetInvItemData( "portable_radio", "freq" )
+	if ( !playerFreq ) then return end
+	
+	for k, v in pairs( player.GetAllByLoaded( ) ) do
+		if ( !v:HasItem( "portable_radio" ) ) then continue end
+		local targetItemDatas = v:GetInvItemDatas( "portable_radio" )
+		
+		if ( targetItemDatas.toggle and targetItemDatas.freq and ( targetItemDatas.freq != "xxx.x" and targetItemDatas.freq != "" ) ) then
+			listeners[ #listeners + 1 ] = v
+		end
+	end
+	
+	return listeners
+end
+
+function Schema:Tick( )
+	if ( self.NextRadioSignalCheckTick <= CurTime( ) ) then
+		self:RadioTick( )
+		self.NextRadioSignalCheckTick = CurTime( ) + 2
+	end
+end
+
+function Schema:RadioTick( )
+	for k, v in pairs( player.GetAllByLoaded( ) ) do
+		if ( v:PlayerIsCombine( ) or !v:HasItem( "portable_radio" ) or v:GetInvItemData( "portable_radio", "toggle" ) == false ) then continue end
+		v:SetNetVar( "radioSignal", self:CalcRadio( v ) )
+	end
+end
+
+function Schema:CalcRadio( pl )
+	local listeners = self:GetRadioListeners( pl )
+	local disradio = {
+		{
+			5, 800
+		},
+		{
+			4, 1800
+		},
+		{
+			3, 3000
+		},
+		{
+			2, 5000
+		},
+		{
+			1, 8000
+		},
+		{
+			0, 10000
+		}
+	}
+	local l = 1000000 // need to set max map size.
+
+	for k, v in pairs( listeners ) do
+		if ( pl == v ) then continue end
+		local dis = catherine.util.CalcDistanceByPos( pl, v )
+		if ( dis < l ) then
+			l = dis
+		end
+	end
+
+	for k, v in pairs( disradio ) do
+		if ( v[ 2 ] >= l and disradio[ math.min( k + 1, #disradio ) ][ 2 ] > l ) then
+			return v[ 1 ]
+		end
+	end
+	
+	return 0
 end
