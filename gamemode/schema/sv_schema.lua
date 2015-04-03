@@ -20,29 +20,23 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 resource.AddWorkshop( "104491619" )
 resource.AddWorkshop( "105042805" )
 
+CAT_SCHEMA_COMBINEOVERLAY_LOCAL = 1
+CAT_SCHEMA_COMBINEOVERLAY_GLOBAL = 2
+
 function Schema:PlayerCanSpray( pl )
 	return pl:HasItem( "spray_can" )
 end
 
 function Schema:SayRadio( pl, text )
-	local chanels, playerFreq = { }, pl:GetInvItemData( "portable_radio", "freq", nil )
-	if ( !playerFreq ) then return end
-	
-	for k, v in pairs( player.GetAllByLoaded( ) ) do
-		if ( !v:HasItem( "portable_radio" ) ) then continue end
-		local targetitemData = v:GetInvItemDatas( "portable_radio" )
-		if ( targetitemData.toggle and targetitemData.freq and ( targetitemData.freq != "xxx.x" and targetitemData.freq != "" ) ) then
-			chanels[ targetitemData.freq ] = chanels[ targetitemData.freq ] or { }
-			chanels[ targetitemData.freq ][ #chanels[ targetitemData.freq ] + 1 ] = v
-		end
-	end
+	local listeners = self:GetRadioListeners( pl )
 
-	catherine.chat.RunByClass( pl, "radio", text, chanels[ playerFreq ] )
+	catherine.chat.RunByClass( pl, "radio", text, listeners )
 end
 
 function Schema:SayRequest( pl, text )
 	local targets = { }
-	for k, v in pairs( player.GetAllByLoaded( ) ) do
+	
+	for k, v in pairs( self:GetCombines( ) ) do
 		if ( !v:PlayerIsCombine( ) ) then continue end
 		targets[ #targets + 1 ] = v
 	end
@@ -50,6 +44,7 @@ function Schema:SayRequest( pl, text )
 		if ( !v:PlayerIsCombine( ) ) then continue end
 		self:AddCombineOverlayMessage( v, pl:Name( ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
 	end
+	
 	catherine.chat.RunByClass( pl, "request", text, targets )
 end
 
@@ -128,10 +123,23 @@ function Schema:PlayerUseDoor( pl, ent )
 	end
 end
 
-function Schema:AddCombineOverlayMessage( pl, message, time, col, textMakeDelay )
-	if ( !IsValid( pl ) or !message ) then return end
-	netstream.Start( pl, "catherine.Schema.AddCombineOverlayMessage", { message, time, col, textMakeDelay } )
+function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, textMakeDelay )
+	if ( !message ) then return end
+	targetType = targetType or CAT_SCHEMA_COMBINEOVERLAY_GLOBAL
+	local combines = self:GetCombines( )
+	
+	if ( targetType == CAT_SCHEMA_COMBINEOVERLAY_LOCAL and IsValid( pl ) ) then
+		combines = pl
+	elseif ( targetType == CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL and IsValid( pl ) ) then
+		table.RemoveByValue( combines, pl )
+	end
+	
+	netstream.Start( combines, "catherine.Schema.AddCombineOverlayMessage", { message, time or 6, col or Color( 255, 255, 255 ), textMakeDelay or 0.05 } )
 end
+
+CAT_SCHEMA_COMBINEOVERLAY_LOCAL = 1
+CAT_SCHEMA_COMBINEOVERLAY_GLOBAL = 2
+CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL = 3
 
 function Schema:ClearCombineOverlayMessages( pl )
 	if ( !IsValid( pl ) ) then return end
@@ -263,5 +271,36 @@ function Schema:CharacterNameChanged( pl, newName )
 end
 
 function Schema:CharacterLoadingStart( pl )
+	if ( !pl:PlayerIsCombine( ) ) then return end
 	self:ClearCombineOverlayMessages( pl )
+end
+
+function Schema:GetRadioListeners( pl )
+	local listeners, playerFreq = { }, pl:GetInvItemData( "portable_radio", "freq" )
+	if ( !playerFreq ) then return end
+	
+	for k, v in pairs( player.GetAllByLoaded( ) ) do
+		if ( !v:HasItem( "portable_radio" ) ) then continue end
+		local targetItemDatas = v:GetInvItemDatas( "portable_radio" )
+		
+		if ( targetItemDatas.toggle and targetItemDatas.freq and ( targetItemDatas.freq != "xxx.x" and targetItemDatas.freq != "" ) ) then
+			listeners[ targetItemDatas.freq ] = listeners[ targetItemDatas.freq ] or { }
+			listeners[ targetItemDatas.freq ][ #listeners[ targetItemDatas.freq ] + 1 ] = v
+		end
+	end
+	
+	return listeners
+end
+
+function Schema:Tick( )
+	local chanels, playerFreq = { }, pl:GetInvItemData( "portable_radio", "freq", nil )
+	if ( !playerFreq ) then return end
+	
+	for k, v in pairs( player.GetAllByLoaded( ) ) do
+	
+	end
+end
+
+function Schema:Tick( )
+
 end

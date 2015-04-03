@@ -103,6 +103,17 @@ function Schema:GetModelByRank( rank )
 	return self.CombineRankModel[ rank ] or "models/dpfilms/metropolice/hl2concept.mdl"
 end
 
+function Schema:GetCombines( )
+	local players = { }
+	
+	for k, v in pairs( player.GetAllByLoaded( ) ) do
+		if ( !v:PlayerIsCombine( ) ) then continue end
+		players[ #players + 1 ] = v
+	end
+	
+	return players
+end
+
 local META = FindMetaTable( "Player" )
 
 function Schema:PlayerIsCombine( pl )

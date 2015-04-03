@@ -71,14 +71,13 @@ function Schema:AutomaticCombineOverlayMessage( )
 end
 
 function Schema:AddCombineOverlayMessage( message, time, col, textMakeDelay )
-	if ( !message or !time ) then return end
 	self.playercombineOverlays[ #self.playercombineOverlays + 1 ] = {
 		message = "",
 		a = 0,
 		y = 20 + ( ( #self.playercombineOverlays + 2 ) * 20 ),
-		time = CurTime( ) + ( time or 6 ),
+		time = CurTime( ) + time,
 		textTime = CurTime( ),
-		textMakeDelay = textMakeDelay or 0.05,
+		textMakeDelay = textMakeDelay,
 		textSubCount = 1,
 		gradientW = 0,
 		originalMessage = self:PrefixCombineOverlayMessage( ) .. message,
@@ -88,6 +87,11 @@ end
 
 function Schema:HUDDrawBarBottom( x, y )
 	if ( !LocalPlayer( ):PlayerIsCombine( ) ) then return end
+	
+	self:DrawCombineOverlay( x, y )
+end
+
+function Schema:DrawCombineOverlay( x, y )
 	for k, v in pairs( self.playercombineOverlays ) do
 		if ( v.time <= CurTime( ) ) then
 			v.a = Lerp( 0.06, v.a, 0 )
@@ -104,8 +108,9 @@ function Schema:HUDDrawBarBottom( x, y )
 			v.message = v.message .. text
 			v.textSubCount = v.textSubCount + 1
 			v.textTime = CurTime( ) + v.textMakeDelay
-			v.gradientW = v.gradientW + 10
+			v.gradientW = v.gradientW + 5
 		end
+		
 		surface.SetDrawColor( v.col.r, v.col.g, v.col.b, v.a - 100 )
 		surface.SetMaterial( Material( "gui/gradient" ) )
 		surface.DrawTexturedRect( 5, v.y + 10, v.gradientW, 1 )
@@ -126,6 +131,10 @@ function Schema:HUDBackgroundDraw( )
 	surface.SetDrawColor( 255, 255, 255, 50 )
 	surface.SetMaterial( combineOverlayMaterial )
 	surface.DrawTexturedRect( 0, 0, ScrW( ), ScrH( ) )
+end
+
+function Schema:HUDDraw( )
+
 end
 
 function Schema:Think( )
