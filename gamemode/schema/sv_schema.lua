@@ -22,6 +22,7 @@ resource.AddWorkshop( "105042805" )
 
 CAT_SCHEMA_COMBINEOVERLAY_LOCAL = 1
 CAT_SCHEMA_COMBINEOVERLAY_GLOBAL = 2
+CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL = 3
 
 Schema.NextRadioSignalCheckTick = Schema.NextRadioSignalCheckTick or CurTime( ) + 2
 
@@ -36,18 +37,8 @@ function Schema:SayRadio( pl, text )
 end
 
 function Schema:SayRequest( pl, text )
-	local targets = { }
-	
-	for k, v in pairs( self:GetCombines( ) ) do
-		if ( !v:PlayerIsCombine( ) ) then continue end
-		targets[ #targets + 1 ] = v
-	end
-	for k, v in pairs( player.GetAllByLoaded( ) ) do
-		if ( !v:PlayerIsCombine( ) ) then continue end
-		self:AddCombineOverlayMessage( v, pl:Name( ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
-	end
-	
-	catherine.chat.RunByClass( pl, "request", text, targets )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, pl:Name( ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
+	catherine.chat.RunByClass( pl, "request", text, self:GetCombines( ) )
 end
 
 function Schema:SayDispatch( pl, text )
@@ -139,43 +130,43 @@ function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, te
 	netstream.Start( combines, "catherine.Schema.AddCombineOverlayMessage", { message, time or 6, col or Color( 255, 255, 255 ), textMakeDelay or 0.05 } )
 end
 
-CAT_SCHEMA_COMBINEOVERLAY_LOCAL = 1
-CAT_SCHEMA_COMBINEOVERLAY_GLOBAL = 2
-CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL = 3
-
 function Schema:ClearCombineOverlayMessages( pl )
 	if ( !IsValid( pl ) ) then return end
 	netstream.Start( pl, "catherine.Schema.ClearCombineOverlayMessages" )
 end
 
 function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
-	if ( !pl:IsRunning( ) ) then return true end
-	local team = pl:Team( )
-	if ( team == FACTION_CP ) then
-		pl:EmitSound( "npc/metropolice/gear" .. math.random( 1, 6 ) .. ".wav", 70 )
-		return true
-	elseif ( team == FACTION_OW ) then
-		pl:EmitSound( "npc/combine_soldier/gear" .. math.random( 1, 6 ) .. ".wav", 70 )
-		return true
+	if ( !pl:PlayerIsCombine( ) or !pl:IsRunning( ) ) then return true end
+	
+	local sound = "npc/metropolice/gear" .. math.random( 1, 6 ) .. ".wav"
+	if ( pl:Team( ) == FACTION_OW ) then
+		sound = "npc/combine_soldier/gear" .. math.random( 1, 6 ) .. ".wav"
 	end
+	
+	pl:EmitSound( sound, 70 )
+	return true
 end
 
 function Schema:GetPlayerPainSound( pl )
-	local team = pl:Team( )
-	if ( team == FACTION_CP ) then
-		return "npc/metropolice/pain" .. math.random( 1, 3 ) .. ".wav"
-	elseif ( team == FACTION_OW ) then
-		return "npc/combine_soldier/pain" .. math.random( 1, 3 ) .. ".wav"
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	
+	local sound = "npc/metropolice/pain" .. math.random( 1, 3 ) .. ".wav"
+	if ( pl:Team( ) == FACTION_OW ) then
+		sound = "npc/combine_soldier/pain" .. math.random( 1, 3 ) .. ".wav"
 	end
+	
+	return sound
 end
 
 function Schema:GetPlayerDeathSound( pl )
-	local team = pl:Team( )
-	if ( team == FACTION_CP ) then
-		return "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav"
-	elseif ( team == FACTION_OW ) then
-		return "npc/combine_soldier/die" .. math.random( 1, 3 ) .. ".wav"
+	if ( !pl:PlayerIsCombine( ) ) then return end
+	
+	local sound = "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav"
+	if ( pl:Team( ) == FACTION_OW ) then
+		sound = "npc/combine_soldier/die" .. math.random( 1, 3 ) .. ".wav"
 	end
+	
+	return sound
 end
 
 function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, textMakeDelay )
@@ -301,10 +292,13 @@ function Schema:Tick( )
 	end
 end
 
-// 1 - 1000,
-// 2 - 300,
-// 3 - 100
-// 4 - 3000
+function Schema:RadioTick( )
+	for k, v in pairs( player.GetAllByLoaded( ) ) do
+		if ( v:PlayerIsCombine( ) or !v:HasItem( "portable_radio" ) or v:GetInvItemData( "portable_radio", "toggle" ) == false ) then continue end
+		
+		v:SetNetVar( "radioSignal", self:CalcRadio( v ) )
+	end
+end
 
 function Schema:CalcRadio( pl )
 	local listeners = self:GetRadioListeners( pl )
@@ -333,11 +327,4 @@ function Schema:CalcRadio( pl )
 	end
 	
 	return 0
-end
-
-function Schema:RadioTick( )
-	for k, v in pairs( player.GetAllByLoaded( ) ) do
-		if ( v:PlayerIsCombine( ) ) then continue end
-		v:SetNetVar( "radioSignal", self:CalcRadio( v ) )
-	end
 end
