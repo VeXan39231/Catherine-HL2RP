@@ -76,6 +76,15 @@ Schema.CombineRankModel = {
 	[ "01" ] = "models/dpfilms/metropolice/hl2concept.mdl",
 	[ "RCT" ] = "models/dpfilms/metropolice/hl2concept.mdl"
 }
+Schema.BadRadioStrings = {
+	"?",
+	"%",
+	"{",
+	"@",
+	"__",
+	"_____",
+	"_"
+}
 
 for k, v in pairs( Schema.CombineRankModel ) do
 	util.PrecacheModel( v )
@@ -129,12 +138,27 @@ function META:PlayerIsCombine( )
 	return Schema:PlayerIsCombine( self )
 end
 
+function Schema:CalcBadNameString( )
+	local rand = math.random( 5, 15 )
+	local text = ""
+	
+	for i = 1, rand do
+		text = text .. table.Random( self.BadRadioStrings )
+	end
+	
+	return text
+end
+
 // Hint stuff
 //catherine.hint.Register( "" )
 
 catherine.chat.RegisterClass( "radio", {
-	onChat = function( pl, text )
-		chat.AddText( Color( 0, 255, 100 ), pl:Name( ) .. " radio says " .. catherine.chat.PreSet( text ) )
+	onChat = function( pl, text, ex )
+		local name = pl:Name( )
+		if ( ex[ 1 ] and LocalPlayer( ) != pl ) then
+			name = Schema:CalcBadNameString( )
+		end
+		chat.AddText( Color( 0, 255, 100 ), name .. " radio says " .. catherine.chat.PreSet( text ) )
 	end,
 	global = true,
 	canRun = function( pl )

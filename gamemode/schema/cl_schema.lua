@@ -126,7 +126,33 @@ function Schema:HUDBackgroundDraw( )
 end
 
 function Schema:HUDDraw( )
+	if ( !LocalPlayer( ):Alive( ) or !LocalPlayer( ):HasItem( "portable_radio" ) or LocalPlayer( ):GetInvItemData( "portable_radio", "toggle", false ) == false ) then return end
+	local freq = LocalPlayer( ):GetInvItemData( "portable_radio", "freq", "000.0" )
+	local x, y = 15, ScrH( ) * 0.4
+	local signal = LocalPlayer( ):GetNetVar( "radioSignal", 0 )
+	
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.SetMaterial( Material( "CAT_HL2RP/antenna.png", "smooth" ) )
+	surface.DrawTexturedRect( x, y, 42, 42 )
 
+	if ( signal == 0 ) then
+		draw.SimpleText( "NO SIGNAL", "catherine_normal15", x + 50, y + 40, Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, 1 )
+	else
+		local col = Color( 255, 255, 255, 255 )
+		
+		if ( signal <= 1 ) then
+			col = Color( 255, 0, 0, 255 )
+		elseif ( signal <= 2 ) then
+			col = Color( 255, 255, 0, 255 )
+		end
+		
+		for i = 1, signal do
+			local h = 5 * i
+			draw.RoundedBox( 0, ( x + 40 ) + 7 * i, ( y + 40 ) - h, 5, h, col )
+		end
+	end
+	
+	draw.SimpleText( freq, "catherine_normal15", x + 5, y + 55, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, 1 )
 end
 
 function Schema:Think( )

@@ -20,6 +20,8 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 resource.AddWorkshop( "104491619" )
 resource.AddWorkshop( "105042805" )
 
+catherine.util.AddResourceInFolder( "materials/CAT_HL2RP" )
+
 CAT_SCHEMA_COMBINEOVERLAY_LOCAL = 1
 CAT_SCHEMA_COMBINEOVERLAY_GLOBAL = 2
 CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL = 3
@@ -32,8 +34,29 @@ end
 
 function Schema:SayRadio( pl, text )
 	local listeners = self:GetRadioListeners( pl )
+	local blockPl = nil
+	local radioSignal = pl:GetNetVar( "radioSignal", 0 )
 
-	catherine.chat.RunByClass( pl, "radio", text, listeners )
+	if ( radioSignal == 2 ) then
+		local ex = string.Explode( " ", text )
+		for k, v in pairs( ex ) do
+			ex[ k ] = ex[ k ] .. string.rep( ".", math.random( 2, 10 ) )
+		end
+		text = table.concat( ex, "" )
+		
+	elseif ( radioSignal == 1 ) then
+		text = string.rep( ".", #text )
+		for k, v in pairs( listeners ) do
+			v:EmitSound( "ambient/levels/prison/radio_random" .. math.random( 1, 9 ) .. ".wav", 40 )
+		end
+		blockPl = pl
+	elseif ( radioSignal == 0 ) then
+		catherine.chat.RunByClass( pl, "radio", string.rep( ".", #text ) )
+		pl:EmitSound( "ambient/levels/prison/radio_random" .. math.random( 1, 9 ) .. ".wav", 40 )
+		return
+	end
+
+	catherine.chat.RunByClass( pl, "radio", text, listeners, blockPl )
 end
 
 function Schema:SayRequest( pl, text )
@@ -277,8 +300,7 @@ function Schema:GetRadioListeners( pl )
 		local targetItemDatas = v:GetInvItemDatas( "portable_radio" )
 		
 		if ( targetItemDatas.toggle and targetItemDatas.freq and ( targetItemDatas.freq != "xxx.x" and targetItemDatas.freq != "" ) ) then
-			listeners[ targetItemDatas.freq ] = listeners[ targetItemDatas.freq ] or { }
-			listeners[ targetItemDatas.freq ][ #listeners[ targetItemDatas.freq ] + 1 ] = v
+			listeners[ #listeners + 1 ] = v
 		end
 	end
 	
@@ -295,7 +317,6 @@ end
 function Schema:RadioTick( )
 	for k, v in pairs( player.GetAllByLoaded( ) ) do
 		if ( v:PlayerIsCombine( ) or !v:HasItem( "portable_radio" ) or v:GetInvItemData( "portable_radio", "toggle" ) == false ) then continue end
-		
 		v:SetNetVar( "radioSignal", self:CalcRadio( v ) )
 	end
 end
@@ -303,16 +324,28 @@ end
 function Schema:CalcRadio( pl )
 	local listeners = self:GetRadioListeners( pl )
 	local disradio = {
-		[ 800 ] = 5,
-		[ 1800 ] = 4,
-		[ 3000 ] = 3,
-		[ 5000 ] = 2,
-		[ 8000 ] = 1,
-		[ 10000 ] = 0
+		{
+			5, 800
+		},
+		{
+			4, 1800
+		},
+		{
+			3, 3000
+		},
+		{
+			2, 5000
+		},
+		{
+			1, 8000
+		},
+		{
+			0, 10000
+		}
 	}
 	local l = 1000000 // need to set max map size.
-	
-	for k, v in pairs( listeners or { } ) do
+
+	for k, v in pairs( listeners ) do
 		if ( pl == v ) then continue end
 		local dis = catherine.util.CalcDistanceByPos( pl, v )
 		if ( dis < l ) then
@@ -321,8 +354,8 @@ function Schema:CalcRadio( pl )
 	end
 
 	for k, v in pairs( disradio ) do
-		if ( k >= l ) then
-			return v
+		if ( v[ 2 ] >= l and disradio[ math.min( k + 1, #disradio ) ][ 2 ] > l ) then
+			return v[ 1 ]
 		end
 	end
 	
