@@ -256,14 +256,24 @@ function Schema:OnSpawnedInCharacter( pl )
 		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Online ...", 5, Color( 150, 255, 150 ), 0.04 )
 		
 		local rankID, classID = self:GetRankByName( pl:Name( ) )
-		if ( pl:Class( ) != nil and pl:Class() == classID ) then return end
-		
-		if ( rankID and classID ) then
-			catherine.class.Set( pl, classID )
+		if ( pl:Class( ) != nil and pl:Class( ) != classID ) then
+			if ( rankID and classID ) then
+				catherine.class.Set( pl, classID )
+				pl:SetModel( self:GetModelByRank( rankID ) )
+			else
+				if ( pl:Class( ) == "cp_unit" ) then return end
+				catherine.class.Set( pl, "cp_unit" )
+			end
+		elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl:GetModel( ) ) then
 			pl:SetModel( self:GetModelByRank( rankID ) )
-		else
-			if ( pl:Class( ) == "cp_unit" ) then return end
-			catherine.class.Set( pl, "cp_unit" )
+		elseif ( pl:Class( ) == nil ) then
+			if ( rankID and classID ) then
+				catherine.class.Set( pl, classID )
+				pl:SetModel( self:GetModelByRank( rankID ) )
+			else
+				if ( pl:Class( ) == "cp_unit" ) then return end
+				catherine.class.Set( pl, "cp_unit" )
+			end
 		end
 		return
 	end
@@ -275,14 +285,24 @@ function Schema:CharacterNameChanged( pl, newName )
 	if ( !pl:PlayerIsCombine( ) ) then return end
 	local rankID, classID = self:GetRankByName( pl:Name( ) )
 
-	if ( pl:Class( ) != nil and pl:Class() == classID ) then return end
-	
-	if ( rankID and classID ) then
-		catherine.class.Set( pl, classID )
+	if ( pl:Class( ) != nil and pl:Class( ) != classID ) then
+		if ( rankID and classID ) then
+			catherine.class.Set( pl, classID )
+			pl:SetModel( self:GetModelByRank( rankID ) )
+		else
+			if ( pl:Class( ) == "cp_unit" ) then return end
+			catherine.class.Set( pl, "cp_unit" )
+		end
+	elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl:GetModel( ) ) then
 		pl:SetModel( self:GetModelByRank( rankID ) )
-	else
-		if ( pl:Class( ) == "cp_unit" ) then return end
-		catherine.class.Set( pl, "cp_unit" )
+	elseif ( pl:Class( ) == nil ) then
+		if ( rankID and classID ) then
+			catherine.class.Set( pl, classID )
+			pl:SetModel( self:GetModelByRank( rankID ) )
+		else
+			if ( pl:Class( ) == "cp_unit" ) then return end
+			catherine.class.Set( pl, "cp_unit" )
+		end
 	end
 end
 
@@ -299,7 +319,7 @@ function Schema:GetRadioListeners( pl )
 		if ( !v:HasItem( "portable_radio" ) ) then continue end
 		local targetItemDatas = v:GetInvItemDatas( "portable_radio" )
 		
-		if ( targetItemDatas.toggle and targetItemDatas.freq and ( targetItemDatas.freq != "xxx.x" and targetItemDatas.freq != "" ) ) then
+		if ( targetItemDatas.toggle and targetItemDatas.freq and ( targetItemDatas.freq != "xxx.x" and targetItemDatas.freq != "" ) and targetItemDatas.freq == playerFreq ) then
 			listeners[ #listeners + 1 ] = v
 		end
 	end
