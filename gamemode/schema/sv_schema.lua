@@ -214,7 +214,7 @@ end
 function Schema:PlayerTakeDamage( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
 	if ( ( pl.CAT_HL2RP_nextHurtDelay or CurTime( ) ) <= CurTime( ) ) then
-		local combineNumber = pl:GetCharacterVar( "combineNumber", "ERROR" )
+		local combineNumber = pl:GetCharVar( "combineNumber", "ERROR" )
 		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "WARNING ! Physical bodily trauma detected ...", 7, Color( 255, 150, 0 ) )
 		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL, pl, "WARNING ! Unit #" .. combineNumber .. " has damaged by unknown problems ...", 7, Color( 255, 150, 0 ) )
 		pl.CAT_HL2RP_nextHurtDelay = CurTime( ) + 5
@@ -228,7 +228,7 @@ end
 
 function Schema:PlayerGone( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
-	local combineNumber = pl:GetCharacterVar( "combineNumber", "ERROR" )
+	local combineNumber = pl:GetCharVar( "combineNumber", "ERROR" )
 	
 	local localMessage = "ERROR ! Shut Down - ..."
 	local globalMessage = "WARNING ! Unit #" .. combineNumber .. " vital signs absent, alerting dispatch ..."
