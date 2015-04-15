@@ -24,6 +24,7 @@ catherine.command.Register( {
 		if ( args != "" ) then
 			if ( pl:HasItem( "portable_radio" ) ) then
 				local itemData = pl:GetInvItemDatas("portable_radio")
+				
 				if ( itemData.toggle ) then
 					if ( itemData.freq != "xxx.x" and itemData.freq != "" ) then
 						Schema:SayRadio( pl, args )
