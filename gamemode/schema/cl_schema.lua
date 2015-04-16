@@ -42,16 +42,18 @@ function Schema:PrefixCombineOverlayMessage( )
 end
 
 function Schema:PostRenderScreenColor( _, data )
-	local data = { }
-	data.colour = 0.6
-	return data
+	return {
+		colour = 0.6
+	}
 end
 
 function Schema:AutomaticCombineOverlayMessage( )
-	self.playercombineOverlays[ #self.playercombineOverlays + 1 ] = {
+	local index = #self.playercombineOverlays + 1
+	
+	self.playercombineOverlays[ index ] = {
 		message = "",
 		a = 0,
-		y = 20 + ( ( #self.playercombineOverlays + 2 ) * 20 ),
+		y = 20 + ( ( index + 1 ) * 20 ),
 		time = CurTime( ) + 6,
 		textTime = CurTime( ),
 		textMakeDelay = 0.03,
@@ -63,10 +65,12 @@ function Schema:AutomaticCombineOverlayMessage( )
 end
 
 function Schema:AddCombineOverlayMessage( message, time, col, textMakeDelay )
-	self.playercombineOverlays[ #self.playercombineOverlays + 1 ] = {
+	local index = #self.playercombineOverlays + 1
+	
+	self.playercombineOverlays[ index ] = {
 		message = "",
 		a = 0,
-		y = 20 + ( ( #self.playercombineOverlays + 2 ) * 20 ),
+		y = 20 + ( ( index + 1 ) * 20 ),
 		time = CurTime( ) + time,
 		textTime = CurTime( ),
 		textMakeDelay = textMakeDelay,
@@ -87,12 +91,14 @@ function Schema:DrawCombineOverlay( x, y )
 	for k, v in pairs( self.playercombineOverlays ) do
 		if ( v.time <= CurTime( ) ) then
 			v.a = Lerp( 0.06, v.a, 0 )
+			
 			if ( math.Round( v.a ) <= 0 ) then
 				table.remove( self.playercombineOverlays, k )
 			end
 		else
 			v.a = Lerp( 0.06, v.a, 255 )
 		end
+		
 		v.y = Lerp( 0.06, v.y, ( y ) + ( k * 20 ) )
 		
 		if ( v.textTime <= CurTime( ) and string.utf8len( v.message ) < string.utf8len( v.originalMessage ) ) then
@@ -103,7 +109,7 @@ function Schema:DrawCombineOverlay( x, y )
 			v.gradientW = v.gradientW + 5
 		end
 		
-		surface.SetDrawColor( v.col.r, v.col.g, v.col.b, v.a - 100 )
+		surface.SetDrawColor( v.col.r, v.col.g, v.col.b, v.a - 130 )
 		surface.SetMaterial( Material( "gui/gradient" ) )
 		surface.DrawTexturedRect( 5, v.y + 10, v.gradientW, 1 )
 
@@ -140,9 +146,9 @@ function Schema:HUDDraw( )
 	else
 		local col = Color( 255, 255, 255, 255 )
 		
-		if ( signal <= 1 ) then
+		if ( signal == 1 ) then
 			col = Color( 255, 0, 0, 255 )
-		elseif ( signal <= 2 ) then
+		elseif ( signal == 2 ) then
 			col = Color( 255, 255, 0, 255 )
 		end
 		

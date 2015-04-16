@@ -30,7 +30,7 @@ function FACTION:PlayerFirstSpawned( pl )
 	catherine.item.Give( pl, "portable_radio" )
 	catherine.item.Give( pl, "weapon_pistol" )
 	catherine.item.Give( pl, "weapon_stunstick" )
-	pl:SetCharacterVar( "combineNumber", math.random( 10000, 99999 ) )
+	pl:SetCharVar( "combineNumber", math.random( 10000, 99999 ) )
 end
 
 FACTION_CP = catherine.faction.Register( FACTION )

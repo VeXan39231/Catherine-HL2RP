@@ -33,7 +33,7 @@ ITEM.func.setfreq = {
 	canShowIsMenu = true,
 	func = function( pl, itemTable )
 		local itemData = pl:GetInvItemDatas( itemTable.uniqueID )
-		catherine.util.UniqueStringReceiver( pl, "PortableRadio_UniqueSetFreq", "Set Radio Frequency", "What are you setting for radio?", itemData.freq or "xxx.x", function( _, val )
+		catherine.util.StringReceiver( pl, "PortableRadio_UniqueSetFreq", "What are you setting for radio?", itemData.freq or "xxx.x", function( _, val )
 			if ( val:find( "^%d%d%d%.%d$" ) ) then
 				local one, two, three = val:match( "(%d)%d(%d)%.(%d)" )
 				one = tonumber( one ) two = tonumber( two ) three = tonumber( three )

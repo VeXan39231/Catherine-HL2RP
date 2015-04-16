@@ -45,7 +45,7 @@ function FACTION:PlayerFirstSpawned( pl )
 		cid = randomNum,
 		name = pl:Name( )
 	} )
-	pl:SetCharacterVar( "cid", randomNum )
+	pl:SetCharVar( "cid", randomNum )
 end
 
 FACTION_CITIZEN = catherine.faction.Register( FACTION )

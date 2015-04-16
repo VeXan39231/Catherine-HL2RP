@@ -24,5 +24,5 @@ catherine.configs.defaultRPInformation = {
 	hour = 1,
 	month = 1,
 	second = 1,
-	temperature = 20
+	temperature = 23
 }
