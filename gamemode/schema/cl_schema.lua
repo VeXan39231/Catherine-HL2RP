@@ -132,32 +132,56 @@ function Schema:HUDBackgroundDraw( )
 end
 
 function Schema:HUDDraw( )
-	if ( !LocalPlayer( ):Alive( ) or !LocalPlayer( ):HasItem( "portable_radio" ) or LocalPlayer( ):GetInvItemData( "portable_radio", "toggle", false ) == false ) then return end
-	local freq = LocalPlayer( ):GetInvItemData( "portable_radio", "freq", "000.0" )
+	local pl = LocalPlayer( )
+	if ( !pl:Alive( ) or !pl:HasItem( "portable_radio" ) or pl:GetInvItemData( "portable_radio", "toggle", false ) == false ) then return end
+	local freq = pl:GetInvItemData( "portable_radio", "freq", "000.0" )
 	local x, y = 15, ScrH( ) * 0.4
-	local signal = LocalPlayer( ):GetNetVar( "radioSignal", 0 )
+	local signal = pl:GetNetVar( "radioSignal", 0 )
+
+	if ( !pl.CAT_HL2RP_radioSignalLast ) then
+		pl.CAT_HL2RP_radioSignalLast = signal
+	end
+	
+	if ( !pl.CAT_HL2RP_radioSignalTable ) then
+		pl.CAT_HL2RP_radioSignalTable = { }
+	end
 	
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( Material( "CAT_HL2RP/antenna.png", "smooth" ) )
 	surface.DrawTexturedRect( x, y, 42, 42 )
 
 	if ( signal == 0 ) then
-		draw.SimpleText( "NO SIGNAL", "catherine_normal15", x + 50, y + 40, Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, 1 )
+		draw.SimpleText( "X", "catherine_normal20", x + 50, y + 40, Color( 255, 0, 0, 255 ), TEXT_ALIGN_LEFT, 1 )
 	else
-		local col = Color( 255, 255, 255, 255 )
+		if ( pl.CAT_HL2RP_radioSignalLast != signal ) then
+			pl.CAT_HL2RP_radioSignalTable = { }
+			
+			for i = 1, signal do
+				local col = Color( 255, 255, 255, 255 )
+				
+				if ( signal == 1 ) then
+					col = Color( 255, 0, 0, 255 )
+				elseif ( signal == 2 ) then
+					col = Color( 255, 255, 0, 255 )
+				end
 		
-		if ( signal == 1 ) then
-			col = Color( 255, 0, 0, 255 )
-		elseif ( signal == 2 ) then
-			col = Color( 255, 255, 0, 255 )
+				pl.CAT_HL2RP_radioSignalTable[ #pl.CAT_HL2RP_radioSignalTable + 1 ] = {
+					h = 0,
+					targetH = 10 * i,
+					col = col
+				}
+			end
+			
+			pl.CAT_HL2RP_radioSignalLast = signal
 		end
-		
-		for i = 1, signal do
-			local h = 5 * i
-			draw.RoundedBox( 0, ( x + 40 ) + 7 * i, ( y + 40 ) - h, 5, h, col )
+
+		for k, v in pairs( pl.CAT_HL2RP_radioSignalTable ) do
+			v.h = math.Approach( v.h, v.targetH, 0.7 )
+			draw.RoundedBox( 0, ( x + 40 ) + 7 * k, ( y + 40 ) - v.h, 5, v.h, v.col )
 		end
 	end
 	
+	draw.SimpleText( "Radio Signal", "catherine_normal15", x, y - 20, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, 1 )
 	draw.SimpleText( freq, "catherine_normal15", x + 5, y + 55, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, 1 )
 end
 
