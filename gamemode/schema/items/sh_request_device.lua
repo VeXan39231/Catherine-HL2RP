@@ -17,10 +17,11 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local ITEM = catherine.item.New( "request_device" )
-ITEM.name = "Request Device"
-ITEM.desc = "If you have this, your can request it to combine."
+ITEM.name = "^Item_Name_RD"
+ITEM.desc = "^Item_Desc_RD"
 ITEM.cost = 50
 ITEM.model = "models/items/battery.mdl"
+ITEM.category = "^Item_Category_Communication"
 ITEM.weight = 0.5
 ITEM.onBusinessFactions = {
 	FACTION_CITIZEN

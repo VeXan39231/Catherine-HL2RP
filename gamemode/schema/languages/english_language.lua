@@ -31,7 +31,6 @@ catherine.language.Merge( "english", {
 	
 	
 	// Item
-	// Bag
 	[ "Item_Name_LargeBag" ] = "Large bag",
 	[ "Item_Desc_LargeBag" ] = "This item adds more inventory space!",
 	
@@ -55,6 +54,11 @@ catherine.language.Merge( "english", {
 	[ "Item_Notify_Error01_PR" ] = "Radio frequency is must be 101.1 ~ 199.9!",
 	[ "Item_Notify_Error02_PR" ] = "Radio frequency is must be XXX.X!",
 	
+	[ "Item_Name_RD" ] = "Request Device",
+	[ "Item_Desc_RD" ] = "If you have this, your can request it to combine.",
+	
+	[ "Item_Name_SC" ] = "Spray Can",
+	[ "Item_Desc_SC" ] = "If you have this, your can spray it to wall.",
 	
 	[ "Item_Category_Communication" ] = "Communication",
 } )
