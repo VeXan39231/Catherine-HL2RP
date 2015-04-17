@@ -17,6 +17,8 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 catherine.language.Merge( "english", {
-
-
+	[ "Faction_Name_Citizen" ] = "Citizen",
+	[ "Faction_Name_Administrator" ] = "Administrator",
+	[ "Faction_Name_OW" ] = "Overwatch Transhuman Arm",
+	[ "Faction_Name_CP" ] = "Civil Protection"
 } )
