@@ -17,8 +17,8 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local ITEM = catherine.item.New( "large_bag", "BAG" )
-ITEM.name = "Large bag"
-ITEM.desc = "This item adds more inventory space!"
+ITEM.name = "^Item_Name_LargeBag"
+ITEM.desc = "^Item_Desc_LargeBag"
 ITEM.cost = 300
 ITEM.model = "models/props_junk/cardboard_box004a_gib01.mdl"
 ITEM.weight = 1

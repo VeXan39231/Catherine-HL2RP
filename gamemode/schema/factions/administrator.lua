@@ -19,7 +19,7 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 local FACTION = catherine.faction.New( "administrator" )
 FACTION.name = "^Faction_Name_Administrator"
 FACTION.color = Color( 237, 179, 97 )
-FACTION.desc = "A city administrator."
+FACTION.desc = "^Faction_Desc_Administrator"
 FACTION.isWhitelist = true
 FACTION.alwaysRecognized = true
 FACTION.models = {

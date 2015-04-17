@@ -17,8 +17,8 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local ITEM = catherine.item.New( "cid" )
-ITEM.name = "CID Card"
-ITEM.desc = "The citizen id card."
+ITEM.name = "^Item_Name_CID"
+ITEM.desc = "^Item_Desc_CID"
 ITEM.cost = 0
 ITEM.model = "models/gibs/metal_gib4.mdl"
 ITEM.weight = 0.1

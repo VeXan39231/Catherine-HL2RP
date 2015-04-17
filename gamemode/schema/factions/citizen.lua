@@ -19,7 +19,7 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 local FACTION = catherine.faction.New( "citizen" )
 FACTION.name = "^Faction_Name_Citizen"
 FACTION.color = Color( 131, 139, 131 )
-FACTION.desc = "He wears a dirty shirt."
+FACTION.desc = "^Faction_Desc_Citizen"
 FACTION.models = {
 	"models/humans/group01/male_01.mdl",
 	"models/humans/group01/male_02.mdl",

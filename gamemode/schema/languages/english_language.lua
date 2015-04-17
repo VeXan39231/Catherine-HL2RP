@@ -17,8 +17,44 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 catherine.language.Merge( "english", {
+	// Faction Name
 	[ "Faction_Name_Citizen" ] = "Citizen",
 	[ "Faction_Name_Administrator" ] = "Administrator",
 	[ "Faction_Name_OW" ] = "Overwatch Transhuman Arm",
-	[ "Faction_Name_CP" ] = "Civil Protection"
+	[ "Faction_Name_CP" ] = "Civil Protection",
+	
+	// Faction Description
+	[ "Faction_Desc_Citizen" ] = "He wears a dirty shirt.",
+	[ "Faction_Desc_Administrator" ] = "A city administrator.",
+	[ "Faction_Desc_OW" ] = "Mechanised Infantry units utilized to combat the ongoing insurgency, these units are the elite of the combine's forces.",
+	[ "Faction_Desc_CP" ] = "These units are the brunt of the combine's forces. These units are well-trained military units but they also take part policing the population.",
+	
+	
+	// Item
+	// Bag
+	[ "Item_Name_LargeBag" ] = "Large bag",
+	[ "Item_Desc_LargeBag" ] = "This item adds more inventory space!",
+	
+	[ "Item_Name_SmallBag" ] = "Small bag",
+	[ "Item_Desc_SmallBag" ] = "This item adds more inventory space!",
+	
+	[ "Item_Name_CID" ] = "Citizen ID Card",
+	[ "Item_Desc_CID" ] = "The Citizen ID Card.",
+	
+	[ "Item_Name_PR" ] = "Portable Radio",
+	[ "Item_Desc_PR" ] = "Communication to other humans.",
+	[ "Item_FuncStr01_PR" ] = "Set Frequency",
+	[ "Item_FuncStr02_PR" ] = "Toggle",
+	[ "Item_DataStr01_PR" ] = "Frequency",
+	[ "Item_DataStr02_PR" ] = "Power",
+	[ "Item_DataStr02_On_PR" ] = "On",
+	[ "Item_DataStr02_Off_PR" ] = "Off",
+	
+	[ "Item_RadioFreqQ_PR" ] = "Would you like to setting frequency for radio?",
+	[ "Item_Notify_FreqSet_PR" ] = "You are set portable radio frequency to %s.",
+	[ "Item_Notify_Error01_PR" ] = "Radio frequency is must be 101.1 ~ 199.9!",
+	[ "Item_Notify_Error02_PR" ] = "Radio frequency is must be XXX.X!",
+	
+	
+	[ "Item_Category_Communication" ] = "Communication",
 } )
