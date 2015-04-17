@@ -22,7 +22,7 @@ ITEM.desc = "^Item_Desc_CID"
 ITEM.cost = 0
 ITEM.model = "models/gibs/metal_gib4.mdl"
 ITEM.weight = 0.1
-ITEM.category = "Wallet"
+ITEM.category = "^Item_Category_Wallet"
 ITEM.itemData = {
 	cid = "",
 	name = ""
@@ -30,7 +30,7 @@ ITEM.itemData = {
 
 if ( CLIENT ) then
 	function ITEM:GetDesc( pl, itemTable, itemData, isInv )
-		return isInv and "#" .. ( itemData.cid or "00000" ) .. ", " .. ( itemData.name or "Citizen" ) or nil
+		return "#" .. ( itemData.cid or "00000" ) .. ", " .. ( itemData.name or "Citizen" )
 	end
 end
 

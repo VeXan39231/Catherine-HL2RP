@@ -28,8 +28,7 @@ catherine.language.Merge( "english", {
 	[ "Faction_Desc_Administrator" ] = "A city administrator.",
 	[ "Faction_Desc_OW" ] = "Mechanised Infantry units utilized to combat the ongoing insurgency, these units are the elite of the combine's forces.",
 	[ "Faction_Desc_CP" ] = "These units are the brunt of the combine's forces. These units are well-trained military units but they also take part policing the population.",
-	
-	
+
 	// Item
 	[ "Item_Name_LargeBag" ] = "Large bag",
 	[ "Item_Desc_LargeBag" ] = "This item adds more inventory space!",
@@ -56,10 +55,7 @@ catherine.language.Merge( "english", {
 	
 	[ "Item_Name_RD" ] = "Request Device",
 	[ "Item_Desc_RD" ] = "If you have this, your can request it to combine.",
-	
-	[ "Item_Name_SC" ] = "Spray Can",
-	[ "Item_Desc_SC" ] = "If you have this, your can spray it to wall.",
-	
+
 	[ "Item_Name_SC" ] = "Spray Can",
 	[ "Item_Desc_SC" ] = "If you have this, your can spray it to wall.",
 	

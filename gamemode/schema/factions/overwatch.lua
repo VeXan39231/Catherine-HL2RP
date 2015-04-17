@@ -29,7 +29,7 @@ FACTION.models = {
 function FACTION:PlayerFirstSpawned( pl )
 	catherine.item.Give( pl, "portable_radio" )
 	catherine.item.Give( pl, "weapon_ar2" )
-	pl:SetCharVar( "combineNumber",  )
+	pl:SetCharVar( "combineNumber", math.random( 10000, 99999 ) )
 end
 
 function FACTION:PostSetName( pl )
