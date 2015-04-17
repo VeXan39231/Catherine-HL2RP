@@ -33,7 +33,7 @@ function FACTION:PlayerFirstSpawned( pl )
 end
 
 function FACTION:PostSetName( pl )
-	local name = math.random( 10000, 99999 )
+	local name = Format( Schema.OWNamePrefix, Schema:GetUniqueCombineUnitCode( ), math.random( 10000, 99999 ) )
 	
 	return name
 end
