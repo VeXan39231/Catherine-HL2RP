@@ -60,5 +60,26 @@ catherine.language.Merge( "english", {
 	[ "Item_Name_SC" ] = "Spray Can",
 	[ "Item_Desc_SC" ] = "If you have this, your can spray it to wall.",
 	
+	[ "Item_Name_SC" ] = "Spray Can",
+	[ "Item_Desc_SC" ] = "If you have this, your can spray it to wall.",
+	
+	[ "Item_Name_BW" ] = "Breen Water",
+	[ "Item_Desc_BW" ] = "Shake and eat!",
+	
+	[ "Item_Name_9MM" ] = "9MM Pistol",
+	[ "Item_Desc_9MM" ] = "A standard 9MM Pistol.",
+	
+	[ "Item_Name_AR2" ] = "AR2",
+	[ "Item_Desc_AR2" ] = "The corp combine.",
+	
+	[ "Item_Name_SMG" ] = "MP7",
+	[ "Item_Desc_SMG" ] = "The simple sub machine gun.",
+	
+	[ "Item_Name_SS" ] = "Stunstick",
+	[ "Item_Desc_SS" ] = "An electrified baton powered by a mysterious combine battery.",
+
 	[ "Item_Category_Communication" ] = "Communication",
+	[ "Item_Category_Food" ] = "Food",
+	
+	[ "Item_FuncStr01_Food" ] = "Eat",
 } )

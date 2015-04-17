@@ -17,8 +17,8 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local ITEM = catherine.item.New( "weapon_ar2", "WEAPON" )
-ITEM.name = "AR2"
-ITEM.desc = "The corp combine."
+ITEM.name = "^Item_Name_AR2"
+ITEM.desc = "^Item_Desc_AR2"
 ITEM.cost = 950
 ITEM.model = "models/weapons/w_IRifle.mdl"
 ITEM.weight = 3

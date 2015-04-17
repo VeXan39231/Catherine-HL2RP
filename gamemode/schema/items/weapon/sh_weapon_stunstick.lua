@@ -17,8 +17,8 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local ITEM = catherine.item.New( "weapon_stunstick", "WEAPON" )
-ITEM.name = "Stunstick"
-ITEM.desc = "An electrified baton powered by a mysterious combine battery."
+ITEM.name = "^Item_Name_SS"
+ITEM.desc = "^Item_Desc_SS"
 ITEM.cost = 350
 ITEM.model = "models/weapons/w_stunbaton.mdl"
 ITEM.weight = 2
