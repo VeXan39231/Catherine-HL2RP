@@ -52,7 +52,6 @@ Schema.CUC = {
 }
 Schema.CPNamePrefix = "C17-%s-RCT.%s"
 Schema.OWNamePrefix = "OW-%s.%s"
-
 Schema.CombineRank = {
 	[ "SeC" ] = Schema.CombineRankClass.Elite,
 	[ "DvL" ] = Schema.CombineRankClass.Elite,
