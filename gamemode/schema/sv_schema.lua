@@ -32,6 +32,10 @@ function Schema:PlayerCanSpray( pl )
 	return pl:HasItem( "spray_can" )
 end
 
+function Schema:PlayerCanFlashlight( pl )
+	return pl:PlayerIsCombine( )
+end
+
 function Schema:SayRadio( pl, text )
 	local listeners = self:GetRadioListeners( pl )
 	local blockPl = nil

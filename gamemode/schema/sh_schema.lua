@@ -44,7 +44,6 @@ Schema.CUC = {
 	"Sector",
 	"Dagger",
 	"Razor",
-	"Ghost",
 	"Sword",
 	"Vamp",
 	"Vice",
@@ -102,19 +101,7 @@ function Schema:GetRankByName( name )
 end
 
 function Schema:GetUniqueCombineUnitCode( )
-	local index = catherine.data.Get( "combine_code_index", 1 )
-	local code = "ERROR"
-	
-	if ( self.CUC[ index ] ) then
-		code = self.CUC[ index ]
-	else
-		index = #self.CUC
-		code = self.CUC[ index ] or "ERROR"
-	end
-	
-	catherine.data.Set( "combine_code_index", index + 1 )
-	
-	return code:upper( )
+	return table.Random( self.CUC ):upper( )
 end
 
 function Schema:CanDispatch( name )
