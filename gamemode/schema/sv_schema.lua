@@ -328,7 +328,7 @@ end
 function Schema:GetRadioListeners( pl )
 	local listeners = { }
 	local playerFreq = pl:GetInvItemData( "portable_radio", "freq" )
-	if ( !playerFreq ) then return end
+	if ( !playerFreq ) then return listeners end
 	
 	for k, v in pairs( player.GetAllByLoaded( ) ) do
 		if ( !v:HasItem( "portable_radio" ) ) then continue end
@@ -358,6 +358,7 @@ end
 
 function Schema:CalcRadio( pl )
 	local listeners = self:GetRadioListeners( pl )
+
 	local disradio = {
 		{
 			5, 800

@@ -26,3 +26,4 @@ catherine.configs.defaultRPInformation = {
 	second = 1,
 	temperature = 23
 }
+catherine.configs.cashName = "Token"
