@@ -36,6 +36,22 @@ Schema.CombineRankClass = {
 	Elite = "cp_elite",
 	Unit = "cp_unit"
 }
+Schema.CUC = {
+	"Alpha",
+	"Savage",
+	"Reaper",
+	"Victor",
+	"Sector",
+	"Dagger",
+	"Razor",
+	"Ghost",
+	"Sword",
+	"Vamp",
+	"Vice",
+	"Echo"
+}
+Schema.CPNamePrefix = "C17-%s-RCT.%s"
+Schema.OWNamePrefix = "OW-%s.%s"
 Schema.CombineRank = {
 	[ "SeC" ] = Schema.CombineRankClass.Elite,
 	[ "DvL" ] = Schema.CombineRankClass.Elite,
@@ -49,20 +65,6 @@ Schema.CombineRank = {
 	[ "01" ] = Schema.CombineRankClass.Unit,
 	[ "RCT" ] = Schema.CombineRankClass.Unit
 }
-/* // Default
-Schema.CombineRankModel = {
-	[ "SeC" ] = "models/sect_police2.mdl",
-	[ "DvL" ] = "models/eliteshockcp.mdl",
-	[ "EpU" ] = "models/leet_police2.mdl",
-	[ "GHOST" ] = "models/eliteghostcp.mdl",
-	[ "OfC" ] = "models/policetrench.mdl",
-	[ "05" ] = "models/police.mdl",
-	[ "04" ] = "models/police.mdl",
-	[ "03" ] = "models/police.mdl",
-	[ "02" ] = "models/police.mdl",
-	[ "01" ] = "models/police.mdl",
-	[ "RCT" ] = "models/police.mdl"
-}*/
 Schema.CombineRankModel = {
 	[ "SeC" ] = "models/dpfilms/metropolice/phoenix_police.mdl",
 	[ "DvL" ] = "models/dpfilms/metropolice/blacop.mdl",
@@ -81,8 +83,8 @@ Schema.BadRadioStrings = {
 	"%",
 	"{",
 	"@",
-	"__",
-	"_____",
+	"*",
+	"##",
 	"_"
 }
 
@@ -97,6 +99,22 @@ function Schema:GetRankByName( name )
 			return k, v
 		end
 	end
+end
+
+function Schema:GetUniqueCombineUnitCode( )
+	local index = catherine.data.Get( "combine_code_index", 1 )
+	local code = "ERROR"
+	
+	if ( self.CUC[ index ] ) then
+		code = self.CUC[ index ]
+	else
+		index = #self.CUC
+		code = self.CUC[ index ] or "ERROR"
+	end
+	
+	catherine.data.Set( "combine_code_index", index + 1 )
+	
+	return code:upper( )
 end
 
 function Schema:CanDispatch( name )

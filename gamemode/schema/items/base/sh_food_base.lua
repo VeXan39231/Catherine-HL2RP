@@ -19,13 +19,13 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 local BASE = catherine.item.New( "FOOD", nil, true )
 BASE.name = "Food Base"
 BASE.desc = "A Food."
-BASE.category = "Food"
+BASE.category = "^Item_Category_Food"
 BASE.cost = 0
 BASE.weight = 0
 BASE.healthAdd = 0
 BASE.func = { }
 BASE.func.eat = {
-	text = "Eat",
+	text = "^Item_FuncStr01_Food",
 	canShowIsWorld = true,
 	canShowIsMenu = true,
 	func = function( pl, itemTable )

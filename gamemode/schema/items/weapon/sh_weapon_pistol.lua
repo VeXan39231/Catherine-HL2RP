@@ -17,8 +17,8 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local ITEM = catherine.item.New( "weapon_pistol", "WEAPON" )
-ITEM.name = "9mm Pistol"
-ITEM.desc = "A standard 9MM Pistol"
+ITEM.name = "^Item_Name_9MM"
+ITEM.desc = "^Item_Desc_9MM"
 ITEM.cost = 300
 ITEM.model = "models/weapons/w_Pistol.mdl"
 ITEM.weight = 1.3

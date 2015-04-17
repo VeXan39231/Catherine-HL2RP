@@ -17,9 +17,9 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local FACTION = catherine.faction.New( "cp" )
-FACTION.name = "Civil Protection"
+FACTION.name = "^Faction_Name_CP"
 FACTION.color = Color( 30, 144, 255 )
-FACTION.desc = "These units are the brunt of the combine's forces. These units are well-trained military units but they also take part policing the population."
+FACTION.desc = "^Faction_Desc_CP"
 FACTION.isWhitelist = true
 FACTION.alwaysRecognized = true
 FACTION.models = {
@@ -30,7 +30,12 @@ function FACTION:PlayerFirstSpawned( pl )
 	catherine.item.Give( pl, "portable_radio" )
 	catherine.item.Give( pl, "weapon_pistol" )
 	catherine.item.Give( pl, "weapon_stunstick" )
+	
 	pl:SetCharVar( "combineNumber", math.random( 10000, 99999 ) )
+end
+
+function FACTION:PostSetName( pl )
+	return Format( Schema.CPNamePrefix, Schema:GetUniqueCombineUnitCode( ), math.random( 10000, 99999 ) )
 end
 
 FACTION_CP = catherine.faction.Register( FACTION )

@@ -17,8 +17,8 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local ITEM = catherine.item.New( "breenwater", "FOOD" )
-ITEM.name = "Breen Water"
-ITEM.desc = "Shake and eat!"
+ITEM.name = "^Item_Name_BW"
+ITEM.desc = "^Item_Desc_BW"
 ITEM.cost = 20
 ITEM.model = "models/props_junk/PopCan01a.mdl"
 ITEM.weight = 0.4

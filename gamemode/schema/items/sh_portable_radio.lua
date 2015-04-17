@@ -17,40 +17,42 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local ITEM = catherine.item.New( "portable_radio" )
-ITEM.name = "Portable Radio"
-ITEM.desc = "Communication to other humans."
+ITEM.name = "^Item_Name_PR"
+ITEM.desc = "^Item_Desc_PR"
 ITEM.cost = 300
 ITEM.model = "models/items/battery.mdl"
 ITEM.weight = 1
-ITEM.category = "Communication"
+ITEM.category = "^Item_Category_Communication"
 ITEM.itemData = {
 	freq = "xxx.x",
 	toggle = false
 }
 ITEM.func = { }
 ITEM.func.setfreq = {
-	text = "Set Frequency",
+	text = "^Item_FuncStr01_PR",
 	canShowIsMenu = true,
 	func = function( pl, itemTable )
 		local itemData = pl:GetInvItemDatas( itemTable.uniqueID )
-		catherine.util.StringReceiver( pl, "PortableRadio_UniqueSetFreq", "What are you setting for radio?", itemData.freq or "xxx.x", function( _, val )
+		
+		catherine.util.StringReceiver( pl, "PortableRadio_UniqueSetFreq", "^Item_RadioFreqQ_PR", itemData.freq or "XXX.X", function( _, val )
 			if ( val:find( "^%d%d%d%.%d$" ) ) then
 				local one, two, three = val:match( "(%d)%d(%d)%.(%d)" )
 				one = tonumber( one ) two = tonumber( two ) three = tonumber( three )
+				
 				if ( one == 1 and two > 0 and two <= 9 and three > 0 and three <= 9 ) then
 					pl:SetInvItemData( itemTable.uniqueID, "freq", val )
-					catherine.util.Notify( pl, "You set portable radio freq to " .. val .. "." )
+					catherine.util.NotifyLang( pl, "Item_Notify_FreqSet_PR", val )
 				else
-					catherine.util.Notify( pl, "Radio freq is must be 101.1 ~ 199.9!" )
+					catherine.util.NotifyLang( pl, "Item_Notify_Error01_PR" )
 				end
 			else
-				catherine.util.Notify( pl, "Radio freq is must be XXX.X!" )
+				catherine.util.NotifyLang( pl, "Item_Notify_Error02_PR" )
 			end
 		end )
 	end
 }
 ITEM.func.toggle = {
-	text = "Toggle",
+	text = "^Item_FuncStr02_PR",
 	icon = "icon16/accept.png",
 	canShowIsMenu = true,
 	func = function( pl, itemTable )
@@ -69,7 +71,7 @@ if ( CLIENT ) then
 	end
 	
 	function ITEM:GetDesc( pl, itemTable, itemData, isInv )
-		return isInv and "Frequency : " .. ( itemData.freq and itemData.freq == "" and "xxx.x" or itemData.freq ) .. "\nPower : " .. ( itemData.toggle == true and "On" or "Off" )
+		return isInv and LANG( "Item_DataStr01_PR" ) .. " : " .. ( itemData.freq and itemData.freq == "" and "xxx.x" or itemData.freq ) .. "\n" .. LANG( "Item_DataStr02_PR" ) .. " : " .. ( itemData.toggle == true and LANG( "Item_DataStr02_On_PR" ) or LANG( "Item_DataStr02_Off_PR" ) )
 	end
 end
 

@@ -17,9 +17,9 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local FACTION = catherine.faction.New( "ow" )
-FACTION.name = "Overwatch Transhuman Arm"
+FACTION.name = "^Faction_Name_OW"
 FACTION.color = Color( 181, 94, 94 )
-FACTION.desc = "Mechanised Infantry units utilized to combat the ongoing insurgency, these units are the elite of the combine's forces."
+FACTION.desc = "^Faction_Desc_OW"
 FACTION.isWhitelist = true
 FACTION.alwaysRecognized = true
 FACTION.models = {
@@ -30,6 +30,10 @@ function FACTION:PlayerFirstSpawned( pl )
 	catherine.item.Give( pl, "portable_radio" )
 	catherine.item.Give( pl, "weapon_ar2" )
 	pl:SetCharVar( "combineNumber", math.random( 10000, 99999 ) )
+end
+
+function FACTION:PostSetName( pl )
+	return Format( Schema.OWNamePrefix, Schema:GetUniqueCombineUnitCode( ), math.random( 10000, 99999 ) )
 end
 
 FACTION_OW = catherine.faction.Register( FACTION )
