@@ -31,9 +31,9 @@ local combineOverlayMaterial
 
 function Schema:GetSchemaInformation( )
 	return {
-		title = Schema.IntroTitle,
-		desc = Schema.IntroDesc,
-		author = "Development and design by " .. Schema.Author .. "."
+		title = catherine.util.StuffLanguage( Schema.IntroTitle ),
+		desc = catherine.util.StuffLanguage( Schema.IntroDesc ),
+		author = LANG( "Basic_Schema_Author", Schema.Author )
 	}
 end
 
@@ -181,7 +181,7 @@ function Schema:HUDDraw( )
 		end
 	end
 	
-	draw.SimpleText( "Radio Signal", "catherine_normal15", x, y - 20, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, 1 )
+	//draw.SimpleText( "Radio Signal", "catherine_normal15", x, y - 20, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, 1 )
 	draw.SimpleText( freq, "catherine_normal15", x + 5, y + 55, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, 1 )
 end
 

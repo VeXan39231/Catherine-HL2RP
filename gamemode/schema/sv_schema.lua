@@ -76,6 +76,12 @@ function Schema:SayDispatch( pl, text )
 	catherine.chat.RunByClass( pl, "dispatch", text )
 end
 
+function Schema:ChatPrefix( pl, class )
+	if ( pl:PlayerIsCombine( ) and ( class == "ic" or class == "yell" or class == "whisper" ) ) then
+		return "< :: "
+	end
+end
+
 function Schema:ChatAdjust( adjustInfo )
 	local pl = adjustInfo.player
 	if ( adjustInfo.class == "ic" or adjustInfo.class == "radio" or adjustInfo.class == "yell" or adjustInfo.class == "whisper" ) then
