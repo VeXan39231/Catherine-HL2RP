@@ -18,10 +18,10 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 
 Schema.Name = "HL2RP"
 Schema.Author = "L7D"
-Schema.Title = "Half - Life 2 Role Play"
-Schema.Desc = "It's safe here."
-Schema.IntroTitle = "City 18, 2016."
-Schema.IntroDesc = "It's safe here."
+Schema.Title = "^Basic_Schema_Title"
+Schema.Desc = "^Basic_Schema_Desc"
+Schema.IntroTitle = "^Basic_Schema_IntroTitle"
+Schema.IntroDesc = "^Basic_Schema_IntroDesc"
 
 catherine.util.Include( "sh_config.lua" )
 catherine.util.Include( "sh_commands.lua" )

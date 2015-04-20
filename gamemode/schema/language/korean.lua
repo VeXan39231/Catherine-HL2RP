@@ -17,6 +17,17 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 catherine.language.Merge( "korean", {
+	// Basic
+	[ "Basic_Schema_Title" ] = "하프 - 라이프 2 롤 플레잉",
+	[ "Basic_Schema_Desc" ] = "이곳은 안전합니다.",
+	[ "Basic_Schema_IntroTitle" ] = "2016 년, 18번 지구",
+	[ "Basic_Schema_IntroDesc" ] = "이곳은 안전합니다.",
+	[ "Basic_Schema_Author" ] = "%s 에 의해 개발 및 디자인.",
+	
+	// Cash
+	[ "Cash_UI_HasStr" ] = "당신은 %s " .. catherine.configs.cashName .. " 를 가지고 있습니다.",
+	[ "Cash_Notify_HasNot" ] = "당신은 충분한 " .. catherine.configs.cashName .. " 가 없습니다!",
+	
 	// Faction Name
 	[ "Faction_Name_Citizen" ] = "시민",
 	[ "Faction_Name_Administrator" ] = "관리자",
@@ -30,6 +41,10 @@ catherine.language.Merge( "korean", {
 	[ "Faction_Desc_CP" ] = "시민들을 보호합니다.",
 
 	// Item
+	[ "Item_Desc_Wallet" ] = catherine.configs.cashName .. " 가 쌓여있습니다.",
+	[ "Item_FuncStr01_Wallet" ] = catherine.configs.cashName .. " 가지기",
+	[ "Item_FuncStr02_Wallet" ] = catherine.configs.cashName .. " 떨어트리기",
+	
 	[ "Item_Name_LargeBag" ] = "큰 가방",
 	[ "Item_Desc_LargeBag" ] = "당신의 인벤토리의 공간을 많이 늘려줍니다.",
 	

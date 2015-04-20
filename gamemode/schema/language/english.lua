@@ -17,6 +17,17 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 catherine.language.Merge( "english", {
+	// Basic
+	[ "Basic_Schema_Title" ] = "Half - Life 2 Role Play",
+	[ "Basic_Schema_Desc" ] = "This place is safe.",
+	[ "Basic_Schema_IntroTitle" ] = "City 18, 2016",
+	[ "Basic_Schema_IntroDesc" ] = "This place is safe.",
+	[ "Basic_Schema_Author" ] = "Development and design by %s.",
+	
+	// Cash
+	[ "Cash_UI_HasStr" ] = "You have a %s " .. catherine.configs.cashName ..".",
+	[ "Cash_Notify_HasNot" ] = "You don't have a enough " .. catherine.configs.cashName .. "!",
+	
 	// Faction Name
 	[ "Faction_Name_Citizen" ] = "Citizen",
 	[ "Faction_Name_Administrator" ] = "Administrator",
@@ -30,6 +41,10 @@ catherine.language.Merge( "english", {
 	[ "Faction_Desc_CP" ] = "These units are the brunt of the combine's forces. These units are well-trained military units but they also take part policing the population.",
 
 	// Item
+	[ "Item_Desc_Wallet" ] = catherine.configs.cashName .. " in a small stack.",
+	[ "Item_FuncStr01_Wallet" ] = "Take " .. catherine.configs.cashName,
+	[ "Item_FuncStr02_Wallet" ] = "Drop " .. catherine.configs.cashName,
+	
 	[ "Item_Name_LargeBag" ] = "Large bag",
 	[ "Item_Desc_LargeBag" ] = "This item adds more inventory space!",
 	
