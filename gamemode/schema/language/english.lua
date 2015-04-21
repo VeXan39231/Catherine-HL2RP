@@ -88,6 +88,10 @@ catherine.language.Merge( "english", {
 	
 	[ "Item_Name_SS" ] = "Stunstick",
 	[ "Item_Desc_SS" ] = "An electrified baton powered by a mysterious combine battery.",
+	
+	[ "Item_Name_ZT" ] = "Zip Tie",
+	[ "Item_Desc_ZT" ] = "Tie to player.",
+	[ "Item_FuncStr01_ZT" ] = "Tie",
 
 	[ "Item_Category_Communication" ] = "Communication",
 	[ "Item_Category_Food" ] = "Food",

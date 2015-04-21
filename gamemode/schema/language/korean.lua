@@ -88,6 +88,10 @@ catherine.language.Merge( "korean", {
 	
 	[ "Item_Name_SS" ] = "전기봉",
 	[ "Item_Desc_SS" ] = "사람을 때려서 기절시킬 수 있습니다.",
+	
+	[ "Item_Name_ZT" ] = "수갑",
+	[ "Item_Desc_ZT" ] = "사람을 묶을 수 있습니다.",
+	[ "Item_FuncStr01_ZT" ] = "묶기",
 
 	[ "Item_Category_Communication" ] = "통신",
 	[ "Item_Category_Food" ] = "음식",
