@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
-
+/*
 AddCSLuaFile( )
 
 DEFINE_BASECLASS( "base_gmodentity" )
@@ -62,6 +62,7 @@ else
 		
 		draw.SimpleText( ent.sr_name, "catherine_outline25", x, y, Color( 255, 255, 255, a ), 1, 1 )
 		draw.SimpleText( ent.sr_desc, "catherine_outline15", x, y + 25, Color( 255, 255, 255, a ), 1, 1 )
-		draw.SimpleText( freqDesc, "catherine_outline15", x, y + 40, Color( 255, 255, 255, a ), 1, 1 )
+		draw.SimpleText( freqDesc, "catherine_outline15", x, y + 45, Color( 255, 255, 255, a ), 1, 1 )
 	end
 end
+*/

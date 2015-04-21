@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
-
+/*
 local ITEM = catherine.item.New( "static_radio" )
 ITEM.name = "^Item_Name_SR"
 ITEM.desc = "^Item_Desc_SR"
@@ -86,3 +86,4 @@ ITEM.func.drop = {
 }
 
 catherine.item.Register( ITEM )
+*/
