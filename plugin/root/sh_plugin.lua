@@ -25,13 +25,19 @@ catherine.util.Include( "sv_plugin.lua" )
 
 catherine.language.Merge( "english", {
 	[ "Root_Notify_AlreadyDoing" ] = "You are already rooting another player!",
+	[ "Root_Notify_CantRoot" ] = "You can't root this player!"
+} )
+
+catherine.language.Merge( "korean", {
+	[ "Root_Notify_AlreadyDoing" ] = "이미 당신은 루팅을 하고 있습니다!",
+	[ "Root_Notify_CantRoot" ] = "이 사람을 루팅할 수 없습니다!"
 } )
 
 catherine.command.Register( {
 	command = "charroot",
 	runFunc = function( pl, args )
 		if ( pl:GetNetVar( "rooting" ) ) then
-			catherine.util.NotifyLang( "Root_Notify_AlreadyDoing" )
+			catherine.util.NotifyLang( pl, "Root_Notify_AlreadyDoing" )
 			return
 		end
 		
@@ -44,7 +50,7 @@ catherine.command.Register( {
 		if ( IsValid( ent ) and ent:IsPlayer( ) ) then
 			PLUGIN:RootPlayer( pl, ent )
 		else
-			catherine.util.NotifyLang( "Entity_Notify_NotPlayer" )
+			catherine.util.NotifyLang( pl, "Entity_Notify_NotPlayer" )
 		end
 	end
 } )
@@ -54,5 +60,14 @@ if ( CLIENT ) then
 		local pl = catherine.util.FindPlayerByStuff( "SteamID", data[ 1 ] )
 		local inventory = data[ 2 ]
 		local cash = data[ 3 ]
+		if ( !IsValid( pl ) ) then return end
+		
+		if ( IsValid( catherine.vgui.root ) ) then
+			catherine.vgui.root:Remove( )
+			catherine.vgui.root = nil
+		end
+		
+		catherine.vgui.root = vgui.Create( "catherine.vgui.root" )
+		catherine.vgui.root:InitializeRoot( pl, inventory, cash )
 	end )
 end

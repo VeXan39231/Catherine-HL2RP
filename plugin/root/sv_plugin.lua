@@ -19,7 +19,10 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 local PLUGIN = PLUGIN
 
 function PLUGIN:RootPlayer( pl, target )
-	
+	if ( !catherine.player.IsTied( target ) ) then
+		catherine.util.NotifyLang( pl, "Root_Notify_CantRoot" )
+		return
+	end
 	
 	pl:SetNetVar( "rooting", true )
 	
@@ -29,3 +32,7 @@ function PLUGIN:RootPlayer( pl, target )
 		catherine.cash.Get( target )
 	} )
 end
+
+netstream.Hook( "catherine_hl2rp.plugin.root.RootClose", function( pl )
+	pl:SetNetVar( "rooting", false )
+end )
