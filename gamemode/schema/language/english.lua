@@ -94,8 +94,12 @@ catherine.language.Merge( "english", {
 	
 	[ "Item_FuncStr01_Food" ] = "Eat",
 	
+	// Radio
 	[ "Item_Name_SR" ] = "Static Radio",
 	[ "Item_Desc_SR" ] = "Communication to other humans.",
+	[ "Item_NoFreq" ] = "No frequency has been set.",
+	[ "Item_Freq" ] = "Frequency set to %s.",
+	
 	[ "Item_FuncStr01_SR" ] = "Set Frequency",
 	[ "Item_FuncStr02_SR" ] = "Toggle",
 	[ "Item_RadioFreqQ_SR" ] = "Would you like to setting frequency for radio?",

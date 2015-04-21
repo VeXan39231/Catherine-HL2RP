@@ -33,7 +33,6 @@ if ( SERVER ) then
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetMoveType( MOVETYPE_VPHYSICS )
 		self:SetUseType( SIMPLE_USE )
-		self:SetHealth( 100 )
 		self:SetNetVar( "active", false )
 		//self:SetNetVar( "freq", "XXX.X" )
 		
@@ -43,21 +42,26 @@ if ( SERVER ) then
 			physObject:Wake( )
 		end
 	end
-
-	function ENT:InitializeRadio( active )
-		self:SetNetVar( "active", active )
-	end
-
-	function ENT:Use( pl )
-		
-	end
 else
 	local toscreen = FindMetaTable("Vector").ToScreen
 	
 	function ENT:DrawEntityTargetID( pl, ent, a )
-		if ( ent:GetClass( ) != "cat_item" ) then return end
 		local pos = toscreen( self:LocalToWorld( self:OBBCenter( ) ) )
 		local x, y = pos.x, pos.y
+		local freqDesc = LANG( "Item_NoFreq" )
 		
+		if ( !ent.sr_name or !ent.sr_desc ) then
+			ent.sr_name = LANG( "Item_Name_SR" )
+			ent.sr_desc = LANG( "Item_Desc_SR" )
+		end
+		
+		local freq = ent:GetNetVar( "freq" )
+		if ( freq ) then
+			freqDesc = LANG( "Item_Freq", freq )
+		end
+		
+		draw.SimpleText( ent.sr_name, "catherine_outline25", x, y, Color( 255, 255, 255, a ), 1, 1 )
+		draw.SimpleText( ent.sr_desc, "catherine_outline15", x, y + 25, Color( 255, 255, 255, a ), 1, 1 )
+		draw.SimpleText( freqDesc, "catherine_outline15", x, y + 40, Color( 255, 255, 255, a ), 1, 1 )
 	end
 end

@@ -95,11 +95,11 @@ catherine.language.Merge( "korean", {
 	[ "Item_FuncStr01_Food" ] = "먹기",
 	
 	// Radio
-	[ "StaticRadio_Title" ] = "고정식 라디오",
-	[ "StaticRadio_Desc" ] = "고정식 라디오",
-	
 	[ "Item_Name_SR" ] = "고정식 라디오",
 	[ "Item_Desc_SR" ] = "다른 사람들과 통신을 할 수 있습니다.",
+	[ "Item_NoFreq" ] = "아직 주파수가 설정되지 않았습니다.",
+	[ "Item_Freq" ] = "주파수 : %s.",
+	
 	[ "Item_FuncStr01_SR" ] = "라디오 주파수 설정",
 	[ "Item_FuncStr02_SR" ] = "전원 켜기/끄기",
 	[ "Item_RadioFreqQ_SR" ] = "라디오 주파수를 무엇으로 설정하시겠습니까?",

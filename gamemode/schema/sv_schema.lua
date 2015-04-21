@@ -28,6 +28,41 @@ CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL = 3
 
 Schema.NextRadioSignalCheckTick = Schema.NextRadioSignalCheckTick or CurTime( ) + 2
 
+function Schema:DataSave( )
+	self:StaticRadioSave( )
+end
+
+function Schema:DataLoad( )
+	self:StaticRadioLoad( )
+end
+
+function Schema:StaticRadioSave( )
+	local data = { }
+	
+	for k, v in pairs( ents.FindByClass( "cat_hl2rp_static_radio" ) ) do
+		data[ #data + 1 ] = {
+			pos = v:GetPos( ),
+			ang = v:GetAngles( ),
+			active = v:GetNetVar( "active", false ),
+			freq = v:GetNetVar( "freq" )
+		}
+	end
+	
+	catherine.data.Set( "static_radio", data )
+end
+
+function Schema:StaticRadioLoad( )
+	for k, v in pairs( catherine.data.Get( "static_radio", { } ) ) do
+		local ent = ents.Create( "cat_hl2rp_static_radio" )
+		ent:SetPos( v.pos )
+		ent:SetAngles( v.ang )
+		ent:Spawn( )
+		ent:Activate( )
+		ent:SetNetVar( "active", v.active )
+		ent:SetNetVar( "freq", v.freq )
+	end
+end
+
 function Schema:PlayerCanSpray( pl )
 	return pl:HasItem( "spray_can" )
 end
