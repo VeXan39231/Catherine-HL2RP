@@ -27,7 +27,15 @@ CAT_SCHEMA_COMBINEOVERLAY_GLOBAL = 2
 CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL = 3
 
 Schema.NextRadioSignalCheckTick = Schema.NextRadioSignalCheckTick or CurTime( ) + 2
+--[[
+function Schema:SchemaDataSave( )
 
+end
+
+function Schema:SchemaDataLoad( )
+
+end
+--]]
 function Schema:PlayerCanSpray( pl )
 	return pl:HasItem( "spray_can" )
 end
@@ -84,6 +92,7 @@ end
 
 function Schema:ChatAdjust( adjustInfo )
 	local pl = adjustInfo.player
+	
 	if ( adjustInfo.class == "ic" or adjustInfo.class == "radio" or adjustInfo.class == "yell" or adjustInfo.class == "whisper" ) then
 		local tab = { sounds = { }, text = "" }
 		local ex = string.Explode( ", ", adjustInfo.text )
@@ -361,39 +370,45 @@ end
 
 function Schema:RadioTick( )
 	for k, v in pairs( player.GetAllByLoaded( ) ) do
-		if ( v:PlayerIsCombine( ) or !v:HasItem( "portable_radio" ) or v:GetInvItemData( "portable_radio", "toggle" ) == false ) then continue end
-		v:SetNetVar( "radioSignal", self:CalcRadio( v ) )
+		if ( !v:HasItem( "portable_radio" ) or v:GetInvItemData( "portable_radio", "toggle" ) == false ) then continue end
+		local pervSignal = v:GetNetVar( "radioSignal", 0 )
+		local newSignal = self:CalcRadio( v )
+		
+		if ( pervSignal != newSignal ) then
+			v:SetNetVar( "radioSignal", newSignal )
+		end
 	end
 end
 
+local disradio = {
+	{
+		5, 800
+	},
+	{
+		4, 1800
+	},
+	{
+		3, 3000
+	},
+	{
+		2, 5000
+	},
+	{
+		1, 8000
+	},
+	{
+		0, 10000
+	}
+}
+
 function Schema:CalcRadio( pl )
 	local listeners = self:GetRadioListeners( pl )
-
-	local disradio = {
-		{
-			5, 800
-		},
-		{
-			4, 1800
-		},
-		{
-			3, 3000
-		},
-		{
-			2, 5000
-		},
-		{
-			1, 8000
-		},
-		{
-			0, 10000
-		}
-	}
 	local l = 1000000 // need to set max map size.
 
 	for k, v in pairs( listeners ) do
 		if ( pl == v ) then continue end
 		local dis = catherine.util.CalcDistanceByPos( pl, v )
+		
 		if ( dis < l ) then
 			l = dis
 		end

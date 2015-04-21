@@ -88,9 +88,25 @@ catherine.language.Merge( "english", {
 	
 	[ "Item_Name_SS" ] = "Stunstick",
 	[ "Item_Desc_SS" ] = "An electrified baton powered by a mysterious combine battery.",
+	
+	[ "Item_Name_ZT" ] = "Zip Tie",
+	[ "Item_Desc_ZT" ] = "Tie to player.",
+	[ "Item_FuncStr01_ZT" ] = "Tie",
 
 	[ "Item_Category_Communication" ] = "Communication",
 	[ "Item_Category_Food" ] = "Food",
 	
 	[ "Item_FuncStr01_Food" ] = "Eat",
+	
+	// Radio
+	[ "Item_Name_SR" ] = "Static Radio",
+	[ "Item_Desc_SR" ] = "Communication to other humans.",
+	[ "Item_NoFreq" ] = "No frequency has been set.",
+	[ "Item_Freq" ] = "Frequency set to %s.",
+	[ "Item_FuncStr01_SR" ] = "Set Frequency",
+	[ "Item_FuncStr02_SR" ] = "Toggle",
+	[ "Item_RadioFreqQ_SR" ] = "Would you like to setting frequency for radio?",
+	[ "Item_Notify_FreqSet_SR" ] = "You are set portable radio frequency to %s.",
+	[ "Item_Notify_Error01_SR" ] = "Radio frequency is must be 101.1 ~ 199.9!",
+	[ "Item_Notify_Error02_SR" ] = "Radio frequency is must be XXX.X!"
 } )
