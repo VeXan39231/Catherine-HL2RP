@@ -18,6 +18,10 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 
 local PLUGIN = PLUGIN
 
+function PLUGIN:ShowSpare2( pl )
+	catherine.command.Run( pl, "charroot" )
+end
+
 function PLUGIN:RootPlayer( pl, target )
 	if ( !catherine.player.IsTied( target ) ) then
 		catherine.util.NotifyLang( pl, "Root_Notify_CantRoot" )
