@@ -27,15 +27,15 @@ CAT_SCHEMA_COMBINEOVERLAY_GLOBAL = 2
 CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL = 3
 
 Schema.NextRadioSignalCheckTick = Schema.NextRadioSignalCheckTick or CurTime( ) + 2
-
-function Schema:DataSave( )
-
-end
-
-function Schema:DataLoad( )
+--[[
+function Schema:SchemaDataSave( )
 
 end
 
+function Schema:SchemaDataLoad( )
+
+end
+--]]
 function Schema:PlayerCanSpray( pl )
 	return pl:HasItem( "spray_can" )
 end
