@@ -48,16 +48,30 @@ ITEM.func.drop = {
 		catherine.entity.RegisterUseMenu( ent, {
 			{
 				uniqueID = "ID_Toggle",
-				text = "Toggle",
-				func = function( pl, ent )
+				text = "^Item_FuncStr02_SR",
+				func = function( )
 					ent:SetNetVar( "active", !ent:GetNetVar( "active" ) )
 				end
 			},
 			{
 				uniqueID = "ID_SetFreq",
-				text = "Set Freq",
-				func = function( pl, ent )
-					
+				text = "^Item_FuncStr01_SR",
+				func = function( )
+					catherine.util.StringReceiver( pl, "StaticRadio_UniqueSetFreq", "^Item_RadioFreqQ_SR", ent:GetNetVar( "freq", "XXX.X" ), function( _, val )
+						if ( val:find( "^%d%d%d%.%d$" ) ) then
+							local one, two, three = val:match( "(%d)%d(%d)%.(%d)" )
+							one = tonumber( one ) two = tonumber( two ) three = tonumber( three )
+							
+							if ( one == 1 and two > 0 and two <= 9 and three > 0 and three <= 9 ) then
+								ent:SetNetVar( "freq", val )
+								catherine.util.NotifyLang( pl, "Item_Notify_FreqSet_SR", val )
+							else
+								catherine.util.NotifyLang( pl, "Item_Notify_Error01_SR" )
+							end
+						else
+							catherine.util.NotifyLang( pl, "Item_Notify_Error02_SR" )
+						end
+					end )
 				end
 			}
 		} )
@@ -67,7 +81,7 @@ ITEM.func.drop = {
 		} )
 	end,
 	canLook = function( pl, itemTable )
-		return catherine.inventory.HasItem( itemTable.uniqueID )
+		return true
 	end
 }
 

@@ -93,4 +93,13 @@ catherine.language.Merge( "english", {
 	[ "Item_Category_Food" ] = "Food",
 	
 	[ "Item_FuncStr01_Food" ] = "Eat",
+	
+	[ "Item_Name_SR" ] = "Static Radio",
+	[ "Item_Desc_SR" ] = "Communication to other humans.",
+	[ "Item_FuncStr01_SR" ] = "Set Frequency",
+	[ "Item_FuncStr02_SR" ] = "Toggle",
+	[ "Item_RadioFreqQ_SR" ] = "Would you like to setting frequency for radio?",
+	[ "Item_Notify_FreqSet_SR" ] = "You are set portable radio frequency to %s.",
+	[ "Item_Notify_Error01_SR" ] = "Radio frequency is must be 101.1 ~ 199.9!",
+	[ "Item_Notify_Error02_SR" ] = "Radio frequency is must be XXX.X!",
 } )

@@ -35,6 +35,7 @@ if ( SERVER ) then
 		self:SetUseType( SIMPLE_USE )
 		self:SetHealth( 100 )
 		self:SetNetVar( "active", false )
+		//self:SetNetVar( "freq", "XXX.X" )
 		
 		local physObject = self:GetPhysicsObject( )
 		
