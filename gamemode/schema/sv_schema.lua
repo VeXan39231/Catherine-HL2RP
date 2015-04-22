@@ -44,6 +44,12 @@ function Schema:PlayerCanFlashlight( pl )
 	return pl:PlayerIsCombine( )
 end
 
+function Schema:PlayerInteract( pl, target )
+	if ( catherine.player.IsTied( target ) ) then
+		return catherine.player.SetTie( pl, target, false )
+	end
+end
+
 function Schema:SayRadio( pl, text )
 	local listeners = self:GetRadioListeners( pl )
 	local blockPl = nil
@@ -161,6 +167,7 @@ end
 function Schema:PlayerUseDoor( pl, ent )
 	if ( pl:PlayerIsCombine( ) and !ent:HasSpawnFlags( 256 ) and !ent:HasSpawnFlags( 1024 ) ) then
 		ent:Fire( "open", "", 0 )
+		
 		return true
 	end
 end
