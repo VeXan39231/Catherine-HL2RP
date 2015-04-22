@@ -33,8 +33,8 @@ Schema.IsCombineFacton = {
 	FACTION_OW
 }
 Schema.CombineRankClass = {
-	Elite = "cp_elite",
-	Unit = "cp_unit"
+	Elite = CLASS_CP_ELITE,
+	Unit = CLASS_CP_UNIT
 }
 Schema.CUC = {
 	"Alpha",
@@ -105,13 +105,6 @@ function Schema:GetUniqueCombineUnitCode( )
 end
 
 function Schema:CanDispatch( name )
-	local can = { }
-	
-	for k, v in pairs( Schema.CombineRank ) do
-		if ( v != Schema.CombineRankClass.Elite ) then continue end
-		can[ #can + 1 ] = v
-	end
-	
 	return table.HasValue( {
 		"EpU", "SeC", "DvL"
 	}, self:GetRankByName( name ) or "ERROR" )

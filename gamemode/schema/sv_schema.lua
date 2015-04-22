@@ -298,8 +298,8 @@ function Schema:OnSpawnedInCharacter( pl )
 				catherine.class.Set( pl, classID )
 				pl:SetModel( self:GetModelByRank( rankID ) )
 			else
-				if ( pl:Class( ) == "cp_unit" ) then return end
-				catherine.class.Set( pl, "cp_unit" )
+				if ( pl:Class( ) == CLASS_CP_UNIT ) then return end
+				catherine.class.Set( pl, CLASS_CP_UNIT )
 			end
 		elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl:GetModel( ) ) then
 			pl:SetModel( self:GetModelByRank( rankID ) )
@@ -308,8 +308,8 @@ function Schema:OnSpawnedInCharacter( pl )
 				catherine.class.Set( pl, classID )
 				pl:SetModel( self:GetModelByRank( rankID ) )
 			else
-				if ( pl:Class( ) == "cp_unit" ) then return end
-				catherine.class.Set( pl, "cp_unit" )
+				if ( pl:Class( ) == CLASS_CP_UNIT ) then return end
+				catherine.class.Set( pl, CLASS_CP_UNIT )
 			end
 		end
 		
@@ -317,6 +317,28 @@ function Schema:OnSpawnedInCharacter( pl )
 	end
 	
 	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, "Refreshing citizen lists ...", 7, Color( 150, 255, 150 ) )
+end
+
+function Schema:GetBeepSound( pl, IsOff )
+	local team = pl:Team( )
+	
+	if ( team == FACTION_CP ) then
+		if ( IsOff ) then
+			return "npc/metropolice/vo/off" .. math.random( 1, 4 ) .. ".wav"
+		else
+			if ( math.random( 1, 9 ) <= 5 ) then
+				return "npc/metropolice/vo/on" .. math.random( 1, 2 ) .. ".wav"
+			else
+				return "npc/overwatch/radiovoice/on3.wav"
+			end
+		end
+	elseif ( team == FACTION_OW ) then
+		if ( IsOff ) then
+			return "npc/combine_soldier/vo/off" .. math.random( 1, 3 ) .. ".wav"
+		else
+			return "npc/combine_soldier/vo/on" .. math.random( 1, 2 ) .. ".wav"
+		end
+	end
 end
 
 function Schema:CharacterNameChanged( pl, newName )
@@ -328,8 +350,9 @@ function Schema:CharacterNameChanged( pl, newName )
 			catherine.class.Set( pl, classID )
 			pl:SetModel( self:GetModelByRank( rankID ) )
 		else
-			if ( pl:Class( ) == "cp_unit" ) then return end
-			catherine.class.Set( pl, "cp_unit" )
+			if ( pl:Class( ) == CLASS_CP_UNIT ) then return end
+			
+			catherine.class.Set( pl, CLASS_CP_UNIT )
 		end
 	elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl:GetModel( ) ) then
 		pl:SetModel( self:GetModelByRank( rankID ) )
@@ -338,9 +361,9 @@ function Schema:CharacterNameChanged( pl, newName )
 			catherine.class.Set( pl, classID )
 			pl:SetModel( self:GetModelByRank( rankID ) )
 		else
-			if ( pl:Class( ) == "cp_unit" ) then return end
+			if ( pl:Class( ) == CLASS_CP_UNIT ) then return end
 			
-			catherine.class.Set( pl, "cp_unit" )
+			catherine.class.Set( pl, CLASS_CP_UNIT )
 		end
 	end
 end

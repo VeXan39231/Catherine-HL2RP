@@ -21,4 +21,4 @@ CLASS.name = "Civil Protection Elite"
 CLASS.desc = "TEST"
 CLASS.faction = FACTION_CP
 
-catherine.class.Register( CLASS )
+CLASS_CP_ELITE = catherine.class.Register( CLASS )
