@@ -341,6 +341,12 @@ function Schema:GetBeepSound( pl, IsOff )
 	end
 end
 
+function Schema:ChatTypingChanged( pl, bool )
+	if ( !pl:PlayerIsCombine( ) ) then return end // need fix.
+	
+	pl:EmitSound( self:GetBeepSound( pl, !bool ) )
+end
+
 function Schema:CharacterNameChanged( pl, newName )
 	if ( !pl:PlayerIsCombine( ) ) then return end
 	local rankID, classID = self:GetRankByName( pl:Name( ) )
