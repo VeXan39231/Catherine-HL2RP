@@ -89,7 +89,7 @@ Schema.BadRadioStrings = {
 
 for k, v in pairs( Schema.CombineRankModel ) do
 	util.PrecacheModel( v )
-	catherine.anim.SetModelAnimation( "metrocop", v )
+	catherine.animation.Register( "metrocop", v )
 end
 
 function Schema:GetRankByName( name )
