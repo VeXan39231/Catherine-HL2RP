@@ -198,10 +198,10 @@ end
 
 catherine.font.Register( "catherine_hl2rp_combineOverlay", "Consolas", 15, 1000 )
 
-netstream.Hook( "catherine.Schema.AddCombineOverlayMessage", function( data )
+catherine.netXync.Receiver( "catherine.Schema.AddCombineOverlayMessage", function( data )
 	Schema:AddCombineOverlayMessage( data[ 1 ], data[ 2 ], data[ 3 ], data[ 4 ] )
 end )
 
-netstream.Hook( "catherine.Schema.ClearCombineOverlayMessages", function( )
+catherine.netXync.Receiver( "catherine.Schema.ClearCombineOverlayMessages", function( )
 	Schema.playercombineOverlays = { }
 end )

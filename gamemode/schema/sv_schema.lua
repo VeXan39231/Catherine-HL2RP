@@ -182,13 +182,13 @@ function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, te
 		table.RemoveByValue( combines, pl )
 	end
 	
-	netstream.Start( combines, "catherine.Schema.AddCombineOverlayMessage", { message, time or 6, col or Color( 255, 255, 255 ), textMakeDelay or 0.05 } )
+	catherine.netXync.Send( combines, "catherine.Schema.AddCombineOverlayMessage", { message, time or 6, col or Color( 255, 255, 255 ), textMakeDelay or 0.05 } )
 end
 
 function Schema:ClearCombineOverlayMessages( pl )
 	if ( !IsValid( pl ) ) then return end
 	
-	netstream.Start( pl, "catherine.Schema.ClearCombineOverlayMessages" )
+	catherine.netXync.Send( pl, "catherine.Schema.ClearCombineOverlayMessages" )
 end
 
 function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
@@ -236,7 +236,7 @@ function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, te
 		table.RemoveByValue( combines, pl )
 	end
 	
-	netstream.Start( combines, "catherine.Schema.AddCombineOverlayMessage", { message, time or 6, col or Color( 255, 255, 255 ), textMakeDelay or 0.05 } )
+	catherine.netXync.Send( combines, "catherine.Schema.AddCombineOverlayMessage", { message, time or 6, col or Color( 255, 255, 255 ), textMakeDelay or 0.05 } )
 end
 
 function Schema:HealthFullRecovered( pl )

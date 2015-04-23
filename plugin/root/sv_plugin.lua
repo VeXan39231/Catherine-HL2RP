@@ -30,13 +30,13 @@ function PLUGIN:RootPlayer( pl, target )
 	
 	pl:SetNetVar( "rooting", true )
 	
-	netstream.Start( pl, "catherine_hl2rp.plugin.root.Work", {
+	catherine.netXync.Send( pl, "catherine_hl2rp.plugin.root.Work", {
 		target:SteamID( ),
 		catherine.inventory.Get( target ),
 		catherine.cash.Get( target )
 	} )
 end
 
-netstream.Hook( "catherine_hl2rp.plugin.root.RootClose", function( pl )
+catherine.netXync.Receiver( "catherine_hl2rp.plugin.root.RootClose", function( pl )
 	pl:SetNetVar( "rooting", false )
 end )
