@@ -56,7 +56,7 @@ catherine.command.Register( {
 } )
 
 if ( CLIENT ) then
-	catherine.netXync.Receiver( "catherine_hl2rp.plugin.root.Work", function( data )
+	netstream.Hook( "catherine_hl2rp.plugin.root.Work", function( data )
 		local pl = catherine.util.FindPlayerByStuff( "SteamID", data[ 1 ] )
 		local inventory = data[ 2 ]
 		local cash = data[ 3 ]

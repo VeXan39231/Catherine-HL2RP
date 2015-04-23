@@ -46,7 +46,7 @@ function PANEL:Init( )
 	self.close.Click = function( )
 		if ( self.closeing ) then return end
 		self:Close( )
-		catherine.netXync.Send( "catherine_hl2rp.plugin.root.RootClose" )
+		netstream.Start( "catherine_hl2rp.plugin.root.RootClose" )
 	end
 end
 
