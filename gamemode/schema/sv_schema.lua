@@ -106,7 +106,7 @@ function Schema:OnChatControl( chatInformation ) // need rebuild :(.
 		local text = chatInformation.text
 		local tab = {
 			sounds = { },
-			text = ""
+			text = text
 		}
 		local ex = string.Explode( ", ", text )
 		local vol = true
@@ -142,7 +142,7 @@ function Schema:OnChatControl( chatInformation ) // need rebuild :(.
 		local text = chatInformation.text:lower( )
 		local tab = {
 			sounds = { },
-			text = ""
+			text = text
 		}
 		
 		for k, v in pairs( self.vo.dispatchVoice ) do
