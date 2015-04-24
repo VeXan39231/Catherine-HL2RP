@@ -149,8 +149,8 @@ end
 // Hint stuff
 //catherine.hint.Register( "" )
 
-catherine.chat.RegisterClass( "radio", {
-	onChat = function( pl, text, ex )
+catherine.chat.Register( "radio", {
+	func = function( pl, text, ex )
 		local name = pl:Name( )
 		
 		if ( ex[ 1 ] and LocalPlayer( ) != pl ) then
@@ -159,27 +159,27 @@ catherine.chat.RegisterClass( "radio", {
 		
 		chat.AddText( Color( 0, 255, 100 ), name .. " radio says " .. catherine.chat.PreSet( text ) )
 	end,
-	global = true,
+	isGlobal = true,
 	canRun = function( pl )
 		return pl:Alive( )
 	end
 } )
 
-catherine.chat.RegisterClass( "dispatch", {
-	onChat = function( pl, text )
+catherine.chat.Register( "dispatch", {
+	func = function( pl, text )
 		chat.AddText( Color( 255, 150, 150 ), "Combine Dispatch - " .. text )
 	end,
-	global = true,
+	isGlobal = true,
 	canRun = function( pl )
 		return pl:Alive( )
 	end
 } )
 
-catherine.chat.RegisterClass( "request", {
-	onChat = function( pl, text )
+catherine.chat.Register( "request", {
+	func = function( pl, text )
 		chat.AddText( Color( 255, 200, 150 ), pl:Name( ) .. " request says " .. catherine.chat.PreSet( text ) )
 	end,
-	global = true,
+	isGlobal = true,
 	canRun = function( pl )
 		return pl:Alive( )
 	end
