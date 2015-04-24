@@ -72,95 +72,114 @@ function Schema:SayRadio( pl, text )
 		
 		blockPl = pl
 	elseif ( radioSignal == 0 ) then
-		catherine.chat.RunByClass( pl, "radio", string.rep( ".", #text ) )
+		catherine.chat.RunByID( pl, "radio", string.rep( ".", #text ) )
 		pl:EmitSound( "ambient/levels/prison/radio_random" .. math.random( 1, 9 ) .. ".wav", 40 )
 		
 		return
 	end
 
-	catherine.chat.RunByClass( pl, "radio", text, listeners, blockPl )
+	catherine.chat.RunByID( pl, "radio", text, listeners, blockPl )
 end
 
 function Schema:SayRequest( pl, text )
 	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, pl:Name( ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
-	catherine.chat.RunByClass( pl, "request", text, self:GetCombines( ) )
+	catherine.chat.RunByID( pl, "request", text, self:GetCombines( ) )
 end
 
 function Schema:SayDispatch( pl, text )
-	catherine.chat.RunByClass( pl, "dispatch", text )
+	catherine.chat.RunByID( pl, "dispatch", text )
 end
 
-function Schema:ChatPrefix( pl, class )
-	if ( pl:PlayerIsCombine( ) and ( class == "ic" or class == "yell" or class == "whisper" ) ) then
+function Schema:ChatPrefix( pl, classTable )
+	local uniqueID = classTable.uniqueID
+	
+	if ( pl:PlayerIsCombine( ) and ( uniqueID == "ic" or uniqueID == "yell" or uniqueID == "whisper" ) ) then
 		return "< :: "
 	end
 end
 
-function Schema:ChatAdjust( adjustInfo )
-	local pl = adjustInfo.player
-	
-	if ( adjustInfo.class == "ic" or adjustInfo.class == "radio" or adjustInfo.class == "yell" or adjustInfo.class == "whisper" ) then
-		local tab = { sounds = { }, text = "" }
-		local ex = string.Explode( ", ", adjustInfo.text )
+function Schema:OnChatControl( chatInformation ) // need rebuild :(.
+	local pl = chatInformation.pl
+	local uniqueID = chatInformation.uniqueID
+
+	if ( uniqueID == "ic" or uniqueID == "radio" or uniqueID == "yell" or uniqueID == "whisper" ) then
+		local text = chatInformation.text
+		local tab = {
+			sounds = { },
+			text = ""
+		}
+		local ex = string.Explode( ", ", text )
 		local vol = true
 
-		if ( adjustInfo.class == "ic" ) then
+		if ( uniqueID == "ic" ) then
 			vol = 80
-		elseif ( adjustInfo.class == "yell" ) then
+		elseif ( uniqueID == "yell" ) then
 			vol = 100
-		elseif ( adjustInfo.class == "whisper" ) then
+		elseif ( uniqueID == "whisper" ) then
 			vol = 30
 		end
 
-		for k, v in pairs( Schema.vo.normalVoice ) do
+		for k, v in pairs( self.vo.normalVoice ) do
 			if ( !table.HasValue( v.faction, pl:Team( ) ) ) then continue end
 			
 			for k1, v1 in pairs( ex ) do
 				if ( v1:lower( ) == v.command:lower( ) ) then
-					tab.sounds[ #tab.sounds + 1 ] = { dir = v.sound, len = SoundDuration( v.sound ), vol = vol }
-					
-					if ( k1 == 1 ) then
-						adjustInfo.text = v.output
-					else
-						adjustInfo.text = adjustInfo.text .. ", " .. v.output
-					end
+					tab.sounds[ #tab.sounds + 1 ] = {
+						dir = v.sound,
+						len = SoundDuration( v.sound ),
+						vol = vol
+					}
+					tab.text = k1 == 1 and ( v.output ) or ( tab.text .. ", " .. v.output )
 				end
 			end
 		end
 
-		adjustInfo.voice = tab.sounds
+		chatInformation.voice = tab.sounds
+		chatInformation.text = tab.text
 		
-		return adjustInfo
-	elseif ( adjustInfo.class == "dispatch" ) then
-		local tab, text = { sounds = { }, text = "" }, adjustInfo.text:lower( )
+		return chatInformation
+	elseif ( uniqueID == "dispatch" ) then
+		local text = chatInformation.text:lower( )
+		local tab = {
+			sounds = { },
+			text = ""
+		}
 		
-		for k, v in pairs( Schema.vo.dispatchVoice ) do
+		for k, v in pairs( self.vo.dispatchVoice ) do
 			if ( v.command:lower( ) == text ) then
-				tab.sounds[ #tab.sounds + 1 ] = { dir = v.sound, len = SoundDuration( v.sound ), vol = true }
-				adjustInfo.text = v.output
+				tab.sounds[ #tab.sounds + 1 ] = {
+					dir = v.sound,
+					len = SoundDuration( v.sound ),
+					vol = true
+				}
+				tab.text = v.output
 			end
 		end
 		
-		adjustInfo.voice = tab.sounds
-		return adjustInfo
+		chatInformation.voice = tab.sounds
+		chatInformation.text = tab.text
+		
+		return chatInformation
 	end
 end
 
-function Schema:ChatSended( adjustInfo )
-	if ( adjustInfo and adjustInfo.voice ) then
-		local pl = adjustInfo.player
-		local len = 0
+function Schema:ChatPosted( chatInformation )
+	if ( !chatInformation.voice ) then return end
+	local pl = chatInformation.pl
+	local len = 0
+	
+	for k, v in pairs( chatInformation.voice ) do
+		len = len + ( k == 1 and 0 or v.len + 0.3 )
 		
-		for k, v in pairs( adjustInfo.voice ) do
-			len = len + ( k == 1 and 0 or v.len + 0.3 )
-			timer.Create( "catherine_hl2rp.timer.ChatPosted_" .. pl:SteamID( ) .. "_" .. k, len, 1, function( )
-				if ( type( v.vol ) == "boolean" and v.vol == true ) then
-					catherine.util.PlaySound( nil, v.dir )
-				else
-					pl:EmitSound( v.dir, v.vol )
-				end
-			end )
-		end
+		timer.Simple( len, function( )
+			if ( !IsValid( pl ) or !pl:Alive( ) ) then return end
+			
+			if ( type( v.vol ) == "boolean" and v.vol == true ) then
+				catherine.util.PlaySound( nil, v.dir )
+			else
+				pl:EmitSound( v.dir, v.vol )
+			end
+		end )
 	end
 end
 
