@@ -72,22 +72,22 @@ function Schema:SayRadio( pl, text )
 		
 		blockPl = pl
 	elseif ( radioSignal == 0 ) then
-		catherine.chat.RunByClass( pl, "radio", string.rep( ".", #text ) )
+		catherine.chat.WorkByClass( pl, "radio", string.rep( ".", #text ) )
 		pl:EmitSound( "ambient/levels/prison/radio_random" .. math.random( 1, 9 ) .. ".wav", 40 )
 		
 		return
 	end
 
-	catherine.chat.RunByClass( pl, "radio", text, listeners, blockPl )
+	catherine.chat.WorkByClass( pl, "radio", text, listeners, blockPl )
 end
 
 function Schema:SayRequest( pl, text )
 	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, pl:Name( ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
-	catherine.chat.RunByClass( pl, "request", text, self:GetCombines( ) )
+	catherine.chat.WorkByClass( pl, "request", text, self:GetCombines( ) )
 end
 
 function Schema:SayDispatch( pl, text )
-	catherine.chat.RunByClass( pl, "dispatch", text )
+	catherine.chat.WorkByClass( pl, "dispatch", text )
 end
 
 function Schema:ChatPrefix( pl, class )
