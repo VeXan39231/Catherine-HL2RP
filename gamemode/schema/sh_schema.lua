@@ -157,7 +157,7 @@ catherine.chat.Register( "radio", {
 			name = Schema:CalcBadNameString( )
 		end
 		
-		chat.AddText( Color( 0, 255, 100 ), name .. " radio says " .. catherine.chat.PreSet( text ) )
+		chat.AddText( Color( 0, 255, 100 ), LANG( "Chat_Radio", name, catherine.chat.PreSet( text ) ) )
 	end,
 	isGlobal = true,
 	canRun = function( pl )
@@ -167,7 +167,7 @@ catherine.chat.Register( "radio", {
 
 catherine.chat.Register( "dispatch", {
 	func = function( pl, text )
-		chat.AddText( Color( 255, 150, 150 ), "Combine Dispatch - " .. text )
+		chat.AddText( Color( 255, 150, 150 ), LANG( "Chat_Dispatch", text ) )
 	end,
 	isGlobal = true,
 	canRun = function( pl )
@@ -177,7 +177,7 @@ catherine.chat.Register( "dispatch", {
 
 catherine.chat.Register( "request", {
 	func = function( pl, text )
-		chat.AddText( Color( 255, 200, 150 ), pl.Name( pl ) .. " request says " .. catherine.chat.PreSet( text ) )
+		chat.AddText( Color( 255, 200, 150 ), LANG( "Chat_Reqeust", pl.Name( pl ), catherine.chat.PreSet( text ) ) )
 	end,
 	isGlobal = true,
 	canRun = function( pl )

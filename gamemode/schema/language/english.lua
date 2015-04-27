@@ -108,5 +108,10 @@ catherine.language.Merge( "english", {
 	[ "Item_RadioFreqQ_SR" ] = "Would you like to setting frequency for radio?",
 	[ "Item_Notify_FreqSet_SR" ] = "You are set portable radio frequency to %s.",
 	[ "Item_Notify_Error01_SR" ] = "Radio frequency is must be 101.1 ~ 199.9!",
-	[ "Item_Notify_Error02_SR" ] = "Radio frequency is must be XXX.X!"
+	[ "Item_Notify_Error02_SR" ] = "Radio frequency is must be XXX.X!",
+	
+	// Chat
+	[ "Chat_Dispatch" ] = "Combine Dispatch - %s",
+	[ "Chat_Radio" ] = "%s radio says %s",
+	[ "Chat_Request" ] = "%s reqeust says %s"
 } )
