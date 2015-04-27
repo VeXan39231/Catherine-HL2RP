@@ -65,7 +65,7 @@ catherine.command.Register( {
 	syntax = "[Text]",
 	runFunc = function( pl, args )
 		local args = table.concat( args, " " )
-		if ( pl:PlayerIsCombine( ) or pl:Team( ) == FACTION_ADMIN ) then
+		if ( pl.PlayerIsCombine( pl ) or pl:Team( ) == FACTION_ADMIN ) then
 			if ( Schema:CanDispatch( pl.Name( pl ) ) ) then
 				if ( args != "" ) then
 					Schema:SayDispatch( pl, args )

@@ -37,11 +37,11 @@ function Schema:SchemaDataLoad( )
 end
 --]]
 function Schema:PlayerCanSpray( pl )
-	return pl:HasItem( "spray_can" )
+	return pl.HasItem( pl, "spray_can" )
 end
 
 function Schema:PlayerCanFlashlight( pl )
-	return pl:PlayerIsCombine( )
+	return pl.PlayerIsCombine( pl )
 end
 
 function Schema:PlayerInteract( pl, target )
@@ -93,7 +93,7 @@ end
 function Schema:ChatPrefix( pl, classTable )
 	local uniqueID = classTable.uniqueID
 	
-	if ( pl:PlayerIsCombine( ) and ( uniqueID == "ic" or uniqueID == "yell" or uniqueID == "whisper" ) ) then
+	if ( pl.PlayerIsCombine( pl ) and ( uniqueID == "ic" or uniqueID == "yell" or uniqueID == "whisper" ) ) then
 		return "< :: "
 	end
 end
@@ -184,7 +184,7 @@ function Schema:ChatPosted( chatInformation )
 end
 
 function Schema:PlayerUseDoor( pl, ent )
-	if ( pl:PlayerIsCombine( ) and !ent:HasSpawnFlags( 256 ) and !ent:HasSpawnFlags( 1024 ) ) then
+	if ( pl.PlayerIsCombine( pl ) and !ent:HasSpawnFlags( 256 ) and !ent:HasSpawnFlags( 1024 ) ) then
 		ent:Fire( "open", "", 0 )
 		
 		return true
@@ -211,7 +211,7 @@ function Schema:ClearCombineOverlayMessages( pl )
 end
 
 function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
-	if ( !pl:PlayerIsCombine( ) or !pl:IsRunning( ) ) then return true end
+	if ( !pl.PlayerIsCombine( pl ) or !pl:IsRunning( ) ) then return true end
 	local sound = "npc/metropolice/gear" .. math.random( 1, 6 ) .. ".wav"
 	
 	if ( pl:Team( ) == FACTION_OW ) then
@@ -224,7 +224,7 @@ function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
 end
 
 function Schema:GetPlayerPainSound( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	local sound = "npc/metropolice/pain" .. math.random( 1, 3 ) .. ".wav"
 	
 	if ( pl:Team( ) == FACTION_OW ) then
@@ -235,7 +235,7 @@ function Schema:GetPlayerPainSound( pl )
 end
 
 function Schema:GetPlayerDeathSound( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	local sound = "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav"
 	
 	if ( pl:Team( ) == FACTION_OW ) then
@@ -259,13 +259,13 @@ function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, te
 end
 
 function Schema:HealthFullRecovered( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	
 	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Vital signs recovered ...", 4, Color( 150, 255, 150 ) )
 end
 
 function Schema:PlayerTakeDamage( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	
 	if ( ( pl.CAT_HL2RP_nextHurtDelay or CurTime( ) ) <= CurTime( ) ) then
 		local combineNumber = pl:GetCharVar( "combineNumber", "ERROR" )
@@ -276,13 +276,13 @@ function Schema:PlayerTakeDamage( pl )
 end
 
 function Schema:HealthRecovering( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	
 	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Vital signs recovering [" .. ( pl.Health( pl ) / pl:GetMaxHealth( ) ) * 100 .. "%] ...", 4, Color( 255, 150, 150 ) )
 end
 
 function Schema:PlayerGone( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	local combineNumber = pl:GetCharVar( "combineNumber", "ERROR" )
 	local localMessage = "ERROR ! Shut Down - ..."
 	local globalMessage = "WARNING ! Unit #" .. combineNumber .. " vital signs absent, alerting dispatch ..."
@@ -307,7 +307,7 @@ function Schema:PlayerGone( pl )
 end
 
 function Schema:OnSpawnedInCharacter( pl )
-	if ( pl:PlayerIsCombine( ) ) then
+	if ( pl.PlayerIsCombine( pl ) ) then
 		local rankID, classID = self:GetRankByName( pl.Name( pl ) )
 		
 		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Online ...", 5, Color( 150, 255, 150 ), 0.04 )
@@ -361,13 +361,13 @@ function Schema:GetBeepSound( pl, IsOff )
 end
 
 function Schema:ChatTypingChanged( pl, bool )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	
 	pl:EmitSound( self:GetBeepSound( pl, !bool ), 60 )
 end
 
 function Schema:CharacterNameChanged( pl, newName )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	local rankID, classID = self:GetRankByName( pl.Name( pl ) )
 
 	if ( pl:Class( ) != nil and pl:Class( ) != classID ) then
@@ -394,7 +394,7 @@ function Schema:CharacterNameChanged( pl, newName )
 end
 
 function Schema:CharacterLoadingStart( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	
 	self:ClearCombineOverlayMessages( pl )
 end

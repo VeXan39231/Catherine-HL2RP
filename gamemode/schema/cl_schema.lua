@@ -187,7 +187,7 @@ end
 
 function Schema:Think( )
 	local pl = LocalPlayer( )
-	if ( !pl:PlayerIsCombine( ) or !pl.Alive( pl ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) or !pl.Alive( pl ) ) then return end
 	if ( !pl.CAT_HL2RP_nextCombineOverlay ) then pl.CAT_HL2RP_nextCombineOverlay = CurTime( ) end
 	
 	if ( pl.CAT_HL2RP_nextCombineOverlay <= CurTime( ) ) then
