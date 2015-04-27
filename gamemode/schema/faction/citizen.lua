@@ -44,7 +44,7 @@ function FACTION:PlayerFirstSpawned( pl )
 	catherine.item.Give( pl, "cid" )
 	pl:SetInvItemDatas( "cid", {
 		cid = randomNum,
-		name = pl:Name( )
+		name = pl.Name( pl )
 	} )
 	pl:SetCharVar( "cid", randomNum )
 end

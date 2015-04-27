@@ -36,7 +36,7 @@ catherine.language.Merge( "korean", {
 catherine.command.Register( {
 	command = "charroot",
 	runFunc = function( pl, args )
-		if ( pl:GetNetVar( "rooting" ) ) then
+		if ( pl.GetNetVar( pl, "rooting" ) ) then
 			catherine.util.NotifyLang( pl, "Root_Notify_AlreadyDoing" )
 			return
 		end

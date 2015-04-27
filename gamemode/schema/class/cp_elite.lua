@@ -20,5 +20,6 @@ local CLASS = catherine.class.New( "cp_elite" )
 CLASS.name = "Civil Protection Elite"
 CLASS.desc = "TEST"
 CLASS.faction = FACTION_CP
+CLASS.cantJoinUsingMenu = true
 
-catherine.class.Register( CLASS )
+CLASS_CP_ELITE = catherine.class.Register( CLASS )

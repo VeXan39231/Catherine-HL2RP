@@ -33,8 +33,8 @@ Schema.IsCombineFacton = {
 	FACTION_OW
 }
 Schema.CombineRankClass = {
-	Elite = "cp_elite",
-	Unit = "cp_unit"
+	Elite = CLASS_CP_ELITE,
+	Unit = CLASS_CP_UNIT
 }
 Schema.CUC = {
 	"Alpha",
@@ -89,7 +89,7 @@ Schema.BadRadioStrings = {
 
 for k, v in pairs( Schema.CombineRankModel ) do
 	util.PrecacheModel( v )
-	catherine.anim.SetModelAnimation( "metrocop", v )
+	catherine.animation.Register( "metrocop", v )
 end
 
 function Schema:GetRankByName( name )
@@ -105,13 +105,6 @@ function Schema:GetUniqueCombineUnitCode( )
 end
 
 function Schema:CanDispatch( name )
-	local can = { }
-	
-	for k, v in pairs( Schema.CombineRank ) do
-		if ( v != Schema.CombineRankClass.Elite ) then continue end
-		can[ #can + 1 ] = v
-	end
-	
 	return table.HasValue( {
 		"EpU", "SeC", "DvL"
 	}, self:GetRankByName( name ) or "ERROR" )
@@ -156,38 +149,38 @@ end
 // Hint stuff
 //catherine.hint.Register( "" )
 
-catherine.chat.RegisterClass( "radio", {
-	onChat = function( pl, text, ex )
-		local name = pl:Name( )
+catherine.chat.Register( "radio", {
+	func = function( pl, text, ex )
+		local name = pl.Name( pl )
 		
 		if ( ex[ 1 ] and LocalPlayer( ) != pl ) then
 			name = Schema:CalcBadNameString( )
 		end
 		
-		chat.AddText( Color( 0, 255, 100 ), name .. " radio says " .. catherine.chat.PreSet( text ) )
+		chat.AddText( Color( 0, 255, 100 ), LANG( "Chat_Radio", name, catherine.chat.PreSet( text ) ) )
 	end,
-	global = true,
+	isGlobal = true,
 	canRun = function( pl )
-		return pl:Alive( )
+		return pl.Alive( pl )
 	end
 } )
 
-catherine.chat.RegisterClass( "dispatch", {
-	onChat = function( pl, text )
-		chat.AddText( Color( 255, 150, 150 ), "Combine Dispatch - " .. text )
+catherine.chat.Register( "dispatch", {
+	func = function( pl, text )
+		chat.AddText( Color( 255, 150, 150 ), LANG( "Chat_Dispatch", text ) )
 	end,
-	global = true,
+	isGlobal = true,
 	canRun = function( pl )
-		return pl:Alive( )
+		return pl.Alive( pl )
 	end
 } )
 
-catherine.chat.RegisterClass( "request", {
-	onChat = function( pl, text )
-		chat.AddText( Color( 255, 200, 150 ), pl:Name( ) .. " request says " .. catherine.chat.PreSet( text ) )
+catherine.chat.Register( "request", {
+	func = function( pl, text )
+		chat.AddText( Color( 255, 200, 150 ), LANG( "Chat_Reqeust", pl.Name( pl ), catherine.chat.PreSet( text ) ) )
 	end,
-	global = true,
+	isGlobal = true,
 	canRun = function( pl )
-		return pl:Alive( )
+		return pl.Alive( pl )
 	end
 } )

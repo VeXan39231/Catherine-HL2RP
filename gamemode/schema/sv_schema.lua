@@ -37,17 +37,23 @@ function Schema:SchemaDataLoad( )
 end
 --]]
 function Schema:PlayerCanSpray( pl )
-	return pl:HasItem( "spray_can" )
+	return pl.HasItem( pl, "spray_can" )
 end
 
 function Schema:PlayerCanFlashlight( pl )
-	return pl:PlayerIsCombine( )
+	return pl.PlayerIsCombine( pl )
+end
+
+function Schema:PlayerInteract( pl, target )
+	if ( catherine.player.IsTied( target ) ) then
+		return catherine.player.SetTie( pl, target, false )
+	end
 end
 
 function Schema:SayRadio( pl, text )
 	local listeners = self:GetRadioListeners( pl )
 	local blockPl = nil
-	local radioSignal = pl:GetNetVar( "radioSignal", 0 )
+	local radioSignal = pl.GetNetVar( pl, "radioSignal", 0 )
 
 	if ( radioSignal == 2 ) then
 		local ex = string.Explode( " ", text )
@@ -66,101 +72,121 @@ function Schema:SayRadio( pl, text )
 		
 		blockPl = pl
 	elseif ( radioSignal == 0 ) then
-		catherine.chat.RunByClass( pl, "radio", string.rep( ".", #text ) )
+		catherine.chat.RunByID( pl, "radio", string.rep( ".", #text ) )
 		pl:EmitSound( "ambient/levels/prison/radio_random" .. math.random( 1, 9 ) .. ".wav", 40 )
 		
 		return
 	end
 
-	catherine.chat.RunByClass( pl, "radio", text, listeners, blockPl )
+	catherine.chat.RunByID( pl, "radio", text, listeners, blockPl )
 end
 
 function Schema:SayRequest( pl, text )
-	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, pl:Name( ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
-	catherine.chat.RunByClass( pl, "request", text, self:GetCombines( ) )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, pl.Name( pl ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
+	catherine.chat.RunByID( pl, "request", text, self:GetCombines( ) )
 end
 
 function Schema:SayDispatch( pl, text )
-	catherine.chat.RunByClass( pl, "dispatch", text )
+	catherine.chat.RunByID( pl, "dispatch", text )
 end
 
-function Schema:ChatPrefix( pl, class )
-	if ( pl:PlayerIsCombine( ) and ( class == "ic" or class == "yell" or class == "whisper" ) ) then
+function Schema:ChatPrefix( pl, classTable )
+	local uniqueID = classTable.uniqueID
+	
+	if ( pl.PlayerIsCombine( pl ) and ( uniqueID == "ic" or uniqueID == "yell" or uniqueID == "whisper" ) ) then
 		return "< :: "
 	end
 end
 
-function Schema:ChatAdjust( adjustInfo )
-	local pl = adjustInfo.player
-	
-	if ( adjustInfo.class == "ic" or adjustInfo.class == "radio" or adjustInfo.class == "yell" or adjustInfo.class == "whisper" ) then
-		local tab = { sounds = { }, text = "" }
-		local ex = string.Explode( ", ", adjustInfo.text )
+function Schema:OnChatControl( chatInformation ) // need rebuild :(.
+	local pl = chatInformation.pl
+	local uniqueID = chatInformation.uniqueID
+
+	if ( uniqueID == "ic" or uniqueID == "radio" or uniqueID == "yell" or uniqueID == "whisper" ) then
+		local text = chatInformation.text
+		local tab = {
+			sounds = { },
+			text = text
+		}
+		local ex = string.Explode( ", ", text )
 		local vol = true
 
-		if ( adjustInfo.class == "ic" ) then
+		if ( uniqueID == "ic" ) then
 			vol = 80
-		elseif ( adjustInfo.class == "yell" ) then
+		elseif ( uniqueID == "yell" ) then
 			vol = 100
-		elseif ( adjustInfo.class == "whisper" ) then
+		elseif ( uniqueID == "whisper" ) then
 			vol = 30
 		end
 
-		for k, v in pairs( Schema.vo.normalVoice ) do
+		for k, v in pairs( self.vo.normalVoice ) do
 			if ( !table.HasValue( v.faction, pl:Team( ) ) ) then continue end
 			
 			for k1, v1 in pairs( ex ) do
 				if ( v1:lower( ) == v.command:lower( ) ) then
-					tab.sounds[ #tab.sounds + 1 ] = { dir = v.sound, len = SoundDuration( v.sound ), vol = vol }
-					
-					if ( k1 == 1 ) then
-						adjustInfo.text = v.output
-					else
-						adjustInfo.text = adjustInfo.text .. ", " .. v.output
-					end
+					tab.sounds[ #tab.sounds + 1 ] = {
+						dir = v.sound,
+						len = SoundDuration( v.sound ),
+						vol = vol
+					}
+					tab.text = k1 == 1 and ( v.output ) or ( tab.text .. ", " .. v.output )
 				end
 			end
 		end
 
-		adjustInfo.voice = tab.sounds
+		chatInformation.voice = tab.sounds
+		chatInformation.text = tab.text
 		
-		return adjustInfo
-	elseif ( adjustInfo.class == "dispatch" ) then
-		local tab, text = { sounds = { }, text = "" }, adjustInfo.text:lower( )
+		return chatInformation
+	elseif ( uniqueID == "dispatch" ) then
+		local text = chatInformation.text:lower( )
+		local tab = {
+			sounds = { },
+			text = text
+		}
 		
-		for k, v in pairs( Schema.vo.dispatchVoice ) do
+		for k, v in pairs( self.vo.dispatchVoice ) do
 			if ( v.command:lower( ) == text ) then
-				tab.sounds[ #tab.sounds + 1 ] = { dir = v.sound, len = SoundDuration( v.sound ), vol = true }
-				adjustInfo.text = v.output
+				tab.sounds[ #tab.sounds + 1 ] = {
+					dir = v.sound,
+					len = SoundDuration( v.sound ),
+					vol = true
+				}
+				tab.text = v.output
 			end
 		end
 		
-		adjustInfo.voice = tab.sounds
-		return adjustInfo
+		chatInformation.voice = tab.sounds
+		chatInformation.text = tab.text
+		
+		return chatInformation
 	end
 end
 
-function Schema:ChatSended( adjustInfo )
-	if ( adjustInfo and adjustInfo.voice ) then
-		local pl = adjustInfo.player
-		local len = 0
+function Schema:ChatPosted( chatInformation )
+	if ( !chatInformation.voice ) then return end
+	local pl = chatInformation.pl
+	local len = 0
+	
+	for k, v in pairs( chatInformation.voice ) do
+		len = len + ( k == 1 and 0 or v.len + 0.3 )
 		
-		for k, v in pairs( adjustInfo.voice ) do
-			len = len + ( k == 1 and 0 or v.len + 0.3 )
-			timer.Create( "catherine_hl2rp.timer.ChatPosted_" .. pl:SteamID( ) .. "_" .. k, len, 1, function( )
-				if ( type( v.vol ) == "boolean" and v.vol == true ) then
-					catherine.util.PlaySound( nil, v.dir )
-				else
-					pl:EmitSound( v.dir, v.vol )
-				end
-			end )
-		end
+		timer.Simple( len, function( )
+			if ( !IsValid( pl ) or !pl.Alive( pl ) ) then return end
+			
+			if ( type( v.vol ) == "boolean" and v.vol == true ) then
+				catherine.util.PlaySound( nil, v.dir )
+			else
+				pl:EmitSound( v.dir, v.vol )
+			end
+		end )
 	end
 end
 
 function Schema:PlayerUseDoor( pl, ent )
-	if ( pl:PlayerIsCombine( ) and !ent:HasSpawnFlags( 256 ) and !ent:HasSpawnFlags( 1024 ) ) then
+	if ( pl.PlayerIsCombine( pl ) and !ent:HasSpawnFlags( 256 ) and !ent:HasSpawnFlags( 1024 ) ) then
 		ent:Fire( "open", "", 0 )
+		
 		return true
 	end
 end
@@ -185,7 +211,7 @@ function Schema:ClearCombineOverlayMessages( pl )
 end
 
 function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
-	if ( !pl:PlayerIsCombine( ) or !pl:IsRunning( ) ) then return true end
+	if ( !pl.PlayerIsCombine( pl ) or !pl:IsRunning( ) ) then return true end
 	local sound = "npc/metropolice/gear" .. math.random( 1, 6 ) .. ".wav"
 	
 	if ( pl:Team( ) == FACTION_OW ) then
@@ -198,7 +224,7 @@ function Schema:PlayerFootstep( pl, pos, foot, soundName, vol )
 end
 
 function Schema:GetPlayerPainSound( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	local sound = "npc/metropolice/pain" .. math.random( 1, 3 ) .. ".wav"
 	
 	if ( pl:Team( ) == FACTION_OW ) then
@@ -209,7 +235,7 @@ function Schema:GetPlayerPainSound( pl )
 end
 
 function Schema:GetPlayerDeathSound( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	local sound = "npc/metropolice/die" .. math.random( 1, 4 ) .. ".wav"
 	
 	if ( pl:Team( ) == FACTION_OW ) then
@@ -233,13 +259,13 @@ function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, te
 end
 
 function Schema:HealthFullRecovered( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	
 	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Vital signs recovered ...", 4, Color( 150, 255, 150 ) )
 end
 
 function Schema:PlayerTakeDamage( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	
 	if ( ( pl.CAT_HL2RP_nextHurtDelay or CurTime( ) ) <= CurTime( ) ) then
 		local combineNumber = pl:GetCharVar( "combineNumber", "ERROR" )
@@ -250,13 +276,13 @@ function Schema:PlayerTakeDamage( pl )
 end
 
 function Schema:HealthRecovering( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	
-	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Vital signs recovering [" .. ( pl:Health( ) / pl:GetMaxHealth( ) ) * 100 .. "%] ...", 4, Color( 255, 150, 150 ) )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Vital signs recovering [" .. ( pl.Health( pl ) / pl:GetMaxHealth( ) ) * 100 .. "%] ...", 4, Color( 255, 150, 150 ) )
 end
 
 function Schema:PlayerGone( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	local combineNumber = pl:GetCharVar( "combineNumber", "ERROR" )
 	local localMessage = "ERROR ! Shut Down - ..."
 	local globalMessage = "WARNING ! Unit #" .. combineNumber .. " vital signs absent, alerting dispatch ..."
@@ -281,8 +307,8 @@ function Schema:PlayerGone( pl )
 end
 
 function Schema:OnSpawnedInCharacter( pl )
-	if ( pl:PlayerIsCombine( ) ) then
-		local rankID, classID = self:GetRankByName( pl:Name( ) )
+	if ( pl.PlayerIsCombine( pl ) ) then
+		local rankID, classID = self:GetRankByName( pl.Name( pl ) )
 		
 		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Online ...", 5, Color( 150, 255, 150 ), 0.04 )
 
@@ -291,18 +317,18 @@ function Schema:OnSpawnedInCharacter( pl )
 				catherine.class.Set( pl, classID )
 				pl:SetModel( self:GetModelByRank( rankID ) )
 			else
-				if ( pl:Class( ) == "cp_unit" ) then return end
-				catherine.class.Set( pl, "cp_unit" )
+				if ( pl:Class( ) == CLASS_CP_UNIT ) then return end
+				catherine.class.Set( pl, CLASS_CP_UNIT )
 			end
-		elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl:GetModel( ) ) then
+		elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl.GetModel( pl ) ) then
 			pl:SetModel( self:GetModelByRank( rankID ) )
 		elseif ( pl:Class( ) == nil ) then
 			if ( rankID and classID ) then
 				catherine.class.Set( pl, classID )
 				pl:SetModel( self:GetModelByRank( rankID ) )
 			else
-				if ( pl:Class( ) == "cp_unit" ) then return end
-				catherine.class.Set( pl, "cp_unit" )
+				if ( pl:Class( ) == CLASS_CP_UNIT ) then return end
+				catherine.class.Set( pl, CLASS_CP_UNIT )
 			end
 		end
 		
@@ -312,34 +338,63 @@ function Schema:OnSpawnedInCharacter( pl )
 	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, "Refreshing citizen lists ...", 7, Color( 150, 255, 150 ) )
 end
 
+function Schema:GetBeepSound( pl, IsOff )
+	local team = pl:Team( )
+	
+	if ( team == FACTION_CP ) then
+		if ( IsOff ) then
+			return "npc/metropolice/vo/off" .. math.random( 1, 4 ) .. ".wav"
+		else
+			if ( math.random( 1, 9 ) <= 5 ) then
+				return "npc/metropolice/vo/on" .. math.random( 1, 2 ) .. ".wav"
+			else
+				return "npc/overwatch/radiovoice/on3.wav"
+			end
+		end
+	elseif ( team == FACTION_OW ) then
+		if ( IsOff ) then
+			return "npc/combine_soldier/vo/off" .. math.random( 1, 3 ) .. ".wav"
+		else
+			return "npc/combine_soldier/vo/on" .. math.random( 1, 2 ) .. ".wav"
+		end
+	end
+end
+
+function Schema:ChatTypingChanged( pl, bool )
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
+	
+	pl:EmitSound( self:GetBeepSound( pl, !bool ), 60 )
+end
+
 function Schema:CharacterNameChanged( pl, newName )
-	if ( !pl:PlayerIsCombine( ) ) then return end
-	local rankID, classID = self:GetRankByName( pl:Name( ) )
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
+	local rankID, classID = self:GetRankByName( pl.Name( pl ) )
 
 	if ( pl:Class( ) != nil and pl:Class( ) != classID ) then
 		if ( rankID and classID ) then
 			catherine.class.Set( pl, classID )
 			pl:SetModel( self:GetModelByRank( rankID ) )
 		else
-			if ( pl:Class( ) == "cp_unit" ) then return end
-			catherine.class.Set( pl, "cp_unit" )
+			if ( pl:Class( ) == CLASS_CP_UNIT ) then return end
+			
+			catherine.class.Set( pl, CLASS_CP_UNIT )
 		end
-	elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl:GetModel( ) ) then
+	elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl.GetModel( pl ) ) then
 		pl:SetModel( self:GetModelByRank( rankID ) )
 	elseif ( pl:Class( ) == nil ) then
 		if ( rankID and classID ) then
 			catherine.class.Set( pl, classID )
 			pl:SetModel( self:GetModelByRank( rankID ) )
 		else
-			if ( pl:Class( ) == "cp_unit" ) then return end
+			if ( pl:Class( ) == CLASS_CP_UNIT ) then return end
 			
-			catherine.class.Set( pl, "cp_unit" )
+			catherine.class.Set( pl, CLASS_CP_UNIT )
 		end
 	end
 end
 
 function Schema:CharacterLoadingStart( pl )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl.PlayerIsCombine( pl ) ) then return end
 	
 	self:ClearCombineOverlayMessages( pl )
 end

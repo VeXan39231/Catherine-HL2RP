@@ -36,14 +36,14 @@ if ( SERVER ) then
 		self:SetNetVar( "active", false )
 		//self:SetNetVar( "freq", "XXX.X" )
 		
-		local physObject = self:GetPhysicsObject( )
+		local physObject = self.GetPhysicsObject( self )
 		
 		if ( IsValid( physObject ) ) then
 			physObject:Wake( )
 		end
 	end
 else
-	local toscreen = FindMetaTable("Vector").ToScreen
+	local toscreen = FindMetaTable( "Vector" ).ToScreen
 	
 	function ENT:DrawEntityTargetID( pl, ent, a )
 		local pos = toscreen( self:LocalToWorld( self:OBBCenter( ) ) )
