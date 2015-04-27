@@ -133,7 +133,7 @@ end
 
 function Schema:HUDDraw( )
 	local pl = LocalPlayer( )
-	if ( !pl:Alive( ) or !pl:HasItem( "portable_radio" ) or pl:GetInvItemData( "portable_radio", "toggle", false ) == false ) then return end
+	if ( !pl.Alive( pl ) or !pl:HasItem( "portable_radio" ) or pl:GetInvItemData( "portable_radio", "toggle", false ) == false ) then return end
 	local freq = pl:GetInvItemData( "portable_radio", "freq", "000.0" )
 	local x, y = 15, ScrH( ) * 0.4
 	local signal = pl.GetNetVar( pl, "radioSignal", 0 )
@@ -187,7 +187,7 @@ end
 
 function Schema:Think( )
 	local pl = LocalPlayer( )
-	if ( !pl:PlayerIsCombine( ) or !pl:Alive( ) ) then return end
+	if ( !pl:PlayerIsCombine( ) or !pl.Alive( pl ) ) then return end
 	if ( !pl.CAT_HL2RP_nextCombineOverlay ) then pl.CAT_HL2RP_nextCombineOverlay = CurTime( ) end
 	
 	if ( pl.CAT_HL2RP_nextCombineOverlay <= CurTime( ) ) then

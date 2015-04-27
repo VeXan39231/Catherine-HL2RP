@@ -30,7 +30,7 @@ BASE.func.eat = {
 	canShowIsMenu = true,
 	func = function( pl, itemTable )
 		pl:EmitSound( "physics/flesh/flesh_impact_hard" .. math.random( 1, 5 ) .. ".wav" )
-		pl:SetHealth( math.Clamp( pl:Health( ) + ( itemTable.healthAdd or 0 ), 0, 100 ) )
+		pl:SetHealth( math.Clamp( pl.Health( pl ) + ( itemTable.healthAdd or 0 ), 0, 100 ) )
 		catherine.inventory.Work( pl, CAT_INV_ACTION_REMOVE, { uniqueID = itemTable.uniqueID } )
 	end
 }

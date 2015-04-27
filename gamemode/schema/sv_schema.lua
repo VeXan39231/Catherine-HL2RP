@@ -172,7 +172,7 @@ function Schema:ChatPosted( chatInformation )
 		len = len + ( k == 1 and 0 or v.len + 0.3 )
 		
 		timer.Simple( len, function( )
-			if ( !IsValid( pl ) or !pl:Alive( ) ) then return end
+			if ( !IsValid( pl ) or !pl.Alive( pl ) ) then return end
 			
 			if ( type( v.vol ) == "boolean" and v.vol == true ) then
 				catherine.util.PlaySound( nil, v.dir )
@@ -278,7 +278,7 @@ end
 function Schema:HealthRecovering( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
 	
-	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Vital signs recovering [" .. ( pl:Health( ) / pl:GetMaxHealth( ) ) * 100 .. "%] ...", 4, Color( 255, 150, 150 ) )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Vital signs recovering [" .. ( pl.Health( pl ) / pl:GetMaxHealth( ) ) * 100 .. "%] ...", 4, Color( 255, 150, 150 ) )
 end
 
 function Schema:PlayerGone( pl )
@@ -320,7 +320,7 @@ function Schema:OnSpawnedInCharacter( pl )
 				if ( pl:Class( ) == CLASS_CP_UNIT ) then return end
 				catherine.class.Set( pl, CLASS_CP_UNIT )
 			end
-		elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl:GetModel( ) ) then
+		elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl.GetModel( pl ) ) then
 			pl:SetModel( self:GetModelByRank( rankID ) )
 		elseif ( pl:Class( ) == nil ) then
 			if ( rankID and classID ) then
@@ -379,7 +379,7 @@ function Schema:CharacterNameChanged( pl, newName )
 			
 			catherine.class.Set( pl, CLASS_CP_UNIT )
 		end
-	elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl:GetModel( ) ) then
+	elseif ( pl:Class( ) != nil and pl:Class( ) == classID and self:GetModelByRank( rankID ) != pl.GetModel( pl ) ) then
 		pl:SetModel( self:GetModelByRank( rankID ) )
 	elseif ( pl:Class( ) == nil ) then
 		if ( rankID and classID ) then

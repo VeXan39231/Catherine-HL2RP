@@ -36,7 +36,7 @@ if ( SERVER ) then
 		self:SetNetVar( "active", false )
 		//self:SetNetVar( "freq", "XXX.X" )
 		
-		local physObject = self:GetPhysicsObject( )
+		local physObject = self.GetPhysicsObject( self )
 		
 		if ( IsValid( physObject ) ) then
 			physObject:Wake( )

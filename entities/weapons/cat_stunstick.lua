@@ -47,7 +47,7 @@ function SWEP:PrimaryAttack( )
 	
 	self:SetNextPrimaryFire( CurTime( ) + self.Primary.Delay )
 	
-	if ( !pl:GetWeaponRaised( ) ) then return end
+	if ( !pl.GetWeaponRaised( pl ) ) then return end
 	
 	pl:SetAnimation( PLAYER_ATTACK1 )
 	pl:ViewPunch( Angle( 1, 0, 0.5 ) )

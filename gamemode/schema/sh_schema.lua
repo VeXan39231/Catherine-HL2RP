@@ -161,7 +161,7 @@ catherine.chat.Register( "radio", {
 	end,
 	isGlobal = true,
 	canRun = function( pl )
-		return pl:Alive( )
+		return pl.Alive( pl )
 	end
 } )
 
@@ -171,7 +171,7 @@ catherine.chat.Register( "dispatch", {
 	end,
 	isGlobal = true,
 	canRun = function( pl )
-		return pl:Alive( )
+		return pl.Alive( pl )
 	end
 } )
 
@@ -181,6 +181,6 @@ catherine.chat.Register( "request", {
 	end,
 	isGlobal = true,
 	canRun = function( pl )
-		return pl:Alive( )
+		return pl.Alive( pl )
 	end
 } )
