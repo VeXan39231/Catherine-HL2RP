@@ -53,7 +53,7 @@ end
 function Schema:SayRadio( pl, text )
 	local listeners = self:GetRadioListeners( pl )
 	local blockPl = nil
-	local radioSignal = pl:GetNetVar( "radioSignal", 0 )
+	local radioSignal = pl.GetNetVar( pl, "radioSignal", 0 )
 
 	if ( radioSignal == 2 ) then
 		local ex = string.Explode( " ", text )
@@ -82,7 +82,7 @@ function Schema:SayRadio( pl, text )
 end
 
 function Schema:SayRequest( pl, text )
-	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, pl:Name( ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, pl.Name( pl ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
 	catherine.chat.RunByID( pl, "request", text, self:GetCombines( ) )
 end
 
@@ -308,7 +308,7 @@ end
 
 function Schema:OnSpawnedInCharacter( pl )
 	if ( pl:PlayerIsCombine( ) ) then
-		local rankID, classID = self:GetRankByName( pl:Name( ) )
+		local rankID, classID = self:GetRankByName( pl.Name( pl ) )
 		
 		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Online ...", 5, Color( 150, 255, 150 ), 0.04 )
 
@@ -368,7 +368,7 @@ end
 
 function Schema:CharacterNameChanged( pl, newName )
 	if ( !pl:PlayerIsCombine( ) ) then return end
-	local rankID, classID = self:GetRankByName( pl:Name( ) )
+	local rankID, classID = self:GetRankByName( pl.Name( pl ) )
 
 	if ( pl:Class( ) != nil and pl:Class( ) != classID ) then
 		if ( rankID and classID ) then

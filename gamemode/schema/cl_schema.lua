@@ -136,7 +136,7 @@ function Schema:HUDDraw( )
 	if ( !pl:Alive( ) or !pl:HasItem( "portable_radio" ) or pl:GetInvItemData( "portable_radio", "toggle", false ) == false ) then return end
 	local freq = pl:GetInvItemData( "portable_radio", "freq", "000.0" )
 	local x, y = 15, ScrH( ) * 0.4
-	local signal = pl:GetNetVar( "radioSignal", 0 )
+	local signal = pl.GetNetVar( pl, "radioSignal", 0 )
 
 	if ( !pl.CAT_HL2RP_radioSignalLast ) then
 		pl.CAT_HL2RP_radioSignalLast = signal

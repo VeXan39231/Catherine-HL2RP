@@ -151,7 +151,7 @@ end
 
 catherine.chat.Register( "radio", {
 	func = function( pl, text, ex )
-		local name = pl:Name( )
+		local name = pl.Name( pl )
 		
 		if ( ex[ 1 ] and LocalPlayer( ) != pl ) then
 			name = Schema:CalcBadNameString( )
@@ -177,7 +177,7 @@ catherine.chat.Register( "dispatch", {
 
 catherine.chat.Register( "request", {
 	func = function( pl, text )
-		chat.AddText( Color( 255, 200, 150 ), pl:Name( ) .. " request says " .. catherine.chat.PreSet( text ) )
+		chat.AddText( Color( 255, 200, 150 ), pl.Name( pl ) .. " request says " .. catherine.chat.PreSet( text ) )
 	end,
 	isGlobal = true,
 	canRun = function( pl )
