@@ -17,20 +17,26 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local PLUGIN = PLUGIN
-PLUGIN.name = "Root"
+PLUGIN.name = "^Root_Plugin_Name"
 PLUGIN.author = "L7D"
-PLUGIN.desc = "Good stuff."
+PLUGIN.desc = "^Root_Plugin_Desc"
+CAT_ROOT_ACTION_GIVE = 1
+CAT_ROOT_ACTION_TAKE = 2
 
 catherine.util.Include( "sv_plugin.lua" )
 
 catherine.language.Merge( "english", {
 	[ "Root_Notify_AlreadyDoing" ] = "You are already rooting another player!",
-	[ "Root_Notify_CantRoot" ] = "You can't root this player!"
+	[ "Root_Notify_CantRoot" ] = "You can't root this player!",
+	[ "Root_Plugin_Name" ] = "Root",
+	[ "Root_Plugin_Desc" ] = "Good stuff."
 } )
 
 catherine.language.Merge( "korean", {
 	[ "Root_Notify_AlreadyDoing" ] = "이미 당신은 루팅을 하고 있습니다!",
-	[ "Root_Notify_CantRoot" ] = "이 사람을 루팅할 수 없습니다!"
+	[ "Root_Notify_CantRoot" ] = "이 사람을 루팅할 수 없습니다!",
+	[ "Root_Plugin_Name" ] = "루팅",
+	[ "Root_Plugin_Desc" ] = "다른 사람의 인벤토리를 볼 수 있습니다."
 } )
 
 catherine.command.Register( {
@@ -46,6 +52,15 @@ catherine.command.Register( {
 		data.endpos = data.start + pl:GetAimVector( ) * 96
 		data.filter = pl
 		local ent = util.TraceLine( data ).Entity
+		
+		if ( !IsValid( ent ) ) then
+			catherine.util.NotifyLang( pl, "Entity_Notify_NotPlayer" )
+			return
+		end
+		
+		if ( ent.GetClass( ent ) == "prop_ragdoll" ) then
+			ent = ent:GetNetVar( "player" )
+		end
 	
 		if ( IsValid( ent ) and ent:IsPlayer( ) ) then
 			PLUGIN:RootPlayer( pl, ent )
@@ -56,10 +71,9 @@ catherine.command.Register( {
 } )
 
 if ( CLIENT ) then
-	netstream.Hook( "catherine_hl2rp.plugin.root.Work", function( data )
+	netstream.Hook( "catherine_hl2rp.plugin.root.OpenPanel", function( data )
 		local pl = catherine.util.FindPlayerByStuff( "SteamID", data[ 1 ] )
 		local inventory = data[ 2 ]
-		local cash = data[ 3 ]
 		if ( !IsValid( pl ) ) then return end
 		
 		if ( IsValid( catherine.vgui.root ) ) then
@@ -68,6 +82,16 @@ if ( CLIENT ) then
 		end
 		
 		catherine.vgui.root = vgui.Create( "catherine.vgui.root" )
-		catherine.vgui.root:InitializeRoot( pl, inventory, cash )
+		catherine.vgui.root:InitializeRoot( pl, inventory )
+	end )
+	
+	netstream.Hook( "catherine_hl2rp.plugin.root.RefreshPanel", function( data )
+		if ( IsValid( catherine.vgui.root ) ) then
+			local pl = catherine.util.FindPlayerByStuff( "SteamID", data[ 1 ] )
+			local inventory = data[ 2 ]
+			if ( !IsValid( pl ) ) then return end
+		
+			catherine.vgui.root:InitializeRoot( pl, inventory )
+		end
 	end )
 end

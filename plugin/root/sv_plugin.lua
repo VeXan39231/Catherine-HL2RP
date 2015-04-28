@@ -30,12 +30,50 @@ function PLUGIN:RootPlayer( pl, target )
 	
 	pl:SetNetVar( "rooting", true )
 	
-	netstream.Start( pl, "catherine_hl2rp.plugin.root.Work", {
+	netstream.Start( pl, "catherine_hl2rp.plugin.root.OpenPanel", {
 		target:SteamID( ),
-		catherine.inventory.Get( target ),
-		catherine.cash.Get( target )
+		catherine.inventory.Get( target )
 	} )
 end
+
+function PLUGIN:RootWork( pl, target, workID, data )
+	if ( workID == CAT_ROOT_ACTION_GIVE ) then
+		local uniqueID = data.uniqueID
+		
+		
+		local success = catherine.item.Give( target, uniqueID )
+		if ( !success ) then
+			catherine.util.NotifyLang( pl, "Inventory_Notify_HasNotSpaceTarget" )
+			return
+		end
+		
+		catherine.item.Take( pl, uniqueID )
+
+		netstream.Start( pl, "catherine_hl2rp.plugin.root.RefreshPanel", {
+			target:SteamID( ),
+			catherine.inventory.Get( target )
+		} )
+	elseif ( workID == CAT_ROOT_ACTION_TAKE ) then
+		local uniqueID = data.uniqueID
+		
+		local success = catherine.item.Give( pl, uniqueID )
+		if ( !success ) then
+			catherine.util.NotifyLang( pl, "Inventory_Notify_HasNotSpace" )
+			return
+		end
+		
+		catherine.item.Take( target, uniqueID )
+		
+		netstream.Start( pl, "catherine_hl2rp.plugin.root.RefreshPanel", {
+			target:SteamID( ),
+			catherine.inventory.Get( target )
+		} )
+	end
+end
+
+netstream.Hook( "catherine_hl2rp.plugin.root.Work", function( pl, data )
+	PLUGIN:RootWork( pl, data[ 1 ], data[ 2 ], data[ 3 ] )
+end )
 
 netstream.Hook( "catherine_hl2rp.plugin.root.RootClose", function( pl )
 	pl:SetNetVar( "rooting", false )
