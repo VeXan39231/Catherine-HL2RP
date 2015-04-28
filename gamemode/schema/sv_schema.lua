@@ -36,6 +36,33 @@ function Schema:SchemaDataLoad( )
 
 end
 --]]
+
+function Schema:ShowSpare1( pl )
+	if ( !pl.HasItem( pl, "zip_tie" ) ) then return end
+	
+	local tr = { }
+	tr.start = pl:GetShootPos( )
+	tr.endpos = tr.start + pl:GetAimVector( ) * 160
+	tr.filter = pl
+	
+	local ent = util.TraceLine( tr ).Entity
+	
+	if ( !IsValid( ent ) ) then
+		catherine.util.NotifyLang( pl, "Entity_Notify_NotPlayer" )
+		return
+	end
+	
+	if ( ent.GetClass( ent ) == "prop_ragdoll" ) then
+		ent = ent:GetNetVar( "player" )
+	end
+	
+	if ( IsValid( ent ) and ent.IsPlayer( ent ) ) then
+		catherine.player.SetTie( pl, ent, true, nil, true )
+	else
+		catherine.util.NotifyLang( pl, "Entity_Notify_NotPlayer" )
+	end
+end
+
 function Schema:PlayerCanSpray( pl )
 	return pl.HasItem( pl, "spray_can" )
 end

@@ -20,6 +20,8 @@ local PLUGIN = PLUGIN
 PLUGIN.name = "^Root_Plugin_Name"
 PLUGIN.author = "L7D"
 PLUGIN.desc = "^Root_Plugin_Desc"
+CAT_ROOT_ACTION_GIVE = 1
+CAT_ROOT_ACTION_TAKE = 2
 
 catherine.util.Include( "sv_plugin.lua" )
 
@@ -50,6 +52,15 @@ catherine.command.Register( {
 		data.endpos = data.start + pl:GetAimVector( ) * 96
 		data.filter = pl
 		local ent = util.TraceLine( data ).Entity
+		
+		if ( !IsValid( ent ) ) then
+			catherine.util.NotifyLang( pl, "Entity_Notify_NotPlayer" )
+			return
+		end
+		
+		if ( ent.GetClass( ent ) == "prop_ragdoll" ) then
+			ent = ent:GetNetVar( "player" )
+		end
 	
 		if ( IsValid( ent ) and ent:IsPlayer( ) ) then
 			PLUGIN:RootPlayer( pl, ent )
@@ -60,10 +71,9 @@ catherine.command.Register( {
 } )
 
 if ( CLIENT ) then
-	netstream.Hook( "catherine_hl2rp.plugin.root.Work", function( data )
+	netstream.Hook( "catherine_hl2rp.plugin.root.OpenPanel", function( data )
 		local pl = catherine.util.FindPlayerByStuff( "SteamID", data[ 1 ] )
 		local inventory = data[ 2 ]
-		local cash = data[ 3 ]
 		if ( !IsValid( pl ) ) then return end
 		
 		if ( IsValid( catherine.vgui.root ) ) then
@@ -72,6 +82,16 @@ if ( CLIENT ) then
 		end
 		
 		catherine.vgui.root = vgui.Create( "catherine.vgui.root" )
-		catherine.vgui.root:InitializeRoot( pl, inventory, cash )
+		catherine.vgui.root:InitializeRoot( pl, inventory )
+	end )
+	
+	netstream.Hook( "catherine_hl2rp.plugin.root.RefreshPanel", function( data )
+		if ( IsValid( catherine.vgui.root ) ) then
+			local pl = catherine.util.FindPlayerByStuff( "SteamID", data[ 1 ] )
+			local inventory = data[ 2 ]
+			if ( !IsValid( pl ) ) then return end
+		
+			catherine.vgui.root:InitializeRoot( pl, inventory )
+		end
 	end )
 end
