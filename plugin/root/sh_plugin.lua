@@ -17,20 +17,24 @@ along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
 local PLUGIN = PLUGIN
-PLUGIN.name = "Root"
+PLUGIN.name = "^Root_Plugin_Name"
 PLUGIN.author = "L7D"
-PLUGIN.desc = "Good stuff."
+PLUGIN.desc = "^Root_Plugin_Desc"
 
 catherine.util.Include( "sv_plugin.lua" )
 
 catherine.language.Merge( "english", {
 	[ "Root_Notify_AlreadyDoing" ] = "You are already rooting another player!",
-	[ "Root_Notify_CantRoot" ] = "You can't root this player!"
+	[ "Root_Notify_CantRoot" ] = "You can't root this player!",
+	[ "Root_Plugin_Name" ] = "Root",
+	[ "Root_Plugin_Desc" ] = "Good stuff."
 } )
 
 catherine.language.Merge( "korean", {
 	[ "Root_Notify_AlreadyDoing" ] = "이미 당신은 루팅을 하고 있습니다!",
-	[ "Root_Notify_CantRoot" ] = "이 사람을 루팅할 수 없습니다!"
+	[ "Root_Notify_CantRoot" ] = "이 사람을 루팅할 수 없습니다!",
+	[ "Root_Plugin_Name" ] = "루팅",
+	[ "Root_Plugin_Desc" ] = "다른 사람의 인벤토리를 볼 수 있습니다."
 } )
 
 catherine.command.Register( {
