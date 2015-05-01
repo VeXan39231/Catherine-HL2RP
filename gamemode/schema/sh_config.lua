@@ -27,3 +27,4 @@ catherine.configs.defaultRPInformation = {
 	temperature = 23
 }
 catherine.configs.cashName = "Token"
+catherine.configs.schemaLogo = "CAT_HL2RP/logos/main01.png"

@@ -57,6 +57,7 @@ ITEM.func.toggle = {
 	canShowIsMenu = true,
 	func = function( pl, itemTable )
 		local itemData = pl:GetInvItemDatas( itemTable.uniqueID )
+		
 		pl:SetInvItemData( itemTable.uniqueID, "toggle", !itemData.toggle )
 	end
 }
