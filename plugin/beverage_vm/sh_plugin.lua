@@ -16,26 +16,19 @@ You should have received a copy of the GNU General Public License
 along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-local BASE = catherine.item.New( "FOOD", nil, true )
-BASE.name = "Food Base"
-BASE.desc = "A Food."
-BASE.category = "^Item_Category_Food"
-BASE.cost = 0
-BASE.weight = 0
-BASE.healthAdd = 0
-BASE.func = { }
-BASE.func.eat = {
-	text = "^Item_FuncStr01_Food",
-	canShowIsWorld = true,
-	canShowIsMenu = true,
-	func = function( pl, itemTable )
-		pl:EmitSound( "physics/flesh/flesh_impact_hard" .. math.random( 1, 5 ) .. ".wav" )
-		pl:SetHealth( math.Clamp( pl:Health( ) + ( itemTable.healthAdd or 0 ), 0, 100 ) )
-		
-		catherine.inventory.Work( pl, CAT_INV_ACTION_REMOVE, {
-			uniqueID = itemTable.uniqueID
-		} )
-	end
-}
+local PLUGIN = PLUGIN
+PLUGIN.name = "^BVM_Plugin_Name"
+PLUGIN.author = "L7D"
+PLUGIN.desc = "^BVM_Plugin_Desc"
 
-catherine.item.Register( BASE )
+catherine.util.Include( "sv_plugin.lua" )
+
+catherine.language.Merge( "english", {
+	[ "BVM_Plugin_Name" ] = "Beverage Vending Machine",
+	[ "BVM_Plugin_Desc" ] = "Good stuff."
+} )
+
+catherine.language.Merge( "korean", {
+	[ "BVM_Plugin_Name" ] = "음료 자동 판매기",
+	[ "BVM_Plugin_Desc" ] = "음료를 판매합니다."
+} )

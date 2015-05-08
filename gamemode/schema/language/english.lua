@@ -77,14 +77,29 @@ catherine.language.Merge( "english", {
 	[ "Item_Name_BW" ] = "Breen Water",
 	[ "Item_Desc_BW" ] = "Shake and eat!",
 	
-	[ "Item_Name_9MM" ] = "9MM Pistol",
-	[ "Item_Desc_9MM" ] = "A standard 9MM Pistol.",
+	[ "Item_Name_9MM" ] = ".9mm Pistol",
+	[ "Item_Desc_9MM" ] = "A standard .9mm Pistol.",
 	
 	[ "Item_Name_AR2" ] = "AR2",
 	[ "Item_Desc_AR2" ] = "The corp combine.",
 	
-	[ "Item_Name_SMG" ] = "MP7",
+	[ "Item_Name_SMG" ] = "SMG",
 	[ "Item_Desc_SMG" ] = "The simple sub machine gun.",
+	
+	[ "Item_Name_357" ] = ".357 Magnum",
+	[ "Item_Desc_357" ] = "A shiny pistol with 6 chambers that appear to rotate.",
+	
+	[ "Item_Name_CB" ] = "Crossbow",
+	[ "Item_Desc_CB" ] = "A massive crossbow that seems to have the ability to heat up metal bars.",
+	
+	[ "Item_Name_Buckshot" ] = "Shotgun",
+	[ "Item_Desc_Buckshot" ] = "A metallic shotgun that has some sort of combine materials added onto the gun near the trigger.",
+	
+	[ "Item_Name_RPG" ] = "Rocket Lancher",
+	[ "Item_Desc_RPG" ] = "A large black tube containing a lot of firepower.",
+	
+	[ "Item_Name_CrowB" ] = "Crowbar",
+	[ "Item_Desc_CrowB" ] = "A rusted tool that looks like it has seen better days.",
 	
 	[ "Item_Name_SS" ] = "Stunstick",
 	[ "Item_Desc_SS" ] = "An electrified baton powered by a mysterious combine battery.",
@@ -95,8 +110,34 @@ catherine.language.Merge( "english", {
 
 	[ "Item_Category_Communication" ] = "Communication",
 	[ "Item_Category_Food" ] = "Food",
-	
 	[ "Item_FuncStr01_Food" ] = "Eat",
+	
+	[ "Item_Name_PistolAmmo" ] = ".9mm Pistol Rounds",
+	[ "Item_Desc_PistolAmmo" ] = "A greenish catridge with the 9mm label on the side.",
+	
+	[ "Item_Name_AR2Ammo" ] = "Pulse Energy Cartridge",
+	[ "Item_Desc_AR2Ammo" ] = "A curved piece of metal with glowing blue pieces.",
+	
+	[ "Item_Name_SMGAmmo" ] = "SMG Round",
+	[ "Item_Desc_SMGAmmo" ] = "A light teal box with some inscriptions on the side.",
+	
+	[ "Item_Name_SMG_G_Ammo" ] = "SMG Grenade",
+	[ "Item_Desc_SMG_G_Ammo" ] = "A greenish grenade shaped like a bullet.",
+	
+	[ "Item_Name_Buckshot_Ammo" ] = "Buckshot Shells",
+	[ "Item_Desc_Buckshot_Ammo" ] = "A red box with the Salvotech logo on it.",
+	
+	[ "Item_Name_Crossbow_Ammo" ] = "Crossbow Bolts",
+	[ "Item_Desc_Crossbow_Ammo" ] = "An orange colored conductive metal bolt.",
+	
+	[ "Item_Name_RPGAmmo" ] = "RPG Rocket",
+	[ "Item_Desc_RPGAmmo" ] = "A rocket with a grey tip and orange body.",
+	
+	[ "Item_Name_357Ammo" ] = ".357 Magnum Rounds",
+	[ "Item_Desc_357Ammo" ] = "An orange and black container with Magnum on the side.",
+	
+	[ "Item_Name_CBAmmo" ] = "Energy Orb Cell",
+	[ "Item_Desc_CBAmmo" ] = "A small cylindrical piece of material with an orange glow.",
 	
 	// Radio
 	[ "Item_Name_SR" ] = "Static Radio",

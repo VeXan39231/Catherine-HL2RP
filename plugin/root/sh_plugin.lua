@@ -42,7 +42,7 @@ catherine.language.Merge( "korean", {
 catherine.command.Register( {
 	command = "charroot",
 	runFunc = function( pl, args )
-		if ( pl.GetNetVar( pl, "rooting" ) ) then
+		if ( pl:GetNetVar( "rooting" ) ) then
 			catherine.util.NotifyLang( pl, "Root_Notify_AlreadyDoing" )
 			return
 		end
@@ -58,7 +58,7 @@ catherine.command.Register( {
 			return
 		end
 		
-		if ( ent.GetClass( ent ) == "prop_ragdoll" ) then
+		if ( ent:GetClass( ) == "prop_ragdoll" ) then
 			ent = ent:GetNetVar( "player" )
 		end
 	

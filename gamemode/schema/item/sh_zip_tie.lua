@@ -40,7 +40,7 @@ ITEM.func.tie = {
 			return
 		end
 		
-		if ( ent.GetClass( ent ) == "prop_ragdoll" ) then
+		if ( ent:GetClass( ) == "prop_ragdoll" ) then
 			ent = ent:GetNetVar( "player" )
 		end
 		

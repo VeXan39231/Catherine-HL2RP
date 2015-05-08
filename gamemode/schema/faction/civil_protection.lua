@@ -23,7 +23,7 @@ FACTION.desc = "^Faction_Desc_CP"
 FACTION.isWhitelist = true
 FACTION.alwaysRecognized = true
 FACTION.models = {
-	"models/police.mdl"
+	"models/dpfilms/metropolice/hl2concept.mdl"
 }
 
 function FACTION:PlayerFirstSpawned( pl )

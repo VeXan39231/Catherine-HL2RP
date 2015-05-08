@@ -51,18 +51,19 @@ Schema.CUC = {
 }
 Schema.CPNamePrefix = "C17-%s-RCT.%s"
 Schema.OWNamePrefix = "OW-%s.%s"
+local elite, unit = Schema.CombineRankClass.Elite, Schema.CombineRankClass.Unit
 Schema.CombineRank = {
-	[ "SeC" ] = Schema.CombineRankClass.Elite,
-	[ "DvL" ] = Schema.CombineRankClass.Elite,
-	[ "EpU" ] = Schema.CombineRankClass.Elite,
-	[ "GHOST" ] = Schema.CombineRankClass.Unit,
-	[ "OfC" ] = Schema.CombineRankClass.Unit,
-	[ "05" ] = Schema.CombineRankClass.Unit,
-	[ "04" ] = Schema.CombineRankClass.Unit,
-	[ "03" ] = Schema.CombineRankClass.Unit,
-	[ "02" ] = Schema.CombineRankClass.Unit,
-	[ "01" ] = Schema.CombineRankClass.Unit,
-	[ "RCT" ] = Schema.CombineRankClass.Unit
+	[ "SeC" ] = elite,
+	[ "DvL" ] = elite,
+	[ "EpU" ] = elite,
+	[ "GHOST" ] = unit,
+	[ "OfC" ] = unit,
+	[ "05" ] = unit,
+	[ "04" ] = unit,
+	[ "03" ] = unit,
+	[ "02" ] = unit,
+	[ "01" ] = unit,
+	[ "RCT" ] = unit
 }
 Schema.CombineRankModel = {
 	[ "SeC" ] = "models/dpfilms/metropolice/phoenix_police.mdl",
@@ -88,8 +89,8 @@ Schema.BadRadioStrings = {
 }
 
 for k, v in pairs( Schema.CombineRankModel ) do
-	util.PrecacheModel( v )
 	catherine.animation.Register( "metrocop", v )
+	util.PrecacheModel( v )
 end
 
 function Schema:GetRankByName( name )
@@ -118,7 +119,8 @@ function Schema:GetCombines( )
 	local players = { }
 	
 	for k, v in pairs( player.GetAllByLoaded( ) ) do
-		if ( !v:PlayerIsCombine( ) ) then continue end
+		if ( !v.PlayerIsCombine( v ) ) then continue end
+		
 		players[ #players + 1 ] = v
 	end
 	
@@ -151,7 +153,7 @@ end
 
 catherine.chat.Register( "radio", {
 	func = function( pl, text, ex )
-		local name = pl.Name( pl )
+		local name = pl:Name( )
 		
 		if ( ex[ 1 ] and LocalPlayer( ) != pl ) then
 			name = Schema:CalcBadNameString( )
@@ -161,7 +163,10 @@ catherine.chat.Register( "radio", {
 	end,
 	isGlobal = true,
 	canRun = function( pl )
-		return pl.Alive( pl )
+		return pl:Alive( )
+	end,
+	canHear = function( pl )
+		return pl:Alive( )
 	end
 } )
 
@@ -171,16 +176,16 @@ catherine.chat.Register( "dispatch", {
 	end,
 	isGlobal = true,
 	canRun = function( pl )
-		return pl.Alive( pl )
+		return pl:Alive( )
 	end
 } )
 
 catherine.chat.Register( "request", {
 	func = function( pl, text )
-		chat.AddText( Color( 255, 200, 150 ), LANG( "Chat_Reqeust", pl.Name( pl ), catherine.chat.PreSet( text ) ) )
+		chat.AddText( Color( 255, 200, 150 ), LANG( "Chat_Reqeust", pl:Name( ), catherine.chat.PreSet( text ) ) )
 	end,
 	isGlobal = true,
 	canRun = function( pl )
-		return pl.Alive( pl )
+		return pl:Alive( )
 	end
 } )

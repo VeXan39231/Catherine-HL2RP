@@ -16,26 +16,13 @@ You should have received a copy of the GNU General Public License
 along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-local BASE = catherine.item.New( "FOOD", nil, true )
-BASE.name = "Food Base"
-BASE.desc = "A Food."
-BASE.category = "^Item_Category_Food"
-BASE.cost = 0
-BASE.weight = 0
-BASE.healthAdd = 0
-BASE.func = { }
-BASE.func.eat = {
-	text = "^Item_FuncStr01_Food",
-	canShowIsWorld = true,
-	canShowIsMenu = true,
-	func = function( pl, itemTable )
-		pl:EmitSound( "physics/flesh/flesh_impact_hard" .. math.random( 1, 5 ) .. ".wav" )
-		pl:SetHealth( math.Clamp( pl:Health( ) + ( itemTable.healthAdd or 0 ), 0, 100 ) )
-		
-		catherine.inventory.Work( pl, CAT_INV_ACTION_REMOVE, {
-			uniqueID = itemTable.uniqueID
-		} )
-	end
-}
+local ITEM = catherine.item.New( "ar2_ammo", "AMMO" )
+ITEM.name = "^Item_Name_AR2Ammo"
+ITEM.desc = "^Item_Desc_AR2Ammo"
+ITEM.cost = 90
+ITEM.model = "models/items/combine_rifle_cartridge01.mdl"
+ITEM.weight = 0.5
+ITEM.ammoType = "AR2"
+ITEM.amount = 50
 
-catherine.item.Register( BASE )
+catherine.item.Register( ITEM )

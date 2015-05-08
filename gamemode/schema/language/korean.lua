@@ -77,14 +77,29 @@ catherine.language.Merge( "korean", {
 	[ "Item_Name_BW" ] = "브린 워터",
 	[ "Item_Desc_BW" ] = "흔들어서 드세요.",
 	
-	[ "Item_Name_9MM" ] = "9MM 피스톨",
-	[ "Item_Desc_9MM" ] = "기본적인 9MM 피스톨 입니다.",
+	[ "Item_Name_9MM" ] = ".9mm 피스톨",
+	[ "Item_Desc_9MM" ] = "기본적인 .9mm 피스톨 입니다.",
 	
 	[ "Item_Name_AR2" ] = "AR2",
 	[ "Item_Desc_AR2" ] = "강력한 화력을 자랑합니다.",
 	
-	[ "Item_Name_SMG" ] = "MP7",
+	[ "Item_Name_SMG" ] = "SMG",
 	[ "Item_Desc_SMG" ] = "기본적인 SMG 입니다.",
+	
+	[ "Item_Name_357" ] = ".357 매그넘",
+	[ "Item_Desc_357" ] = "6발의 .357 매그넘 입니다.",
+	
+	[ "Item_Name_CB" ] = "크로스보우",
+	[ "Item_Desc_CB" ] = "크로스보우 입니다, 반시민들이 사용합니다.",
+	
+	[ "Item_Name_Buckshot" ] = "샷건",
+	[ "Item_Desc_Buckshot" ] = "산탄이 날라가는 강력한 위력의 샷건 입니다.",
+	
+	[ "Item_Name_RPG" ] = "로켓 런처",
+	[ "Item_Desc_RPG" ] = "강력한 화력을 자랑하는 로켓 런처 입니다.",
+	
+	[ "Item_Name_CrowB" ] = "크로우 바",
+	[ "Item_Desc_CrowB" ] = "녹슬어 보이는 이 도구에는 추억이 깃들어 있습니다.",
 	
 	[ "Item_Name_SS" ] = "전기봉",
 	[ "Item_Desc_SS" ] = "사람을 때려서 기절시킬 수 있습니다.",
@@ -95,8 +110,34 @@ catherine.language.Merge( "korean", {
 
 	[ "Item_Category_Communication" ] = "통신",
 	[ "Item_Category_Food" ] = "음식",
-	
 	[ "Item_FuncStr01_Food" ] = "먹기",
+	
+	[ "Item_Name_PistolAmmo" ] = ".9mm 피스톨 탄약",
+	[ "Item_Desc_PistolAmmo" ] = ".9mm 피스톨에 들어가는 탄약입니다.",
+	
+	[ "Item_Name_AR2Ammo" ] = "펄스 에너지 카트리지",
+	[ "Item_Desc_AR2Ammo" ] = "펄스 에너지가 카트리지 안에 들어있습니다.",
+	
+	[ "Item_Name_SMGAmmo" ] = "SMG 탄약",
+	[ "Item_Desc_SMGAmmo" ] = "SMG 탄약이 상자안에 들어있습니다.",
+	
+	[ "Item_Name_SMG_G_Ammo" ] = "SMG 유탄",
+	[ "Item_Desc_SMG_G_Ammo" ] = "SMG 유탄 입니다, 터지면서 피해를 줍니다.",
+	
+	[ "Item_Name_Buckshot_Ammo" ] = "샷건 탄약",
+	[ "Item_Desc_Buckshot_Ammo" ] = "샷건 탄약이 상자안에 들어있습니다.",
+	
+	[ "Item_Name_Crossbow_Ammo" ] = "크로스 보우 탄약",
+	[ "Item_Desc_Crossbow_Ammo" ] = "크로스 보우 탄약 입니다.",
+	
+	[ "Item_Name_RPGAmmo" ] = "RPG 로켓",
+	[ "Item_Desc_RPGAmmo" ] = "RPG 로켓 발사기에 들어가는 로켓 입니다.",
+
+	[ "Item_Name_357Ammo" ] = ".357 매그넘 탄약",
+	[ "Item_Desc_357Ammo" ] = ".357 매그넘 탄약 입니다.",
+	
+	[ "Item_Name_CBAmmo" ] = "에너지 오브",
+	[ "Item_Desc_CBAmmo" ] = "펄스 라이플에 들어가는 에너지 오브 입니다.",
 	
 	// Radio
 	[ "Item_Name_SR" ] = "고정식 라디오",
