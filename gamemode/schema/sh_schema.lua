@@ -182,7 +182,7 @@ catherine.chat.Register( "dispatch", {
 
 catherine.chat.Register( "request", {
 	func = function( pl, text )
-		chat.AddText( Color( 255, 200, 150 ), LANG( "Chat_Reqeust", pl:Name( ), catherine.chat.PreSet( text ) ) )
+		chat.AddText( Color( 255, 200, 150 ), LANG( "Chat_Request", pl:Name( ), catherine.chat.PreSet( text ) ) )
 	end,
 	isGlobal = true,
 	canRun = function( pl )

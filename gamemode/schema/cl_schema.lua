@@ -46,7 +46,7 @@ end
 function Schema:AutomaticCombineOverlayMessage( )
 	local index = #self.playercombineOverlays + 1
 	local randMessage = catherine.util.StuffLanguage( table.Random( self.combineOverlayMessage ) )
-	
+
 	self.playercombineOverlays[ index ] = {
 		message = "",
 		a = 0,

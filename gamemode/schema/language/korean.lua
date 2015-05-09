@@ -158,7 +158,7 @@ catherine.language.Merge( "korean", {
 	
 	// Combine Overlay
 	[ "CombineOverlay_Str01" ] = "바이오 시그널을 기다리는 중 ...",
-	[ "CombineOverlay_Str02" ] = "",
+	[ "CombineOverlay_Str02" ] = "메세지를 번역 하는 중 ...",
 	[ "CombineOverlay_Str03" ] = "주파수를 필터링 하는 중 ...",
 	[ "CombineOverlay_Str04" ] = "시더 찾는 중 ...",
 	[ "CombineOverlay_Str05" ] = "피어 찾는 중 ...",

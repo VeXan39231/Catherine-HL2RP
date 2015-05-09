@@ -97,7 +97,7 @@ function Schema:SayRadio( pl, text )
 end
 
 function Schema:SayRequest( pl, text )
-	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, LANG( pl, "CombineOverlay_Request", pl:Name( ), text ), 9, Color( 255, 150, 150 ) )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, { "CombineOverlay_Request", { pl:Name( ), text } }, 9, Color( 255, 150, 150 ) )
 	catherine.chat.RunByID( pl, "request", text, self:GetCombines( ) )
 end
 
