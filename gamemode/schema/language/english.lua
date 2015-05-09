@@ -154,5 +154,28 @@ catherine.language.Merge( "english", {
 	// Chat
 	[ "Chat_Dispatch" ] = "Combine Dispatch - %s",
 	[ "Chat_Radio" ] = "%s radio says %s",
-	[ "Chat_Request" ] = "%s reqeust says %s"
+	[ "Chat_Request" ] = "%s reqeust says %s",
+	
+	// Combine Overlay
+	[ "CombineOverlay_Str01" ] = "Waiting for biosignal ...",
+	[ "CombineOverlay_Str02" ] = "Initializing Heads-up-display ...",
+	[ "CombineOverlay_Str03" ] = "Ascertaining low-wave radio frequency ...",
+	[ "CombineOverlay_Str04" ] = "Finding seeders ...",
+	[ "CombineOverlay_Str05" ] = "Finding peers ...",
+	[ "CombineOverlay_Str06" ] = "Regaining CAT-equalization ...",
+	[ "CombineOverlay_Str07" ] = "Receiving network messages ...",
+	[ "CombineOverlay_Str08" ] = "Registering Citadel messages ...",
+	[ "CombineOverlay_Str09" ] = "Idle state ...",
+	
+	[ "CombineOverlay_Request" ] = "%s's request - %s",
+	[ "CombineOverlay_HealthFullRecovered" ] = "Vital signs recovered ...",
+	[ "CombineOverlay_TakeDmg_Local" ] = "WARNING ! Physical bodily trauma detected ...",
+	[ "CombineOverlay_TakeDmg_NoLocal" ] = "WARNING ! Unit '%s' has damaged by unknown problems ...",
+	[ "CombineOverlay_HealthRecovering" ] = "Vital signs recovering [%s%] ...",
+	[ "CombineOverlay_LocalPlayerDeath_CP" ] = "ERROR ! Shut Down - ...",
+	[ "CombineOverlay_LocalPlayerDeath_OW" ] = "Critical Error - ...",
+	[ "CombineOverlay_PlayerDeath_CP" ] = "WARNING ! Unit '%s' vital signs absent, alerting dispatch ...",
+	[ "CombineOverlay_PlayerDeath_OW" ] = "WARNING ! Overwatch Unit '%s' vital signs absent, alerting dispatch ...",
+	[ "CombineOverlay_Online" ] = "Online ...",
+	[ "CombineOverlay_RFCitizens" ] = "Refreshing citizen lists ..."
 } )

@@ -154,5 +154,28 @@ catherine.language.Merge( "korean", {
 	// Chat
 	[ "Chat_Dispatch" ] = "콤바인 방송 - %s",
 	[ "Chat_Radio" ] = "%s 님의 라디오 말 %s",
-	[ "Chat_Request" ] = "%s 님의 신고 %s"
+	[ "Chat_Request" ] = "%s 님의 신고 %s",
+	
+	// Combine Overlay
+	[ "CombineOverlay_Str01" ] = "바이오 시그널을 기다리는 중 ...",
+	[ "CombineOverlay_Str02" ] = "",
+	[ "CombineOverlay_Str03" ] = "주파수를 필터링 하는 중 ...",
+	[ "CombineOverlay_Str04" ] = "시더 찾는 중 ...",
+	[ "CombineOverlay_Str05" ] = "피어 찾는 중 ...",
+	[ "CombineOverlay_Str06" ] = "CAT-이퀄라이제이션을 필터링 하는 중 ...",
+	[ "CombineOverlay_Str07" ] = "네트워킹 메세지를 수신 하는 중 ...",
+	[ "CombineOverlay_Str08" ] = "시타델 메세지를 등록 하는 중 ...",
+	[ "CombineOverlay_Str09" ] = "유휴 상태 ...",
+	
+	[ "CombineOverlay_Request" ] = "%s 님의 신고 - %s",
+	[ "CombineOverlay_HealthFullRecovered" ] = "체력 상태가 복구됨 ...",
+	[ "CombineOverlay_TakeDmg_Local" ] = "경고 ! 물리적인 피해가 감지됨 ...",
+	[ "CombineOverlay_TakeDmg_NoLocal" ] = "경고 ! 유닛 '%s' 가 알 수 없는 요인에게서 물리적인 피해를 입음 ...",
+	[ "CombineOverlay_HealthRecovering" ] = "체력 상태를 복구 중 [%s] ...",
+	[ "CombineOverlay_LocalPlayerDeath_CP" ] = "오류 ! 심각한 오류 발생 - ...",
+	[ "CombineOverlay_LocalPlayerDeath_OW" ] = "심각한 오류 - ...",
+	[ "CombineOverlay_PlayerDeath_CP" ] = "경고 ! 유닛 '%s' 의 신호가 소멸, 주의 요망 ...",
+	[ "CombineOverlay_PlayerDeath_OW" ] = "경고 ! 오버와치 유닛 '%s' 의 신호가 소멸, 주의 요망 ...",
+	[ "CombineOverlay_Online" ] = "온라인 ...",
+	[ "CombineOverlay_RFCitizens" ] = "시민 리스트 새로고침 중 ..."
 } )

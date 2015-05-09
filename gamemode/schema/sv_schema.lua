@@ -27,14 +27,13 @@ CAT_SCHEMA_COMBINEOVERLAY_GLOBAL = 2
 CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL = 3
 
 function Schema:ShowSpare1( pl )
-	if ( !pl.HasItem( pl, "zip_tie" ) ) then return end
+	if ( !pl:HasItem( "zip_tie" ) ) then return end
 	
-	local tr = { }
-	tr.start = pl:GetShootPos( )
-	tr.endpos = tr.start + pl:GetAimVector( ) * 160
-	tr.filter = pl
-	
-	local ent = util.TraceLine( tr ).Entity
+	local data = { }
+	data.start = pl:GetShootPos( )
+	data.endpos = data.start + pl:GetAimVector( ) * 160
+	data.filter = pl
+	local ent = util.TraceLine( data ).Entity
 	
 	if ( !IsValid( ent ) ) then
 		catherine.util.NotifyLang( pl, "Entity_Notify_NotPlayer" )
@@ -53,7 +52,7 @@ function Schema:ShowSpare1( pl )
 end
 
 function Schema:PlayerCanSpray( pl )
-	return pl.HasItem( pl, "spray_can" )
+	return pl:HasItem( "spray_can" )
 end
 
 function Schema:PlayerCanFlashlight( pl )
@@ -98,7 +97,7 @@ function Schema:SayRadio( pl, text )
 end
 
 function Schema:SayRequest( pl, text )
-	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, pl:Name( ) .. "'s request - " .. text, 9, Color( 255, 150, 150 ) )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, LANG( pl, "CombineOverlay_Request", pl:Name( ), text ), 9, Color( 255, 150, 150 ) )
 	catherine.chat.RunByID( pl, "request", text, self:GetCombines( ) )
 end
 
@@ -201,13 +200,13 @@ end
 
 function Schema:PlayerUseDoor( pl, ent )
 	if ( pl:PlayerIsCombine( ) and !ent:HasSpawnFlags( 256 ) and !ent:HasSpawnFlags( 1024 ) ) then
-		ent:Fire( "open", "", 0 )
+		ent:Fire( "Open", "", 0 )
 		
 		return true
 	end
 end
 
-function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, textMakeDelay )
+function Schema:AddCombineOverlayMessage( targetType, pl, langTable, time, col, textMakeDelay )
 	targetType = targetType or CAT_SCHEMA_COMBINEOVERLAY_GLOBAL
 	local combines = self:GetCombines( )
 	
@@ -217,7 +216,14 @@ function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, te
 		table.RemoveByValue( combines, pl )
 	end
 	
-	netstream.Start( combines, "catherine.Schema.AddCombineOverlayMessage", { message, time or 6, col or Color( 255, 255, 255 ), textMakeDelay or 0.05 } )
+	for k, v in pairs( type( combines ) == "Player" and { combines } or combines ) do
+		netstream.Start( v, "catherine.Schema.AddCombineOverlayMessage", {
+			LANG( v, langTable[ 1 ], unpack( langTable[ 2 ] or { } ) ),
+			time or 6,
+			col or Color( 255, 255, 255 ),
+			textMakeDelay or 0.05
+		} )
+	end
 end
 
 function Schema:ClearCombineOverlayMessages( pl )
@@ -261,53 +267,39 @@ function Schema:GetPlayerDeathSound( pl )
 	end
 end
 
-function Schema:AddCombineOverlayMessage( targetType, pl, message, time, col, textMakeDelay )
-	targetType = targetType or CAT_SCHEMA_COMBINEOVERLAY_GLOBAL
-	local combines = self:GetCombines( )
-	
-	if ( targetType == CAT_SCHEMA_COMBINEOVERLAY_LOCAL and IsValid( pl ) ) then
-		combines = pl
-	elseif ( targetType == CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL and IsValid( pl ) ) then
-		table.RemoveByValue( combines, pl )
-	end
-	
-	netstream.Start( combines, "catherine.Schema.AddCombineOverlayMessage", { message, time or 6, col or Color( 255, 255, 255 ), textMakeDelay or 0.05 } )
-end
-
 function Schema:HealthFullRecovered( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
 	
-	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Vital signs recovered ...", 4, Color( 150, 255, 150 ) )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, { "CombineOverlay_HealthFullRecovered" }, 4, Color( 150, 255, 150 ) )
 end
 
 function Schema:PlayerTakeDamage( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
 	
 	if ( ( pl.CAT_HL2RP_nextHurtDelay or CurTime( ) ) <= CurTime( ) ) then
-		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "WARNING ! Physical bodily trauma detected ...", 7, Color( 255, 150, 0 ) )
-		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL, pl, "WARNING ! Unit '" .. pl:Name( ) .. "' has damaged by unknown problems ...", 7, Color( 255, 150, 0 ) )
+		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, { "CombineOverlay_TakeDmg_Local" }, 7, Color( 255, 150, 0 ) )
+		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL, pl, { "CombineOverlay_TakeDmg_NoLocal", { pl:Name( ) } }, 7, Color( 255, 150, 0 ) )
 		pl.CAT_HL2RP_nextHurtDelay = CurTime( ) + 5
 	end
 end
 
 function Schema:HealthRecovering( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
-	
-	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Vital signs recovering [" .. ( pl:Health( ) / pl:GetMaxHealth( ) ) * 100 .. "%] ...", 4, Color( 255, 150, 150 ) )
+
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, { "CombineOverlay_HealthRecovering", { ( pl:Health( ) / pl:GetMaxHealth( ) ) * 100 } }, 4, Color( 255, 150, 150 ) )
 end
 
 function Schema:PlayerDeath( pl )
 	if ( !pl:PlayerIsCombine( ) ) then return end
 	local name = pl:Name( )
-	local localMessage = "ERROR ! Shut Down - ..."
-	local globalMessage = "WARNING ! Unit '" .. name .. "' vital signs absent, alerting dispatch ..."
+	local localMessage = { "CombineOverlay_LocalPlayerDeath_CP" }
+	local globalMessage = { "CombineOverlay_PlayerDeath_CP", { name } }
 	
 	if ( pl:Team( ) == FACTION_OW ) then
-		localMessage = "Critical Error - ..."
-		globalMessage = "WARNING ! Overwatch Unit '" .. name .. "' vital signs absent, alerting dispatch ..."
+		localMessage = { "CombineOverlay_LocalPlayerDeath_OW" }
+		globalMessage = { "CombineOverlay_PlayerDeath_OW", { name } }
 	end
-	
-	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL, pl, "WARNING ! Vital signs dropping ...", 10, Color( 255, 150, 0 ), 0.04 )
+
 	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, localMessage, 10, Color( 255, 0, 0 ), 0.04 )
 	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL_NOLOCAL, pl, globalMessage, 10, Color( 255, 0, 0 ), 0.04 )
 
@@ -325,7 +317,7 @@ function Schema:OnSpawnedInCharacter( pl )
 	if ( pl:PlayerIsCombine( ) ) then
 		local rankID, classID = self:GetRankByName( pl:Name( ) )
 		
-		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, "Online ...", 5, Color( 150, 255, 150 ), 0.04 )
+		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, { "CombineOverlay_Online" }, 5, Color( 150, 255, 150 ), 0.04 )
 
 		if ( pl:Class( ) != nil and pl:Class( ) != classID ) then
 			if ( rankID and classID ) then
@@ -350,7 +342,7 @@ function Schema:OnSpawnedInCharacter( pl )
 		return
 	end
 	
-	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, "Refreshing citizen lists ...", 7, Color( 150, 255, 150 ) )
+	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, { "CombineOverlay_RFCitizens" }, 7, Color( 150, 255, 150 ) )
 end
 
 function Schema:GetBeepSound( pl, IsOff )
@@ -376,7 +368,7 @@ function Schema:GetBeepSound( pl, IsOff )
 end
 
 function Schema:ChatTypingChanged( pl, bool )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( !pl:Alive( ) or !pl:PlayerIsCombine( ) ) then return end
 	
 	pl:EmitSound( self:GetBeepSound( pl, !bool ), 60 )
 end

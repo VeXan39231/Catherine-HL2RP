@@ -25,6 +25,7 @@ SWEP.WorldModel = Model( "models/weapons/w_stunbaton.mdl" )
 
 SWEP.LowerAngles = Angle( 15, -10, -20 )
 SWEP.CanFireLowered = true
+SWEP.HitDistance = 48
 
 function SWEP:SetupDataTables( )
 	self:NetworkVar( "Bool", 0, "Active" )
@@ -44,8 +45,8 @@ function SWEP:Initialize( )
 	self:SetWeaponHoldType( self.HoldType )
 end
 
-function SWEP:OnLowered()
-	self:SetActive(false)
+function SWEP:OnLowered( )
+	self:SetActive( false )
 end
 
 function SWEP:PrimaryAttack( )
@@ -79,7 +80,7 @@ function SWEP:PrimaryAttack( )
 	local dmg = self.Primary.Damage
 
 	if ( self:GetActive( ) ) then
-		dmg = dmg + 15
+		dmg = dmg + 7
 	end
 
 	self:EmitSound( "weapons/stunstick/stunstick_swing" .. math.random( 1, 2 ) .. ".wav" )
@@ -112,22 +113,30 @@ function SWEP:PrimaryAttack( )
 
 		if ( IsValid( ent ) ) then
 			if ( ent:IsPlayer( ) ) then
-				if ( self:GetActive( ) ) then
-					catherine.util.ScreenColorEffect( ent, Color( 255, 255, 255 ), 0.5, 0.001 )
-				else
-					catherine.util.ScreenColorEffect( ent, nil, 2, 0.005 )
-				end
-
 				ent:ViewPunch( Angle( -20, math.random( -15, 15 ), math.random( -10, 10 ) ) )
 
-				if ( self:GetActive( ) and entity:Health( ) - dmg <= 0 ) then
+				if ( self:GetActive( ) and ent:Health( ) - dmg <= 0 ) then
 					catherine.player.RagdollWork( ent, true, 60 )
 					ent:SetHealth( 50 )
 
 					return
 				end
 			elseif ( ent:GetClass( ) == "prop_ragdoll" ) then
-				dmg = self:GetActive( ) and 2 or 10
+				local target = ent:GetNetVar( "player" )
+			
+				if ( IsValid( target ) and target:IsPlayer( ) ) then
+					ent = target
+				end
+				
+				dmg = self:GetActive( ) and 2 or 5
+			end
+			
+			ent.CAT_ignoreScreenColor = true
+			
+			if ( ent:IsPlayer( ) and self:GetActive( ) ) then
+				catherine.util.ScreenColorEffect( ent, Color( 255, 255, 255 ), 2, 0.005 )
+			else
+				catherine.util.ScreenColorEffect( ent, Color( 255, 150, 150 ), 0.5, 0.005 )
 			end
 
 			local dmgInfo = DamageInfo( )
@@ -136,9 +145,11 @@ function SWEP:PrimaryAttack( )
 			dmgInfo:SetDamage( dmg )
 			dmgInfo:SetDamageType( DMG_CLUB )
 			dmgInfo:SetDamagePosition( tr.HitPos )
-			dmgInfo:SetDamageForce( pl:GetAimVector( ) * 100000 )
+			dmgInfo:SetDamageForce( pl:GetAimVector( ) * 100 )
 			
 			ent:DispatchTraceAttack( dmgInfo, data.start, data.endpos )
+			
+			ent.CAT_ignoreScreenColor = nil
 		end
 	end
 end
@@ -164,16 +175,16 @@ function SWEP:SecondaryAttack( )
 
 		if ( catherine.entity.IsDoor( ent ) ) then
 			pl:ViewPunch( Angle( -1.3, 1.8, 0 ) )
-			pl:EmitSound( "physics/plastic/plastic_box_impact_hard" .. math.random( 1, 4 ) .. ".wav" )	
+			pl:EmitSound( "physics/wood/wood_crate_impact_hard2.wav" )	
 			pl:SetAnimation( PLAYER_ATTACK1 )
 
 			self:SetNextSecondaryFire( CurTime( ) + 0.4 )
 			self:SetNextPrimaryFire( CurTime( ) + 1 )
 		elseif ( ent:IsPlayer( ) ) then
-			local direct = self.Owner:GetAimVector( ) * 10
+			local direct = self.Owner:GetAimVector( ) * 180
 			direct.z = 0
 
-			entity:SetVelocity( direct )
+			ent:SetVelocity( direct )
 
 			pushed = true
 		else
@@ -232,7 +243,7 @@ function SWEP:ViewModelDrawn( )
 		return
 	end
 
-	local viewModel = LocalPlayer( ):GetViewModel( )
+	local viewMdl = LocalPlayer( ):GetViewModel( )
 
 	if ( !IsValid( viewMdl ) ) then
 		return

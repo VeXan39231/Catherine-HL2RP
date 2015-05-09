@@ -16,16 +16,12 @@ You should have received a copy of the GNU General Public License
 along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-Schema.combineOverlayMessage = {
-	"Waiting for biosignal ...",
-	"Initializing Heads-up-display ...",
-	"Ascertaining low-wave radio frequency ...",
-	"Finding seeders ...",
-	"Finding peers ...",
-	"Regaining CAT-equalization ...",
-	"Receiving network messages ...",
-	"Registering Citadel messages ..."
-}
+Schema.combineOverlayMessage = { }
+
+for i = 1, 9 do
+	Schema.combineOverlayMessage[ #Schema.combineOverlayMessage + 1 ] = "^CombineOverlay_Str0" .. i
+end
+
 Schema.playercombineOverlays = { }
 local combineOverlayMaterial
 
@@ -49,6 +45,7 @@ end
 
 function Schema:AutomaticCombineOverlayMessage( )
 	local index = #self.playercombineOverlays + 1
+	local randMessage = catherine.util.StuffLanguage( table.Random( self.combineOverlayMessage ) )
 	
 	self.playercombineOverlays[ index ] = {
 		message = "",
@@ -59,7 +56,7 @@ function Schema:AutomaticCombineOverlayMessage( )
 		textMakeDelay = 0.03,
 		textSubCount = 1,
 		gradientW = 0,
-		originalMessage = self:PrefixCombineOverlayMessage( ) .. table.Random( self.combineOverlayMessage ),
+		originalMessage = self:PrefixCombineOverlayMessage( ) .. randMessage,
 		col = Color( 255, 255, 255 )
 	}
 end
