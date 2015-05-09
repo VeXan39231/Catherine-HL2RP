@@ -31,7 +31,9 @@ function FACTION:PlayerFirstSpawned( pl )
 	catherine.item.Give( pl, "weapon_pistol" )
 	catherine.item.Give( pl, "weapon_stunstick" )
 	
-	pl:SetCharVar( "combineNumber", math.random( 10000, 99999 ) )
+	for i = 1, 2 do
+		catherine.item.Give( pl, "pistol_ammo" )
+	end
 end
 
 function FACTION:PostSetName( pl )

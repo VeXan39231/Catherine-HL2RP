@@ -28,8 +28,13 @@ FACTION.models = {
 
 function FACTION:PlayerFirstSpawned( pl )
 	catherine.item.Give( pl, "portable_radio" )
+	catherine.item.Give( pl, "weapon_pistol" )
 	catherine.item.Give( pl, "weapon_ar2" )
-	pl:SetCharVar( "combineNumber", math.random( 10000, 99999 ) )
+	
+	for i = 1, 4 do
+		catherine.item.Give( pl, "pistol_ammo" )
+		catherine.item.Give( pl, "ar2_ammo" )
+	end
 end
 
 function FACTION:PostSetName( pl )
