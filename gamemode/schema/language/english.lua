@@ -177,5 +177,9 @@ catherine.language.Merge( "english", {
 	[ "CombineOverlay_PlayerDeath_CP" ] = "WARNING ! Unit '%s' vital signs absent, alerting dispatch ...",
 	[ "CombineOverlay_PlayerDeath_OW" ] = "WARNING ! Overwatch Unit '%s' vital signs absent, alerting dispatch ...",
 	[ "CombineOverlay_Online" ] = "Online ...",
-	[ "CombineOverlay_RFCitizens" ] = "Refreshing citizen lists ..."
+	[ "CombineOverlay_RFCitizens" ] = "Refreshing citizen lists ...",
+	
+	// Attribute
+	[ "Jump_Title" ] = "Jump",
+	[ "Jump_Desc" ] = "",
 } )

@@ -343,6 +343,8 @@ function Schema:OnSpawnedInCharacter( pl )
 	end
 	
 	self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_GLOBAL, nil, { "CombineOverlay_RFCitizens" }, 7, Color( 150, 255, 150 ) )
+	
+	self:PlayerJumpFunc( pl )
 end
 
 function Schema:GetBeepSound( pl, IsOff )
@@ -426,14 +428,29 @@ function Schema:GetRadioListeners( pl )
 	return listeners
 end
 
-function Schema:Tick( )
+function Schema:Think( )
 	if ( ( self.NextRadioSignalCheckTick or 0 ) <= CurTime( ) ) then
-		self:RadioTick( )
+		self:RadioThink( )
 		self.NextRadioSignalCheckTick = CurTime( ) + 2
 	end
 end
 
-function Schema:RadioTick( )
+function Schema:PlayerJump( pl, velo )
+	self:PlayerJumpFunc( pl )
+end
+
+function Schema:PlayerJumpFunc( pl )
+	local jumpAttribute = catherine.attribute.GetProgress( pl, CAT_ATT_JUMP )
+
+	if ( pl.CAT_HL2RP_LastjumpAttribute or 0 != jumpAttribute ) then
+		pl:SetJumpPower( 150 + math.min( jumpAttribute * 1.5, 60 ) )
+		pl.CAT_HL2RP_LastjumpAttribute = jumpAttribute
+	end
+	
+	catherine.attribute.AddProgress( pl, CAT_ATT_JUMP, 0.0009 )
+end
+
+function Schema:RadioThink( )
 	for k, v in pairs( player.GetAllByLoaded( ) ) do
 		if ( !v:HasItem( "portable_radio" ) or v:GetInvItemData( "portable_radio", "toggle" ) == false ) then continue end
 		local newSignal = self:CalcRadio( v )

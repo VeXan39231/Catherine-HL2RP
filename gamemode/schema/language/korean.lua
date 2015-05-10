@@ -177,5 +177,9 @@ catherine.language.Merge( "korean", {
 	[ "CombineOverlay_PlayerDeath_CP" ] = "경고 ! 유닛 '%s' 의 신호가 소멸, 주의 요망 ...",
 	[ "CombineOverlay_PlayerDeath_OW" ] = "경고 ! 오버와치 유닛 '%s' 의 신호가 소멸, 주의 요망 ...",
 	[ "CombineOverlay_Online" ] = "온라인 ...",
-	[ "CombineOverlay_RFCitizens" ] = "시민 리스트 새로고침 중 ..."
+	[ "CombineOverlay_RFCitizens" ] = "시민 리스트 새로고침 중 ...",
+	
+	// Attribute
+	[ "Jump_Title" ] = "점프력",
+	[ "Jump_Desc" ] = "높을 경우 높이 점프를 뛸 수 있습니다."
 } )
