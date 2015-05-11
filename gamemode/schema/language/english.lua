@@ -77,6 +77,12 @@ catherine.language.Merge( "english", {
 	[ "Item_Name_BW" ] = "Breen Water",
 	[ "Item_Desc_BW" ] = "Shake and eat!",
 	
+	[ "Item_Name_RBW" ] = "Red Breen Water",
+	[ "Item_Desc_RBW" ] = "Shake and eat!",
+	
+	[ "Item_Name_GBW" ] = "Golden Breen Water",
+	[ "Item_Desc_GBW" ] = "Shake and eat!",
+	
 	[ "Item_Name_9MM" ] = ".9mm Pistol",
 	[ "Item_Desc_9MM" ] = "A standard .9mm Pistol.",
 	

@@ -16,13 +16,14 @@ You should have received a copy of the GNU General Public License
 along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
-local ITEM = catherine.item.New( "breenwater", "FOOD" )
-ITEM.name = "^Item_Name_BW"
-ITEM.desc = "^Item_Desc_BW"
-ITEM.cost = 20
+local ITEM = catherine.item.New( "gold_breenwater", "FOOD" )
+ITEM.name = "^Item_Name_GBW"
+ITEM.desc = "^Item_Desc_GBW"
+ITEM.cost = 200
 ITEM.model = "models/props_junk/PopCan01a.mdl"
+ITEM.skin = 2
 ITEM.weight = 0.4
-ITEM.healthAdd = 10
+ITEM.healthAdd = 30
 ITEM.staminaSet = 100
 
 catherine.item.Register( ITEM )
