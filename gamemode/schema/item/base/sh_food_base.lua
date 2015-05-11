@@ -23,18 +23,31 @@ BASE.category = "^Item_Category_Food"
 BASE.cost = 0
 BASE.weight = 0
 BASE.healthAdd = 0
+BASE.staminaSet = 0
+BASE.eatSound = {
+	"npc/barnacle/barnacle_gulp1.wav",
+	"npc/barnacle/barnacle_gulp2.wav"
+}
 BASE.func = { }
 BASE.func.eat = {
 	text = "^Item_FuncStr01_Food",
 	canShowIsWorld = true,
 	canShowIsMenu = true,
-	func = function( pl, itemTable )
-		pl:EmitSound( "physics/flesh/flesh_impact_hard" .. math.random( 1, 5 ) .. ".wav" )
-		pl:SetHealth( math.Clamp( pl:Health( ) + ( itemTable.healthAdd or 0 ), 0, 100 ) )
+	func = function( pl, itemTable, ent )
+		pl:EmitSound( type( itemTable.eatSound ) == "table" and table.Random( itemTable.eatSound ) or itemTable.eatSound )
+		pl:SetHealth( math.Clamp( pl:Health( ) + ( itemTable.healthAdd or 0 ), 0, pl:GetMaxHealth( ) ) )
 		
-		catherine.inventory.Work( pl, CAT_INV_ACTION_REMOVE, {
-			uniqueID = itemTable.uniqueID
-		} )
+		if ( itemTable.staminaSet != 0 ) then
+			catherine.character.SetCharVar( pl, "stamina", itemTable.staminaSet )
+		end
+		
+		if ( type( ent ) == "Entity" ) then
+			ent:Remove( )
+		else
+			catherine.inventory.Work( pl, CAT_INV_ACTION_REMOVE, {
+				uniqueID = itemTable.uniqueID
+			} )
+		end
 	end
 }
 

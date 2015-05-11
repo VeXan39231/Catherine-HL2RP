@@ -77,6 +77,12 @@ catherine.language.Merge( "korean", {
 	[ "Item_Name_BW" ] = "브린 워터",
 	[ "Item_Desc_BW" ] = "흔들어서 드세요.",
 	
+	[ "Item_Name_RBW" ] = "고급 브린 워터",
+	[ "Item_Desc_RBW" ] = "흔들어서 드세요.",
+	
+	[ "Item_Name_GBW" ] = "최고급 브린 워터",
+	[ "Item_Desc_GBW" ] = "흔들어서 드세요.",
+	
 	[ "Item_Name_9MM" ] = ".9mm 피스톨",
 	[ "Item_Desc_9MM" ] = "기본적인 .9mm 피스톨 입니다.",
 	

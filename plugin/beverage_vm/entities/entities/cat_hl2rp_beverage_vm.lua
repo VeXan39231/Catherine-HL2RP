@@ -16,6 +16,8 @@ You should have received a copy of the GNU General Public License
 along with Catherine.  If not, see <http://www.gnu.org/licenses/>.
 ]]--
 
+local PLUGIN = PLUGIN
+
 AddCSLuaFile( )
 
 DEFINE_BASECLASS( "base_gmodentity" )
@@ -32,8 +34,7 @@ if ( SERVER ) then
 		self:SetSolid( SOLID_VPHYSICS )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetUseType( SIMPLE_USE )
-		self:SetNetVar( "active", true )
-		
+
 		local physObject = self.GetPhysicsObject( self )
 		
 		if ( IsValid( physObject ) ) then
@@ -43,20 +44,37 @@ if ( SERVER ) then
 	end
 	
 	function ENT:Use( pl )
-		pl:EmitSound( "buttons/lightswitch2.wav", 60 )
-		
 		if ( ( self.nextCanUse or 0 ) <= CurTime( ) ) then
 			self.nextCanUse = CurTime( ) + 1.5
 		else
 			return
 		end
 		
-		if ( pl:PlayerIsCombine( ) ) then
-			// Open derma menu
-		else
-			
-		end
+		netstream.Start( pl, "catherine_hl2rp.plugin.beverage_vm.MachineUse", self:EntIndex( ) )
+	end
+	
+	function ENT:SpawnBeverage( pl, uniqueID )
+		local itemPos = self:GetPos( ) + self:GetForward( ) * 19 + self:GetRight( ) * 4 + self:GetUp( ) * -35
+		local ent = catherine.item.Spawn( uniqueID, itemPos )
+
+		self:EmitSound( "buttons/button4.wav", 100 )
+		self:EmitSound( "buttons/lightswitch2.wav", 100 )
+	end
+	
+	function ENT:DoOnline( )
+		self:EmitSound( "ambient/machines/thumper_startup1.wav", 60 )
+	end
+	
+	function ENT:DoOffline( )
+		self:EmitSound( "ambient/machines/thumper_shutdown1.wav", 60 )
 	end
 else
+	local glowMat = Material( "sprites/glow04_noz" )
 
+	function ENT:Draw( )
+		self:DrawModel( )
+
+		render.SetMaterial( glowMat )
+		render.DrawSprite( self:GetPos( ) + self:GetForward( ) * 18 + self:GetRight( ) * -22.4 + self:GetUp( ) * 9.3, 10, 10, PLUGIN:IsActive( self ) and Color( 150, 255, 150 ) or Color( 255, 0, 0 ) )
+	end
 end
