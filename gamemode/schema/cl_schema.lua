@@ -84,6 +84,28 @@ function Schema:HUDDrawBarBottom( x, y )
 	self:DrawCombineOverlay( x, y )
 end
 
+function Schema:OWHUDPaint( )
+	self.ow_hudData = self.ow_hudData or { }
+	
+	for i = 1, 100 do
+		self.ow_hudData[ i ] = self.ow_hudData[ i ] or {
+			w = 0,
+			targetW = math.random( 1, 150 ),
+			a = math.Rand( 0, 5 )
+		}
+		
+		local data = self.ow_hudData[ i ]
+
+		data.w = Lerp( 0.01, data.w, data.targetW + ( 10 / 1 ) * math.sin( CurTime( ) + math.Rand( 0, 2 ) ) )
+		
+		self.ow_hudData[ i ] = data
+		
+		local h = ScrH( ) * 0.05 + ( ScrH( ) * ( i / 100 ) )
+		draw.RoundedBox( 0, 0, h, data.w, 5, Color( 255, 255, 255, data.a ) )
+		draw.RoundedBox( 0, ScrW( ) - data.w, h, data.w, 5, Color( 255, 255, 255, data.a ) )
+	end
+end
+
 function Schema:DrawCombineOverlay( x, y )
 	for k, v in pairs( self.playercombineOverlays ) do
 		if ( v.time <= CurTime( ) ) then
@@ -126,6 +148,10 @@ function Schema:HUDBackgroundDraw( )
 	surface.SetDrawColor( 255, 255, 255, 50 )
 	surface.SetMaterial( combineOverlayMaterial )
 	surface.DrawTexturedRect( 0, 0, ScrW( ), ScrH( ) )
+	
+	if ( LocalPlayer( ):Team( ) == FACTION_OW ) then
+		self:OWHUDPaint( )
+	end
 end
 
 function Schema:HUDDraw( )

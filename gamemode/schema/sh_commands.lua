@@ -21,6 +21,7 @@ catherine.command.Register( {
 	syntax = "[Text]",
 	runFunc = function( pl, args )
 		local args = table.concat( args, " " )
+		
 		if ( args != "" ) then
 			if ( pl:HasItem( "portable_radio" ) ) then
 				local itemData = pl:GetInvItemDatas( "portable_radio" )
@@ -48,6 +49,7 @@ catherine.command.Register( {
 	syntax = "[Text]",
 	runFunc = function( pl, args )
 		local args = table.concat( args, " " )
+		
 		if ( args != "" ) then
 			if ( pl:HasItem( "request_device" ) ) then
 				Schema:SayRequest( pl, args )
@@ -65,6 +67,7 @@ catherine.command.Register( {
 	syntax = "[Text]",
 	runFunc = function( pl, args )
 		local args = table.concat( args, " " )
+		
 		if ( pl:PlayerIsCombine( ) or pl:Team( ) == FACTION_ADMIN ) then
 			if ( Schema:CanDispatch( pl:Name( ) ) ) then
 				if ( args != "" ) then
@@ -78,5 +81,21 @@ catherine.command.Register( {
 		else
 			catherine.util.Notify( pl, "You are not combine!" )
 		end
+	end
+} )
+
+catherine.command.Register( {
+	command = "dispenseradd",
+	canRun = function( pl ) return pl:IsAdmin( ) end,
+	runFunc = function( pl, args )
+		local pos, ang = pl:GetEyeTraceNoCursor( ).HitPos, pl:EyeAngles( )
+		ang.p = 0
+		ang.y = ang.y - 180
+		
+		local ent = ents.Create( "cat_hl2rp_ration_dispenser" )
+		ent:SetPos( pos )
+		ent:SetAngles( ang )
+		ent:Spawn( )
+		ent:Activate( )
 	end
 } )

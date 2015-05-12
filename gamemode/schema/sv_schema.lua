@@ -59,6 +59,10 @@ function Schema:PlayerCanFlashlight( pl )
 	return pl:PlayerIsCombine( )
 end
 
+function Schema:GetRationCash( pl )
+	return math.random( 20, 40 )
+end
+
 function Schema:PlayerInteract( pl, target )
 	if ( catherine.player.IsTied( target ) ) then
 		return catherine.player.SetTie( pl, target, false )
@@ -314,7 +318,7 @@ function Schema:PlayerDeath( pl )
 end
 
 function Schema:OnSpawnedInCharacter( pl )
-	if ( pl:PlayerIsCombine( ) ) then
+	if ( pl:Team( ) == FACTION_CP ) then
 		local rankID, classID = self:GetRankByName( pl:Name( ) )
 		
 		self:AddCombineOverlayMessage( CAT_SCHEMA_COMBINEOVERLAY_LOCAL, pl, { "CombineOverlay_Online" }, 5, Color( 150, 255, 150 ), 0.04 )
@@ -376,7 +380,7 @@ function Schema:ChatTypingChanged( pl, bool )
 end
 
 function Schema:CharacterNameChanged( pl, newName )
-	if ( !pl:PlayerIsCombine( ) ) then return end
+	if ( pl:Team( ) != FACTION_CP ) then return end
 	local rankID, classID = self:GetRankByName( pl:Name( ) )
 
 	if ( pl:Class( ) != nil and pl:Class( ) != classID ) then

@@ -110,6 +110,13 @@ catherine.language.Merge( "korean", {
 	[ "Item_Name_SS" ] = "전기봉",
 	[ "Item_Desc_SS" ] = "사람을 때려서 기절시킬 수 있습니다.",
 	
+	[ "Item_Name_Ration" ] = "배급식",
+	[ "Item_Desc_Ration" ] = "약간의 돈과 음식이 들어있습니다.",
+	[ "Item_FuncStr01_Ration" ] = "개봉하기",
+	
+	[ "Item_Name_CitizenS" ] = "시민 보급식",
+	[ "Item_Desc_CitizenS" ] = "시민들의 생계를 이어가기 위해 기본적으로 제공되는 보급식 입니다.",
+	
 	[ "Item_Name_ZT" ] = "수갑",
 	[ "Item_Desc_ZT" ] = "사람을 묶을 수 있습니다.",
 	[ "Item_FuncStr01_ZT" ] = "묶기",
