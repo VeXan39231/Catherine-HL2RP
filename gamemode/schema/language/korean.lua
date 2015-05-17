@@ -194,5 +194,8 @@ catherine.language.Merge( "korean", {
 	
 	// Attribute
 	[ "Jump_Title" ] = "점프력",
-	[ "Jump_Desc" ] = "높을 경우 높이 점프를 뛸 수 있습니다."
+	[ "Jump_Desc" ] = "높을 경우 높이 점프를 뛸 수 있습니다.",
+	
+	// Help Category
+	[ "Help_Category_CombineVoice" ] = "콤바인 보이스"
 } )

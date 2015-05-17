@@ -195,4 +195,7 @@ catherine.language.Merge( "english", {
 	// Attribute
 	[ "Jump_Title" ] = "Jump",
 	[ "Jump_Desc" ] = "",
+	
+	// Help Category
+	[ "Help_Category_CombineVoice" ] = "Combine Voice"
 } )

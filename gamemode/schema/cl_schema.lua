@@ -122,6 +122,7 @@ function Schema:DrawCombineOverlay( x, y )
 		
 		if ( v.textTime <= CurTime( ) and string.utf8len( v.message ) < string.utf8len( v.originalMessage ) ) then
 			local text = string.utf8sub( v.originalMessage, v.textSubCount, v.textSubCount )
+			
 			v.message = v.message .. text
 			v.textSubCount = v.textSubCount + 1
 			v.textTime = CurTime( ) + v.textMakeDelay

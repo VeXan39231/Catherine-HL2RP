@@ -140,12 +140,23 @@ function Schema:OnChatControl( chatInformation ) // need rebuild :(.
 
 		for k, v in pairs( self.vo.normalVoice ) do
 			if ( !table.HasValue( v.faction, pl:Team( ) ) ) then continue end
+			local isFemale = false
+			
+			if ( pl:Team( ) == FACTION_CITIZEN and pl:IsFemale( ) and v.allowFemale ) then
+				isFemale = true
+			end
 			
 			for k1, v1 in pairs( ex ) do
 				if ( v1:lower( ) == v.command:lower( ) ) then
+					local sound = v.sound
+					
+					if ( isFemale ) then
+						sound = sound:gsub( "male01", "female01" )
+					end
+					
 					tab.sounds[ #tab.sounds + 1 ] = {
-						dir = v.sound,
-						len = SoundDuration( v.sound ),
+						dir = sound,
+						len = SoundDuration( sound ),
 						vol = vol
 					}
 					tab.text = k1 == 1 and ( v.output ) or ( tab.text .. ", " .. v.output )

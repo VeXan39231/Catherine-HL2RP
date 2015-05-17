@@ -22,12 +22,13 @@ Schema.vo.dispatchVoice = { }
 
 local COMBINE, CITIZEN = Schema.IsCombineFacton, { FACTION_CITIZEN }
 
-function Schema.vo.RegisterNormal( faction, command, output, sound )
+function Schema.vo.RegisterNormal( faction, command, output, sound, allowFemale )
 	Schema.vo.normalVoice[ #Schema.vo.normalVoice + 1 ] = {
 		faction = faction,
 		command = command,
 		output = output,
-		sound = sound
+		sound = sound,
+		allowFemale = allowFemale
 	}
 end
 
@@ -193,6 +194,18 @@ Schema.vo.RegisterNormal( COMBINE, "Vice", "Vice!", "npc/metropolice/vo/vice.wav
 Schema.vo.RegisterNormal( COMBINE, "Zero", "Zero!", "npc/metropolice/vo/zero.wav" )
 Schema.vo.RegisterNormal( COMBINE, "Zone", "Zone!", "npc/metropolice/vo/zone.wav" )
 
-
 // Citizen voice stuff.
 //Schema.vo.RegisterNormal( CITIZEN, "Command", "Answer", "Sound" )
+
+if ( CLIENT ) then
+	local title_voice = LANG( "Help_Category_CombineVoice" )
+	local html = [[<b>]] .. title_voice .. [[</b><br>]]
+
+	for k, v in pairs( Schema.vo.normalVoice ) do
+		if ( table.HasValue( v.faction, FACTION_CP, FACTION_OW ) ) then
+			html = html .. "<p><b>&#10022; " ..v.command .. "</b><br>" .. v.output .. "<br>"
+		end
+	end
+	
+	catherine.help.Register( CAT_HELP_HTML, title_voice, html )
+end
