@@ -55,7 +55,7 @@ function Schema:PlayerCanSpray( pl )
 	return pl:HasItem( "spray_can" )
 end
 
-function Schema:PlayerCanFlashlight( pl )
+function Schema:PlayerSwitchFlashlight( pl, bool )
 	return pl:PlayerIsCombine( )
 end
 
