@@ -220,7 +220,11 @@ function Schema:Think( )
 	end
 end
 
-catherine.font.Register( "catherine_hl2rp_combineOverlay", "Consolas", 15, 1000 )
+catherine.font.Register( "catherine_hl2rp_combineOverlay", {
+	font = "Consolas",
+	size = 15,
+	weight = 1000
+} )
 
 netstream.Hook( "catherine.Schema.AddCombineOverlayMessage", function( data )
 	Schema:AddCombineOverlayMessage( data[ 1 ], data[ 2 ], data[ 3 ], data[ 4 ] )

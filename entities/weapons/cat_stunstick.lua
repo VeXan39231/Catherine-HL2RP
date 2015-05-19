@@ -42,7 +42,7 @@ function SWEP:Precache( )
 end
 
 function SWEP:Initialize( )
-	self:SetWeaponHoldType( self.HoldType )
+	self:SetHoldType( self.HoldType )
 end
 
 function SWEP:OnLowered( )
