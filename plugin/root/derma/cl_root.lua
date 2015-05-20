@@ -22,13 +22,8 @@ local PANEL = { }
 function PANEL:Init( )
 	catherine.vgui.root = self
 
-	self.ent = nil
 	self.entCheck = CurTime( ) + 1
-	self.closeing = false
 	self.player = LocalPlayer( )
-	self.playerInventory = nil
-	self.targetInventory = nil
-	self.cash = nil
 	self.w, self.h = ScrW( ) * 0.8, ScrH( ) * 0.8
 
 	self:SetSize( self.w, self.h )
@@ -66,6 +61,7 @@ function PANEL:Init( )
 	self.close:SetGradientColor( Color( 255, 150, 150, 255 ) )
 	self.close.Click = function( )
 		if ( self.closeing ) then return end
+		
 		self:Close( )
 	end
 end
@@ -74,14 +70,14 @@ function PANEL:Paint( w, h )
 	catherine.theme.Draw( CAT_THEME_MENU_BACKGROUND, w, h )
 	
 	if ( !IsValid( self.ent ) ) then return end
-	local name = self.ent.Name( self.ent )
+	local name = self.ent:Name( )
 	
 	if ( name ) then
 		draw.SimpleText( name, "catherine_normal25", 10, 0, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT )
 		draw.SimpleText( LANG( "Cash_UI_TargetHasStr", self.cash ), "catherine_normal20", 10, 30, Color( 50, 50, 50, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT )
 	end
 	
-	draw.SimpleText( self.player.Name( self.player ), "catherine_normal25", w / 2 + 20, 0, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT )
+	draw.SimpleText( self.player:Name( ), "catherine_normal25", w / 2 + 20, 0, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT )
 	draw.SimpleText( LANG( "Cash_UI_HasStr", catherine.cash.Get( self.player ) ), "catherine_normal20", w / 2 + 20, 30, Color( 50, 50, 50, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT )
 end
 
@@ -257,19 +253,23 @@ function PANEL:RebuildRoot( )
 end
 
 function PANEL:Think( )
-	if ( self.entCheck <= CurTime( ) ) then
+	if ( ( self.entCheck or 0 ) <= CurTime( ) ) then
 		if ( !IsValid( self.ent ) and !self.closeing ) then
 			self:Close( )
+			
 			return
 		end
-		self.entCheck = CurTime( ) + 0.01
+		
+		self.entCheck = CurTime( ) + 0.5
 	end
 end
 
 function PANEL:Close( )
 	self.closeing = true
+	
 	self:Remove( )
 	self = nil
+	
 	netstream.Start( "catherine_hl2rp.plugin.root.RootClose" )
 end
 

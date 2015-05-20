@@ -23,5 +23,6 @@ ITEM.cost = 1200
 ITEM.model = "models/weapons/w_rocket_launcher.mdl"
 ITEM.weight = 6
 ITEM.weaponClass = "weapon_rpg"
+ITEM.weaponType = "primary"
 
 catherine.item.Register( ITEM )

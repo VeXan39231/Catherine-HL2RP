@@ -23,5 +23,6 @@ ITEM.cost = 510
 ITEM.model = "models/weapons/w_smg1.mdl"
 ITEM.weight = 2
 ITEM.weaponClass = "weapon_smg1"
+ITEM.weaponType = "primary"
 
 catherine.item.Register( ITEM )

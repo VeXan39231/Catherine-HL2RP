@@ -108,6 +108,7 @@ function PANEL:RefreshList( )
 			
 			if ( v <= 0 ) then
 				catherine.geometry.SlickBackground( 0, 0, w, h )
+				
 				draw.SimpleText( LANG( "BVM_UI_NoStockStr" ), "catherine_normal25", w - 10, 60, Color( 50, 50, 50, 255 ), TEXT_ALIGN_RIGHT, 1 )
 			else
 				percentAni = Lerp( 0.06, percentAni, v / PLUGIN.maxItemStockCount * 360 )
@@ -191,7 +192,7 @@ function PANEL:Think( )
 			return
 		end
 		
-		self.entCheck = CurTime( ) + 0.01
+		self.entCheck = CurTime( ) + 0.05
 	end
 end
 
@@ -199,6 +200,7 @@ function PANEL:Close( )
 	if ( self.closeing ) then return end
 	
 	self.closeing = true
+	
 	self:AlphaTo( 0, 0.2, 0, function( )
 		self:Remove( )
 		self = nil

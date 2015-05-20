@@ -23,5 +23,6 @@ ITEM.cost = 150
 ITEM.model = "models/weapons/w_crowbar.mdl"
 ITEM.weight = 2
 ITEM.weaponClass = "weapon_crowbar"
+ITEM.weaponType = "melee"
 
 catherine.item.Register( ITEM )

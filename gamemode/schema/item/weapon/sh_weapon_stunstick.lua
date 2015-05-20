@@ -23,5 +23,6 @@ ITEM.cost = 350
 ITEM.model = "models/weapons/w_stunbaton.mdl"
 ITEM.weight = 2
 ITEM.weaponClass = "cat_stunstick"
+ITEM.weaponType = "melee"
 
 catherine.item.Register( ITEM )

@@ -23,9 +23,6 @@ ITEM.cost = 300
 ITEM.model = "models/weapons/w_Pistol.mdl"
 ITEM.weight = 1.3
 ITEM.weaponClass = "weapon_pistol"
-ITEM.attachment = {
-	model = "models/weapons/w_Pistol.mdl",
-	bone = "ValveBiped.Bip01_Spine"
-}
+ITEM.weaponType = "secondary"
 
 catherine.item.Register( ITEM )

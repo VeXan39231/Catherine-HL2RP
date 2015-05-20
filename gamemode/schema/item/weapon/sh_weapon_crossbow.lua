@@ -23,5 +23,6 @@ ITEM.cost = 1000
 ITEM.model = "models/weapons/w_crossbow.mdl"
 ITEM.weight = 4
 ITEM.weaponClass = "weapon_crossbow"
+ITEM.weaponType = "primary"
 
 catherine.item.Register( ITEM )
