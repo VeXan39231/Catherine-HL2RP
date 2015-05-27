@@ -79,7 +79,7 @@ function PANEL:Init( )
 	self.close:SetStrColor( Color( 255, 150, 150, 255 ) )
 	self.close:SetGradientColor( Color( 255, 150, 150, 255 ) )
 	self.close.Click = function( )
-		if ( self.closeing ) then return end
+		if ( self.closing ) then return end
 		
 		self:Close( )
 	end
@@ -187,7 +187,7 @@ end
 
 function PANEL:Think( )
 	if ( ( self.entCheck or 0 ) <= CurTime( ) ) then
-		if ( !IsValid( self.ent ) and !self.closeing ) then
+		if ( !IsValid( self.ent ) and !self.closing ) then
 			self:Close( )
 			return
 		end
@@ -197,9 +197,9 @@ function PANEL:Think( )
 end
 
 function PANEL:Close( )
-	if ( self.closeing ) then return end
+	if ( self.closing ) then return end
 	
-	self.closeing = true
+	self.closing = true
 	
 	self:AlphaTo( 0, 0.2, 0, function( )
 		self:Remove( )
