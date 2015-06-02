@@ -24,12 +24,14 @@ function PANEL:Init( )
 
 	self.player = LocalPlayer( )
 	self.w, self.h = ScrW( ) * 0.6, ScrH( ) * 0.8
-
+	self.x, self.y = ScrW( ) / 2 - self.w / 2, ScrH( ) / 2 - self.h / 2
+	
 	self:SetSize( self.w, self.h )
-	self:Center( )
+	self:SetPos( ScrW( ), self.y )
 	self:SetTitle( "" )
 	self:MakePopup( )
 	self:ShowCloseButton( false )
+	self:MoveTo( ScrW( ) / 2 - self.w / 2, self.y, 0.2, 0 )
 	
 	self.Lists = vgui.Create( "DPanelList", self )
 	self.Lists:SetPos( 10, 70 )
@@ -169,7 +171,7 @@ function PANEL:Paint( w, h )
 	catherine.theme.Draw( CAT_THEME_MENU_BACKGROUND, w, h )
 	
 	if ( !IsValid( self.ent ) ) then return end
-	draw.SimpleText( LANG( "BVM_Name" ), "catherine_normal25", 0, 0, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT )
+	draw.SimpleText( LANG( "BVM_Name" ), "catherine_normal20", 0, 5, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_RIGHT )
 
 	if ( PLUGIN:IsActive( self.ent ) ) then
 		draw.SimpleText( LANG( "BVM_UI_OnlineStr" ), "catherine_normal20", w - 50, 40, Color( 50, 50, 50, 255 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT )
@@ -197,11 +199,9 @@ function PANEL:Think( )
 end
 
 function PANEL:Close( )
-	if ( self.closing ) then return end
-	
 	self.closing = true
 	
-	self:AlphaTo( 0, 0.2, 0, function( )
+	self:MoveTo( ScrW( ), self.y, 0.2, 0, nil, function( )
 		self:Remove( )
 		self = nil
 	end )
